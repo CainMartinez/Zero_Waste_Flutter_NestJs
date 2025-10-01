@@ -1,0 +1,18 @@
+include: package:flutter_lints/flutter.yaml
+analyzer:
+exclude:
+- "**/*.gen.dart" # (Opcional) por si en el futuro hay archivos generados
+- "build/**" # Ignora carpeta build
+linter:
+rules:
+# === Estilo de código ===
+always_use_package_imports: true # Usar imports con "package:" en vez de relativos
+prefer_single_quotes: true # Usar comillas simples para consistencia
+require_trailing_commas: true # Comas al final en listas/mapas multilínea
+sort_child_properties_last: true # child: siempre al final en widgets
+use_key_in_widget_constructors: true # Widgets con super.key obligatorio
+# === Buenas prácticas ===
+avoid_print: true # No usar print() (usar debugPrint o logging)
+prefer_const_constructors: true # Usar const cuando se pueda
+prefer_final_locals: true # Variables locales inmutables por defecto
+unnecessary_this: false # Se permite usar "this." si da claridad

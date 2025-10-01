@@ -1,0 +1,1 @@
+Implementación de las interfaces declaradas en domain.

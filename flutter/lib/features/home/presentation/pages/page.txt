@@ -1,0 +1,1 @@
+Página principal del módulo, se conecta al provider para poder mostrarse.
