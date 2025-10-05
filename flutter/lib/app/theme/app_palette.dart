@@ -18,24 +18,24 @@ class AppPalette {
   });
 }
 
-/// Paleta para tema claro
+/// Paleta para tema claro (marca)
 const appPaletteLight = AppPalette(
-  primary: Color(0xFF0057D9),
+  primary: Color(0xFF4285F4), // Azul
   onPrimary: Colors.white,
-  secondary: Color(0xFF0B874B),
+  secondary: Color(0xFF34A853), // Verde
   onSecondary: Colors.white,
-  danger: Color(0xFFD92D20),
+  danger: Color(0xFFEA4335), // Rojo
   onDanger: Colors.white,
 );
 
-/// Paleta para tema oscuro (ajusta los contrastes)
+/// Paleta para tema oscuro (marca) — superficies se toman del ThemeData oscuro en gris
 const appPaletteDark = AppPalette(
-  primary: Color(0xFF7BA7FF),
-  onPrimary: Color(0xFF0B0B0B),
-  secondary: Color(0xFF6CD09A),
-  onSecondary: Color(0xFF0B0B0B),
-  danger: Color(0xFFFF7A6E),
-  onDanger: Color(0xFF0B0B0B),
+  primary: Color(0xFF4285F4),
+  onPrimary: Colors.white,
+  secondary: Color(0xFF34A853),
+  onSecondary: Colors.white,
+  danger: Color(0xFFEA4335),
+  onDanger: Colors.white,
 );
 
 /// Devuelve la paleta adecuada según el brillo del tema activo.
