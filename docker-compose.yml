@@ -11,13 +11,18 @@ services:
     volumes:
       - ./backend-nest:/web
     environment:
+      - DB_HOST=database
+      - DB_PORT=3306
+      - DB_USER=${MYSQL_USER}
+      - DB_PASSWORD=${MYSQL_PASSWORD}
+      - DB_NAME=${MYSQL_DATABASE}
       - TZ=Europe/Berlin
     restart: always
   database:
     image: yobasystems/alpine-mariadb:11.4.5
     container_name: maria-db
     ports:
-      - "2222:3306"
+      - "3306:3306"
     restart: always
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
