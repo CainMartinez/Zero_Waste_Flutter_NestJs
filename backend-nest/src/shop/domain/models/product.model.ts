@@ -1,10 +1,4 @@
-export class Category {
-  readonly code: string;
-
-  constructor(code: string) {
-    this.code = code;
-  }
-}
+import { Category } from './category.model';
 
 export class Product {
   readonly id: number;
