@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ProductResponseDto } from '../dto/product.response.dto';
-import { Product } from '../../domain/models/product.model';
+import { Product } from '../../domain/entities/product.entity';
 import { IProductRepository } from '../../domain/repositories/product.repository';
 import { ProductAssembler } from '../../presentation/assemblers/product.assembler';
 

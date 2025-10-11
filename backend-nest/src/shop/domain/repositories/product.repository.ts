@@ -1,4 +1,4 @@
-import { Product } from '../models/product.model';
+import { Product } from '../entities/product.entity';
 
 export abstract class IProductRepository {
   abstract findAllVisible(): Promise<Product[]>;
