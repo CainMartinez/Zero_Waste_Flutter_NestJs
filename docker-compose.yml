@@ -31,7 +31,6 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - TZ=Europe/Berlin
     volumes:
-     - db_data:/var/lib/mysql
-     - ./db/init:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/mysql
 volumes:
   db_data:

@@ -1,6 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ShopModule } from './shop/shop.module';
+import { OrdersModule } from './orders/orders.module';
+import { BillingModule } from './billing/billing.module';
+import { LoyaltyModule } from './loyalty/loyalty.module';
+import { AuthModule } from './auth/auth.module';
+import { LocationsModule } from './locations/locations.module';
 
 @Module({
   imports: [
@@ -12,10 +17,15 @@ import { ShopModule } from './shop/shop.module';
       password: process.env.DB_PASSWORD ?? process.env.MYSQL_PASSWORD ?? '',
       database: process.env.DB_NAME ?? process.env.MYSQL_DATABASE ?? 'zero_waste_db',
       entities: [__dirname + '/**/*.orm-entity{.ts,.js}'],
-      synchronize: false,
+      synchronize: true,
       autoLoadEntities: true,
     }),
     ShopModule,
+    OrdersModule,
+    BillingModule,
+    LoyaltyModule,
+    AuthModule,
+    LocationsModule,
   ],
 })
 export class AppModule {}
