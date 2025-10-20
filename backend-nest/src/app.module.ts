@@ -6,6 +6,7 @@ import { BillingModule } from './billing/billing.module';
 import { LoyaltyModule } from './loyalty/loyalty.module';
 import { AuthModule } from './auth/auth.module';
 import { LocationsModule } from './locations/locations.module';
+import { ThrottlerModule } from '@nestjs/throttler/dist/throttler.module';
 
 @Module({
   imports: [
@@ -20,6 +21,10 @@ import { LocationsModule } from './locations/locations.module';
       synchronize: true,
       autoLoadEntities: true,
     }),
+    ThrottlerModule.forRoot([{
+      ttl: 60,   // ventana de 60 segundos
+      limit: 20, // máximo 20 peticiones por IP
+    }]),
     ShopModule,
     OrdersModule,
     BillingModule,
