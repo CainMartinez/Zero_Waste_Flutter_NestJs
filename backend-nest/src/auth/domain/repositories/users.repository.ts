@@ -11,6 +11,12 @@ export abstract class IUsersRepository {
   abstract existsByEmail(email: string): Promise<boolean>;
 
   /**
+   * Devuelve el usuario por email o null si no existe.
+   * Necesario para el flujo de login (verificación de credenciales).
+   */
+  abstract findByEmail(email: string): Promise<User | null>;
+
+  /**
    * Crea y persiste un nuevo usuario.
    * @param user Entidad de dominio (ya validada y con hash aplicado)
    */
