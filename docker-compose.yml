@@ -17,6 +17,9 @@ services:
       - DB_PASSWORD=${MYSQL_PASSWORD}
       - DB_NAME=${MYSQL_DATABASE}
       - TZ=Europe/Berlin
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_ISSUER=${JWT_ISSUER}
+      - JWT_AUDIENCE=${JWT_AUDIENCE}
     restart: always
   database:
     image: yobasystems/alpine-mariadb:11.4.5
