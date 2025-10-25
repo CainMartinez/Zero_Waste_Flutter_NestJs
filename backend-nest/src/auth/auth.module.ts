@@ -12,9 +12,15 @@ import { JwtModule } from '@nestjs/jwt';
 import { LoginUseCase } from './application/use_cases/login.usecase';
 import { JwtTokenService } from './infrastructure/token/jwt-token.service';
 import { LoginController } from './presentation/controllers/login.controller';
+import { RefreshController } from './presentation/controllers/refresh-token.controller';
+import { JwtStrategy } from './infrastructure/strategies/jwt.strategy';
+import { RefreshTokenOrmEntity } from './infrastructure/typeorm/entities-orm/refresh-token.orm-entity';
+import { RefreshTokenTypeOrmRepository } from './infrastructure/typeorm/repositories/refresh-token.typeorm.repository';
+import { IRefreshTokensRepository } from './domain/repositories/refresh-token.repository';
+import { RefreshAccessTokenUseCase } from './application/use_cases/refresh-access-token.usecase';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UsersOrmEntity, AdminsOrmEntity]),
+  imports: [TypeOrmModule.forFeature([UsersOrmEntity, AdminsOrmEntity, RefreshTokenOrmEntity]),
     JwtModule.register({
       secret: process.env.JWT_SECRET ?? 'dev-secret-change-me',
       signOptions: {
@@ -23,7 +29,7 @@ import { LoginController } from './presentation/controllers/login.controller';
       },
     }),
   ],
-  controllers: [RegisterController, LoginController],
+  controllers: [RegisterController, LoginController, RefreshController],
   providers: [
     RegisterUserUseCase,
     PasswordHasherService,
@@ -31,6 +37,13 @@ import { LoginController } from './presentation/controllers/login.controller';
     UsersTypeOrmRepository,
     LoginUseCase,
     JwtTokenService,
+    RefreshAccessTokenUseCase,
+    JwtStrategy,
+    RefreshTokenTypeOrmRepository,
+    {
+      provide: IRefreshTokensRepository,
+      useExisting: RefreshTokenTypeOrmRepository,
+    },
     {
       provide: IUsersRepository,
       useExisting: UsersTypeOrmRepository,
@@ -41,6 +54,10 @@ import { LoginController } from './presentation/controllers/login.controller';
     JwtModule,
     JwtTokenService,
     PasswordHasherService,
+    {
+      provide: IRefreshTokensRepository,
+      useExisting: RefreshTokenTypeOrmRepository,
+    },
     {
       provide: IUsersRepository,
       useExisting: UsersTypeOrmRepository,

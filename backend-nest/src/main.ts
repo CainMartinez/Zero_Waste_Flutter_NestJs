@@ -12,6 +12,7 @@ async function bootstrap() {
     .setTitle('Zero Waste Pub Diferent API')
     .setDescription('Documentación interactiva de los endpoints de Zero Waste Pub Diferent.')
     .setVersion('3.5.4')
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' , description: 'Ingrese el access token JWT sin el "Bearer"'})
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
