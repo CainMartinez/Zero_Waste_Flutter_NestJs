@@ -5,10 +5,10 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UsersOrmEntity } from './users.orm-entity';
+import { UsersOrmEntity } from '../../../../auth/infrastructure/typeorm/entities-orm/users.orm-entity';
 
 @Entity({ name: 'profiles' })
-export class ProfilesOrmEntity {
+export class ProfileOrmEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
