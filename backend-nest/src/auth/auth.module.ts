@@ -18,9 +18,14 @@ import { RefreshTokenOrmEntity } from './infrastructure/typeorm/entities-orm/ref
 import { RefreshTokenTypeOrmRepository } from './infrastructure/typeorm/repositories/refresh-token.typeorm.repository';
 import { IRefreshTokensRepository } from './domain/repositories/refresh-token.repository';
 import { RefreshAccessTokenUseCase } from './application/use_cases/refresh-access-token.usecase';
+import { JwtBlacklistOrmEntity } from './infrastructure/typeorm/entities-orm/blacklist.orm-entity';
+import { JwtBlacklistTypeOrmRepository } from './infrastructure/typeorm/repositories/jwt-blacklist.typeorm.repository';
+import { IJwtBlacklistRepository } from './domain/repositories/jwt-blacklist.repository';
+import { LogoutController } from './presentation/controllers/jwt-blacklist.controller';
+import { LogoutUseCase } from './application/use_cases/logout.usecase';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UsersOrmEntity, AdminsOrmEntity, RefreshTokenOrmEntity]),
+  imports: [TypeOrmModule.forFeature([UsersOrmEntity, AdminsOrmEntity, RefreshTokenOrmEntity, JwtBlacklistOrmEntity]),
     JwtModule.register({
       secret: process.env.JWT_SECRET ?? 'dev-secret-change-me',
       signOptions: {
@@ -29,7 +34,7 @@ import { RefreshAccessTokenUseCase } from './application/use_cases/refresh-acces
       },
     }),
   ],
-  controllers: [RegisterController, LoginController, RefreshController],
+  controllers: [RegisterController, LoginController, RefreshController, LogoutController],
   providers: [
     RegisterUserUseCase,
     PasswordHasherService,
@@ -40,6 +45,8 @@ import { RefreshAccessTokenUseCase } from './application/use_cases/refresh-acces
     RefreshAccessTokenUseCase,
     JwtStrategy,
     RefreshTokenTypeOrmRepository,
+    JwtBlacklistTypeOrmRepository,
+    LogoutUseCase,
     {
       provide: IRefreshTokensRepository,
       useExisting: RefreshTokenTypeOrmRepository,
@@ -47,6 +54,10 @@ import { RefreshAccessTokenUseCase } from './application/use_cases/refresh-acces
     {
       provide: IUsersRepository,
       useExisting: UsersTypeOrmRepository,
+    },
+    {
+      provide: IJwtBlacklistRepository,
+      useExisting: JwtBlacklistTypeOrmRepository,
     },
   ],
   exports: [
@@ -61,6 +72,10 @@ import { RefreshAccessTokenUseCase } from './application/use_cases/refresh-acces
     {
       provide: IUsersRepository,
       useExisting: UsersTypeOrmRepository,
+    },
+    {
+      provide: IJwtBlacklistRepository,
+      useExisting: JwtBlacklistTypeOrmRepository,
     },
   ],
 })
