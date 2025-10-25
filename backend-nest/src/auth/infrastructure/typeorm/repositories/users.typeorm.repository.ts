@@ -21,6 +21,11 @@ export class UsersTypeOrmRepository extends IUsersRepository {
     return this.repo.exist({ where: { email } });
   }
 
+  async findByEmail(email: string): Promise<User | null> {
+    const orm = await this.repo.findOne({ where: { email } });
+    return orm ? this.mapOrmToDomain(orm) : null;
+  }
+  
   async createUser(user: User): Promise<User> {
     try {
       const toSave = this.repo.create({

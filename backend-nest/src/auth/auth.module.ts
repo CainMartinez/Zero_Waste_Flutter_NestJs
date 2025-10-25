@@ -9,20 +9,43 @@ import { PasswordHasherService } from './infrastructure/crypto/password-hasher.s
 import { IUsersRepository } from './domain/repositories/users.repository';
 import { RegisterController } from './presentation/controllers/register.controller';
 import { UserPublicAssembler } from './presentation/assemblers/user-public.assembler';
+import { JwtModule } from '@nestjs/jwt';
+import { LoginUseCase } from './application/use_cases/login.usecase';
+import { JwtTokenService } from './infrastructure/token/jwt-token.service';
+import { LoginController } from './presentation/controllers/login.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UsersOrmEntity, AdminsOrmEntity, ProfilesOrmEntity])],
-  controllers: [RegisterController],
+  imports: [TypeOrmModule.forFeature([UsersOrmEntity, AdminsOrmEntity, ProfilesOrmEntity]),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET ?? 'dev-secret-change-me',
+      signOptions: {
+        issuer: process.env.JWT_ISSUER ?? 'zero-waste-api',
+        audience: process.env.JWT_AUDIENCE ?? 'zero-waste-clients',
+      },
+    }),
+  ],
+  controllers: [RegisterController, LoginController],
   providers: [
     RegisterUserUseCase,
     PasswordHasherService,
     UserPublicAssembler,
     UsersTypeOrmRepository,
+    LoginUseCase,
+    JwtTokenService,
     {
       provide: IUsersRepository,
       useExisting: UsersTypeOrmRepository,
     },
   ],
-  exports: [RegisterUserUseCase],
+  exports: [
+    RegisterUserUseCase,
+    JwtModule,
+    JwtTokenService,
+    PasswordHasherService,
+    {
+      provide: IUsersRepository,
+      useExisting: UsersTypeOrmRepository,
+    },
+  ],
 })
 export class AuthModule {}
