@@ -64,6 +64,23 @@ export class RefreshTokenTypeOrmRepository {
     return count > 0;
   }
 
+  /**
+   * Revoca todos los refresh tokens activos de un usuario.
+   * Se usa en logout para invalidar la sesión.
+   */
+  async revokeActiveForUser(userId: number, reason = 'logout'): Promise<number> {
+    const result = await this.repo
+      .createQueryBuilder()
+      .update(RefreshTokenOrmEntity)
+      .set({ revokedAt: new Date(), reason })
+      .where('user_id = :userId', { userId })
+      .andWhere('revoked_at IS NULL')
+      .andWhere('expires_at > NOW()')
+      .execute();
+
+    return result.affected ?? 0;
+  }
+
   private toDomainEntity(orm: RefreshTokenOrmEntity): RefreshToken {
     return new RefreshToken({
       id: orm.id,
