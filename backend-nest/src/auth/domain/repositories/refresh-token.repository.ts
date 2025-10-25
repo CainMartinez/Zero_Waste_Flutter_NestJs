@@ -32,4 +32,10 @@ export abstract class IRefreshTokensRepository {
    * Se utiliza en el flujo de /auth/refresh protegido por access token.
    */
   abstract hasActiveForUser(userId: number): Promise<boolean>;
+  
+  /**
+   * Revoca todos los refresh tokens activos del usuario.
+   * Devuelve el número de filas afectadas.
+   */
+  abstract revokeActiveForUser(userId: number, reason?: string): Promise<number>;
 }
