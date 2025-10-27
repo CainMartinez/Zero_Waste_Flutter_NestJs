@@ -1,6 +1,7 @@
 export class Profile {
   readonly id: number;
-  readonly userId: number;
+  readonly ownerType: 'user' | 'admin';
+  readonly ownerId: number;
 
   readonly phone: string | null;
   readonly addressLine1: string | null;
@@ -16,7 +17,8 @@ export class Profile {
 
   constructor(props: {
     id: number;
-    userId: number;
+    ownerType: 'user' | 'admin';
+    ownerId: number;
     phone: string | null;
     addressLine1: string | null;
     addressLine2: string | null;
@@ -28,7 +30,8 @@ export class Profile {
     updatedAt: Date;
   }) {
     this.id = props.id;
-    this.userId = props.userId;
+    this.ownerType = props.ownerType;
+    this.ownerId = props.ownerId;
 
     this.phone = props.phone ?? null;
     this.addressLine1 = props.addressLine1 ?? null;
@@ -38,14 +41,15 @@ export class Profile {
     this.countryCode = props.countryCode;
 
     this.isActive = props.isActive;
-
+    
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
   }
 
   static fromPrimitives(p: {
     id: number;
-    userId: number;
+    ownerType: 'user' | 'admin';
+    ownerId: number;
     phone: string | null;
     addressLine1: string | null;
     addressLine2: string | null;
@@ -56,18 +60,6 @@ export class Profile {
     createdAt: Date;
     updatedAt: Date;
   }): Profile {
-    return new Profile({
-      id: p.id,
-      userId: p.userId,
-      phone: p.phone ?? null,
-      addressLine1: p.addressLine1 ?? null,
-      addressLine2: p.addressLine2 ?? null,
-      city: p.city ?? null,
-      postalCode: p.postalCode ?? null,
-      countryCode: p.countryCode,
-      isActive: p.isActive,
-      createdAt: p.createdAt,
-      updatedAt: p.updatedAt,
-    });
+    return new Profile({ ...p });
   }
 }

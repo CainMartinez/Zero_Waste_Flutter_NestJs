@@ -1,23 +1,21 @@
 import {
   Column,
   Entity,
-  JoinColumn,
-  OneToOne,
   PrimaryGeneratedColumn,
+  Index,
 } from 'typeorm';
-import { UsersOrmEntity } from '../../../../auth/infrastructure/typeorm/entities-orm/users.orm-entity';
 
 @Entity({ name: 'profiles' })
+@Index(['ownerType', 'ownerId'], { unique: true })
 export class ProfileOrmEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'user_id', type: 'int' })
-  userId: number;
+  @Column({ name: 'owner_type', type: 'varchar', length: 10 })
+  ownerType: 'user' | 'admin';
 
-  @OneToOne(() => UsersOrmEntity, { eager: false })
-  @JoinColumn({ name: 'user_id' })
-  user: UsersOrmEntity;
+  @Column({ name: 'owner_id', type: 'int' })
+  ownerId: number;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   phone: string | null;
