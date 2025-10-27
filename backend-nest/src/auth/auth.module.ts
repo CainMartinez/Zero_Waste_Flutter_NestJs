@@ -23,6 +23,11 @@ import { JwtBlacklistTypeOrmRepository } from './infrastructure/typeorm/reposito
 import { IJwtBlacklistRepository } from './domain/repositories/jwt-blacklist.repository';
 import { LogoutController } from './presentation/controllers/jwt-blacklist.controller';
 import { LogoutUseCase } from './application/use_cases/logout.usecase';
+import { AdminLoginController } from './presentation/controllers/admin-login.controller';
+import { AdminLoginUseCase } from './application/use_cases/admin-login.usecase';
+import { AdminsTypeOrmRepository } from './infrastructure/typeorm/repositories/admin.typeorm.repository';
+import { IAdminsRepository } from './domain/repositories/admin.repository';
+import { AdminPublicAssembler } from './presentation/assemblers/admin-public.assembler';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UsersOrmEntity, AdminsOrmEntity, RefreshTokenOrmEntity, JwtBlacklistOrmEntity]),
@@ -34,7 +39,7 @@ import { LogoutUseCase } from './application/use_cases/logout.usecase';
       },
     }),
   ],
-  controllers: [RegisterController, LoginController, RefreshController, LogoutController],
+  controllers: [RegisterController, LoginController, RefreshController, LogoutController, AdminLoginController],
   providers: [
     RegisterUserUseCase,
     PasswordHasherService,
@@ -47,6 +52,9 @@ import { LogoutUseCase } from './application/use_cases/logout.usecase';
     RefreshTokenTypeOrmRepository,
     JwtBlacklistTypeOrmRepository,
     LogoutUseCase,
+    AdminLoginUseCase,
+    AdminsTypeOrmRepository,
+    AdminPublicAssembler,
     {
       provide: IRefreshTokensRepository,
       useExisting: RefreshTokenTypeOrmRepository,
@@ -58,6 +66,10 @@ import { LogoutUseCase } from './application/use_cases/logout.usecase';
     {
       provide: IJwtBlacklistRepository,
       useExisting: JwtBlacklistTypeOrmRepository,
+    },
+    { 
+      provide: IAdminsRepository, 
+      useExisting: AdminsTypeOrmRepository 
     },
   ],
   exports: [
@@ -76,6 +88,10 @@ import { LogoutUseCase } from './application/use_cases/logout.usecase';
     {
       provide: IJwtBlacklistRepository,
       useExisting: JwtBlacklistTypeOrmRepository,
+    },
+    { 
+      provide: IAdminsRepository, 
+      useExisting: AdminsTypeOrmRepository 
     },
   ],
 })

@@ -2,6 +2,8 @@ import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { CategoryOrmEntity } from '../shop/infrastructure/typeorm/entities-orm/category.orm-entity';
 import { ProductOrmEntity } from '../shop/infrastructure/typeorm/entities-orm/product.orm-entity';
+import { AdminsOrmEntity } from 'src/auth/infrastructure/typeorm/entities-orm/admins.orm-entity';
+import * as argon2 from 'argon2';
 
 // UUIDs a mano para que no cree nuevos productos con distinto uuid en cada arranque
 const PRODUCT_UUIDS = {
@@ -32,7 +34,29 @@ export class SeedOnBootProvider implements OnApplicationBootstrap {
     await this.ds.transaction(async (em) => {
       const categoryRepo = em.getRepository(CategoryOrmEntity);
       const productRepo  = em.getRepository(ProductOrmEntity);
+      const adminRepo = em.getRepository(AdminsOrmEntity);
 
+      const adminEmail = 'cain@gmail.com';
+      const adminPassword = 'Password1!';
+      const existingAdmin = await adminRepo.findOne({ where: { email: adminEmail } });
+
+      if (!existingAdmin) {
+        const passwordHash = await argon2.hash(adminPassword);
+        const admin = adminRepo.create({
+          uuid: null,
+          email: adminEmail,
+          name: 'Cain',
+          passwordHash,
+          avatarUrl: `https://i.pravatar.cc/200?u=${encodeURIComponent(adminEmail)}`,
+          isActive: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+        await adminRepo.save(admin);
+        this.logger.log(`Admin inicial creado: ${adminEmail}`);
+      } else {
+        this.logger.log(`Admin existente detectado: ${adminEmail}`);
+      }
       // Categorías base (para FK de productos), los crea si no existen
       const cats = [
         { code: 'bebidas',     nameEs: 'Bebidas',     nameEn: 'Drinks' },
