@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pub_diferent/catalog/catalog_page.dart';
+import 'package:pub_diferent/core/widgets/primary_cta_bar.dart';
 import 'package:pub_diferent/features/settings/presentation/controllers/settings_controller.dart';
 import 'package:pub_diferent/features/settings/presentation/widgets/settings_section_title.dart';
 import 'package:pub_diferent/features/settings/presentation/widgets/settings_switch_tile.dart';
@@ -66,7 +68,18 @@ class SettingsPage extends StatelessWidget {
                   },
                 ),
               ),
+
+              const SizedBox(height: 24),
             ],
+          ),
+
+          bottomNavigationBar: PrimaryCtaBar(
+            label: 'Ver Catálogo',
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const CatalogPage()),
+              );
+            },
           ),
         );
       },
