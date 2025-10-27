@@ -28,6 +28,8 @@ import { AdminLoginUseCase } from './application/use_cases/admin-login.usecase';
 import { AdminsTypeOrmRepository } from './infrastructure/typeorm/repositories/admin.typeorm.repository';
 import { IAdminsRepository } from './domain/repositories/admin.repository';
 import { AdminPublicAssembler } from './presentation/assemblers/admin-public.assembler';
+import { AdminLogoutController } from './presentation/controllers/admin-logout.controller';
+import { AdminLogoutUseCase } from './application/use_cases/admin-logout.usecase';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UsersOrmEntity, AdminsOrmEntity, RefreshTokenOrmEntity, JwtBlacklistOrmEntity]),
@@ -39,7 +41,7 @@ import { AdminPublicAssembler } from './presentation/assemblers/admin-public.ass
       },
     }),
   ],
-  controllers: [RegisterController, LoginController, RefreshController, LogoutController, AdminLoginController],
+  controllers: [RegisterController, LoginController, RefreshController, LogoutController, AdminLoginController, AdminLogoutController],
   providers: [
     RegisterUserUseCase,
     PasswordHasherService,
@@ -55,6 +57,7 @@ import { AdminPublicAssembler } from './presentation/assemblers/admin-public.ass
     AdminLoginUseCase,
     AdminsTypeOrmRepository,
     AdminPublicAssembler,
+    AdminLogoutUseCase,
     {
       provide: IRefreshTokensRepository,
       useExisting: RefreshTokenTypeOrmRepository,
