@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pub_diferent/features/settings/presentation/controllers/settings_controller.dart';
 import 'package:pub_diferent/features/settings/presentation/pages/settings_page.dart';
+import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart';
 
-/// Estructura base de la aplicación:
-/// - AppBar con título dinámico y botón de preferencias.
-/// - NavigationBar persistente con 4 secciones (Inicio, Menú, Pedidos, Perfil).
-class AppShell extends StatelessWidget {
+class AppShell extends ConsumerWidget {
   const AppShell({
     super.key,
     required this.navigationShell,
@@ -31,23 +30,90 @@ class AppShell extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final cs = Theme.of(context).colorScheme;
 
-    // Determina el título del AppBar según la pestaña activa
     final currentIndex = navigationShell.currentIndex;
     final titles = ['Inicio', 'Menú', 'Pedidos', 'Perfil'];
     final currentTitle = titles[currentIndex];
 
+    final auth = ref.watch(authProvider);
+    final isLogged = auth.isAuthenticated;
+    final displayName =
+        auth.userSession?.user.name ?? auth.adminSession?.admin.name;
+    final avatarUrl =
+        auth.userSession?.user.avatarUrl ?? auth.adminSession?.admin.avatarUrl;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(currentTitle),
+        titleSpacing: 0,
+        title: Row(
+          children: [
+            const SizedBox(width: 12),
+            GestureDetector(
+              onTap: () => navigationShell.goBranch(0),
+              child: Row(
+                children: [
+                  Image.asset('assets/images/logo.jpg', height: 72),
+                  const SizedBox(width: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Pub Diferent',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      Text(
+                        currentTitle,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 16),
+            Container(
+              width: 1,
+              height: 24,
+              color: cs.outlineVariant.withOpacity(0.4),
+            ),
+            const SizedBox(width: 16),
+          ],
+        ),
         actions: [
+          if (isLogged && displayName != null) ...[
+            GestureDetector(
+              onTap: () => navigationShell.goBranch(3),
+              child: Text(
+                'Hola, $displayName',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
+            const SizedBox(width: 8),
+          ],
+          GestureDetector(
+            onTap: () => navigationShell.goBranch(3),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: CircleAvatar(
+                radius: 16,
+                backgroundColor: cs.secondaryContainer,
+                backgroundImage: (avatarUrl != null && avatarUrl.isNotEmpty)
+                    ? NetworkImage(avatarUrl)
+                    : null,
+                child: (avatarUrl == null || avatarUrl.isEmpty)
+                    ? const Icon(Icons.person, size: 18)
+                    : null,
+              ),
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.settings),
             tooltip: 'Preferencias',
             onPressed: () => _openSettings(context),
           ),
+          const SizedBox(width: 6),
         ],
       ),
       body: navigationShell,
