@@ -1,1 +1,0 @@
-Declarar las tablas de la base de datos en entidades.

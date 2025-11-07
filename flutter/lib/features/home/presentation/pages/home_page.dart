@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:pub_diferent/core/widgets/app_badge.dart';
-import 'package:pub_diferent/features/settings/presentation/controllers/settings_controller.dart';
 import 'package:pub_diferent/features/home/presentation/widgets/home_hero_header.dart';
 import 'package:pub_diferent/features/home/presentation/widgets/featured_big_card.dart';
 import 'package:pub_diferent/features/home/presentation/widgets/info_small_card.dart';
 import 'package:pub_diferent/features/home/presentation/widgets/loyalty_gradient_banner.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.settingsController});
-
-  final SettingsController settingsController;
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
 
     return ListView(
       padding: const EdgeInsets.all(24),

@@ -1,1 +1,0 @@
-Llaman a los casos de uso y muestran el estado de los widgets.

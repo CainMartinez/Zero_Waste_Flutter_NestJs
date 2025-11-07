@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import 'package:pub_diferent/core/layout/app_shell.dart';
 import 'package:pub_diferent/features/home/presentation/pages/home_page.dart';
-import 'package:pub_diferent/features/settings/presentation/controllers/settings_controller.dart';
 
 import 'package:pub_diferent/features/auth/presentation/pages/auth_page.dart';
 import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart';
@@ -15,9 +14,7 @@ final _menuNavKey = GlobalKey<NavigatorState>(debugLabel: 'menuNav');
 final _ordersNavKey = GlobalKey<NavigatorState>(debugLabel: 'ordersNav');
 final _profileNavKey = GlobalKey<NavigatorState>(debugLabel: 'profileNav');
 
-GoRouter createRouter({
-  required SettingsController settingsController,
-}) {
+GoRouter createRouter() {
   return GoRouter(
     navigatorKey: _rootKey,
     initialLocation: '/home',
@@ -25,7 +22,6 @@ GoRouter createRouter({
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) => AppShell(
           navigationShell: navigationShell,
-          settingsController: settingsController,
         ),
         branches: [
           // HOME
@@ -34,8 +30,8 @@ GoRouter createRouter({
             routes: [
               GoRoute(
                 path: '/home',
-                pageBuilder: (context, state) => NoTransitionPage(
-                  child: HomePage(settingsController: settingsController),
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: HomePage(),
                 ),
               ),
             ],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pub_diferent/features/settings/presentation/controllers/settings_controller.dart';
 import 'package:pub_diferent/features/settings/presentation/pages/settings_page.dart';
 import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart';
 
@@ -9,17 +8,14 @@ class AppShell extends ConsumerWidget {
   const AppShell({
     super.key,
     required this.navigationShell,
-    this.settingsController,
   });
 
   final StatefulNavigationShell navigationShell;
-  final SettingsController? settingsController;
 
   void _openSettings(BuildContext context) {
-    if (settingsController == null) return;
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => SettingsPage(controller: settingsController!),
+        builder: (_) => const SettingsPage(),
       ),
     );
   }
