@@ -17,7 +17,6 @@ class AppShell extends ConsumerWidget {
 
   void _openSettings(BuildContext context) {
     if (settingsController == null) return;
-
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => SettingsPage(controller: settingsController!),
@@ -37,12 +36,12 @@ class AppShell extends ConsumerWidget {
     final titles = ['Inicio', 'Menú', 'Pedidos', 'Perfil'];
     final currentTitle = titles[currentIndex];
 
-    final auth = ref.watch(authProvider);
-    final isLogged = auth.isAuthenticated;
-    final displayName =
-        auth.userSession?.user.name ?? auth.adminSession?.admin.name;
-    final avatarUrl =
-        auth.userSession?.user.avatarUrl ?? auth.adminSession?.admin.avatarUrl;
+    final authAsync = ref.watch(authProvider);
+    final auth = authAsync.asData?.value;
+
+    final isLogged = auth?.isAuthenticated ?? false;
+    final displayName = auth?.displayName;
+    final avatarUrl = auth?.avatarUrl;
 
     return Scaffold(
       appBar: AppBar(
