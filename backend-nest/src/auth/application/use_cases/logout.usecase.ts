@@ -1,12 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { IJwtBlacklistRepository } from '../../domain/repositories/jwt-blacklist.repository';
-import { IRefreshTokensRepository } from '../../domain/repositories/refresh-token.repository';
 import { JwtBlacklistEntry } from '../../domain/entities/blacklist.entity';
+import { JwtTokenService } from '../../infrastructure/token/jwt-token.service';
 
 /**
  * Caso de uso: Logout del usuario autenticado.
  * - Revoca el access token actual añadiéndolo a la blacklist.
- * - Revoca también el refresh token activo del usuario, si existe.
+ * - Opcionalmente revoca también el refresh token si se proporciona.
  */
 @Injectable()
 export class LogoutUseCase {
@@ -14,23 +14,24 @@ export class LogoutUseCase {
 
   constructor(
     private readonly blacklistRepo: IJwtBlacklistRepository,
-    private readonly refreshRepo: IRefreshTokensRepository,
+    private readonly jwtTokens: JwtTokenService,
   ) {}
 
   /**
    * Ejecuta el proceso de logout.
-   * @param params datos extraídos del access token
+   * @param params datos extraídos del access token y opcionalmente refresh token
    */
   async execute(params: {
     jti: string;
     userId: number;
     token: string;
     exp: number;
+    refreshToken?: string;
   }): Promise<void> {
     const expiresAt = new Date(params.exp * 1000);
 
-    // Añadir a la blacklist
-    const entry = new JwtBlacklistEntry({
+    // Añadir access token a la blacklist
+    const accessEntry = new JwtBlacklistEntry({
       jti: params.jti,
       userId: params.userId,
       token: params.token,
@@ -40,12 +41,30 @@ export class LogoutUseCase {
       reason: 'logout',
     });
 
-    await this.blacklistRepo.add(entry);
+    await this.blacklistRepo.add(accessEntry);
+    this.logger.log(`Access token revocado para userId=${params.userId}`);
 
-    // Revocar refresh tokens asociados al usuario
-    const hasActive = await this.refreshRepo.hasActiveForUser(params.userId);
-    if (hasActive) {
-      await this.refreshRepo.revokeActiveForUser(params.userId, 'logout');
+    // Si se proporciona refresh token, también revocarlo
+    if (params.refreshToken) {
+      try {
+        const refreshPayload = await this.jwtTokens.verify(params.refreshToken);
+        
+        const refreshEntry = new JwtBlacklistEntry({
+          jti: refreshPayload.jti,
+          userId: params.userId,
+          token: params.refreshToken,
+          issuedAt: new Date(),
+          expiresAt: new Date(refreshPayload.exp * 1000),
+          revokedAt: new Date(),
+          reason: 'logout',
+        });
+
+        await this.blacklistRepo.add(refreshEntry);
+        this.logger.log(`Refresh token revocado para userId=${params.userId}`);
+      } catch (error) {
+        // Si el refresh token es inválido, lo ignoramos (puede estar expirado)
+        this.logger.warn(`Refresh token inválido o expirado durante logout para userId=${params.userId}`);
+      }
     }
 
     this.logger.log(`Logout completado para userId=${params.userId}`);

@@ -48,7 +48,7 @@ export class AdminLoginUseCase {
       isActive: admin.isActive,
       createdAt: admin.createdAt,
       updatedAt: admin.updatedAt,
-    } as any);
+    } as any, 'admin');
 
     this.logger.log(`Admin autenticado: ${admin.email}`);
     return { accessToken, admin };

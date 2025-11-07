@@ -6,11 +6,10 @@ import { LoginRequestDto } from '../dto/request/login.request.dto';
 import { UserNotFoundException } from '../../domain/exceptions/user-not-found.exception';
 import { InvalidPasswordException } from '../../domain/exceptions/invalid-password.exception';
 import { User } from '../../domain/entities/users.entity';
-import { IRefreshTokensRepository } from '../../domain/repositories/refresh-token.repository';
-import { RefreshToken } from '../../domain/entities/refresh-token.entity';
 
 type LoginResult = {
   accessToken: string;
+  refreshToken: string;
   user: User;
 };
 
@@ -22,7 +21,6 @@ export class LoginUseCase {
     private readonly usersRepository: IUsersRepository,
     private readonly passwordHasher: PasswordHasherService,
     private readonly jwtTokens: JwtTokenService,
-    private readonly refreshRepo: IRefreshTokensRepository,
   ) {}
 
   async execute(dto: LoginRequestDto): Promise<LoginResult> {
@@ -38,17 +36,10 @@ export class LoginUseCase {
       throw new InvalidPasswordException();
     }
 
-    const { token: accessToken } = await this.jwtTokens.signAccessToken(user);
+    const { token: accessToken } = await this.jwtTokens.signAccessToken(user, 'user');
+    const { token: refreshToken } = await this.jwtTokens.signRefreshToken(user, 'user');
 
-    const { jti, exp } = await this.jwtTokens.signRefreshToken(user);
-    const refresh = new RefreshToken({
-      userId: user.id,
-      jti,
-      expiresAt: new Date(exp * 1000),
-    });
-    await this.refreshRepo.save(refresh);
-
-    this.logger.log(`Login correcto: ${user.email} (refresh guardado: ${jti})`);
-    return { accessToken, user };
+    this.logger.log(`Login correcto: ${user.email}`);
+    return { accessToken, refreshToken, user };
   }
 }
