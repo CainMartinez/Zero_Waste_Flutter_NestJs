@@ -3,13 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pub_diferent/core/widgets/app_text_field.dart';
 import 'package:pub_diferent/core/widgets/app_password_field.dart';
 import 'package:pub_diferent/core/widgets/app_form_submit.dart';
-import 'package:pub_diferent/features/auth/data/dto/request/register_user_request_dto.dart';
-import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart'; 
+import 'package:pub_diferent/core/utils/validators.dart';
+import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart';
 
-/// Formulario de alta de usuario (POST /auth/register).
-/// - Valida con el DTO
-/// - Llama al AuthRepository (no gestiona sesión ni tokens).
-/// - En éxito, muestra "Te has registrado con éxito, -nombre-".
 class RegisterForm extends ConsumerStatefulWidget {
   const RegisterForm({super.key});
 
@@ -22,10 +18,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
   final _nameCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
-
-  Map<String, String>? _fieldErrors;
-
-  bool _isLoading = false;
+  bool _errorShown = false;
 
   @override
   void dispose() {
@@ -36,45 +29,58 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
   }
 
   Future<void> _submit() async {
-    setState(() => _fieldErrors = null);
+    _errorShown = false;
+    final isValid = _formKey.currentState?.validate() ?? false;
+    if (!isValid) return;
 
-    final dto = RegisterUserRequestDto.create(
-      email: _emailCtrl.text,
-      name: _nameCtrl.text,
+    // Guardar el contexto antes de hacer la llamada async
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    
+    final notifier = ref.read(authProvider.notifier);
+    final user = await notifier.registerUser(
+      email: _emailCtrl.text.trim(),
+      name: _nameCtrl.text.trim(),
       password: _passwordCtrl.text,
     );
-    final errors = dto.validate();
-    if (errors != null) {
-      setState(() => _fieldErrors = errors);
-      return;
-    }
-
-    final repo = ref.read(authRepositoryProvider);
-    setState(() => _isLoading = true);
-    try {
-      final user = await repo.registerUser(
-        email: dto.email,
-        name: dto.name,
-        password: dto.password,
+    
+    if (user != null) {
+      final userName = user.name ?? 'Usuario';
+      final userEmail = user.email ?? '';
+      
+      // Usar el ScaffoldMessenger guardado que sigue siendo válido
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Text('¡Te has registrado con éxito $userName con el email $userEmail!'),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 4),
+        ),
       );
-
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Te has registrado con éxito, ${user.name}.')),
-      );
-
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al registrar: $e')),
-      );
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
+    final isLoading = authState.isLoading;
+
+    // Detectar errores
+    if (authState.hasError && !_errorShown) {
+      _errorShown = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final errorString = authState.error?.toString() ?? 'Error en el registro';
+        final message = errorString.startsWith('Exception: ') 
+            ? errorString.substring(11) 
+            : errorString;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      });
+    }
+
     return Form(
       key: _formKey,
       child: Column(
@@ -82,37 +88,32 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
           AppTextField(
             controller: _nameCtrl,
             label: 'Nombre',
-            hint: 'Tu nombre',
             textInputAction: TextInputAction.next,
-            errorText: _fieldErrors?['name'],
+            validator: Validators.name,
           ),
           const SizedBox(height: 12),
-
           AppTextField(
             controller: _emailCtrl,
             label: 'Email',
-            hint: 'tu@email.com',
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
-            errorText: _fieldErrors?['email'],
+            validator: Validators.email,
           ),
           const SizedBox(height: 12),
-
           AppPasswordField(
             controller: _passwordCtrl,
             label: 'Contraseña',
             textInputAction: TextInputAction.done,
             onFieldSubmitted: (_) {
-              if (!_isLoading) _submit();
+              if (!isLoading) _submit();
             },
-            errorText: _fieldErrors?['password'],
+            validator: Validators.password,
           ),
           const SizedBox(height: 20),
-
           AppFormSubmit(
-            label: _isLoading ? 'Creando cuenta...' : 'Crear cuenta',
-            isLoading: _isLoading,
-            onPressed: _isLoading ? null : _submit,
+            label: isLoading ? 'Creando cuenta...' : 'Crear cuenta',
+            isLoading: isLoading,
+            onPressed: isLoading ? null : _submit,
           ),
         ],
       ),

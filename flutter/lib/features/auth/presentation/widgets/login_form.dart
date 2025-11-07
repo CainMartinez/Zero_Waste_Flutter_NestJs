@@ -4,13 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pub_diferent/core/widgets/app_text_field.dart';
 import 'package:pub_diferent/core/widgets/app_password_field.dart';
 import 'package:pub_diferent/core/widgets/app_form_submit.dart';
-
+import 'package:pub_diferent/core/utils/validators.dart';
 import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart';
-import 'package:pub_diferent/features/auth/data/dto/request/login_request_dto.dart';
-import 'package:pub_diferent/features/auth/data/dto/request/admin_login_request_dto.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
-  const LoginForm({super.key, this.isAdmin = false});
+  const LoginForm({
+    super.key,
+    this.isAdmin = false,
+  });
 
   final bool isAdmin;
 
@@ -22,8 +23,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
-
-  Map<String, String>? _fieldErrors;
+  bool _errorShown = false;
 
   @override
   void dispose() {
@@ -33,61 +33,48 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   }
 
   Future<void> _submit() async {
-    setState(() => _fieldErrors = null);
+    _errorShown = false;
+    final isValid = _formKey.currentState?.validate() ?? false;
+    if (!isValid) return;
+
+    final notifier = ref.read(authProvider.notifier);
 
     if (widget.isAdmin) {
-      final dto = AdminLoginRequestDto.create(
-        email: _emailCtrl.text,
-        password: _passwordCtrl.text,
+      await notifier.loginAdmin(
+        _emailCtrl.text.trim(),
+        _passwordCtrl.text,
       );
-      final errors = dto.validate();
-      if (errors != null) {
-        setState(() => _fieldErrors = errors);
-        return;
-      }
-
-      await ref
-          .read(authProvider.notifier)
-          .loginAdmin(_emailCtrl.text.trim(), _passwordCtrl.text);
     } else {
-      final dto = LoginRequestDto.create(
-        email: _emailCtrl.text,
-        password: _passwordCtrl.text,
-      );
-      final errors = dto.validate();
-      if (errors != null) {
-        setState(() => _fieldErrors = errors);
-        return;
-      }
-
-      await ref
-          .read(authProvider.notifier)
-          .loginUser(_emailCtrl.text.trim(), _passwordCtrl.text);
-    }
-
-    final auth = ref.read(authProvider);
-
-    if (!auth.isAuthenticated && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No se pudo iniciar sesión. Revisa tus credenciales.'),
-        ),
-      );
-      return;
-    }
-
-    final name = auth.userSession?.user.name ?? auth.adminSession?.admin.name;
-    if (name != null && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Bienvenido, $name')),
+      await notifier.loginUser(
+        _emailCtrl.text.trim(),
+        _passwordCtrl.text,
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final auth = ref.watch(authProvider);
-    final isLoading = auth.isLoading;
+    final authState = ref.watch(authProvider);
+    final isLoading = authState.isLoading;
+
+    // Detectar errores directamente en el build
+    if (authState.hasError && !_errorShown) {
+      _errorShown = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final errorString = authState.error?.toString() ?? 'No se pudo iniciar sesión';
+        // Quitar el prefijo "Exception: " si existe
+        final message = errorString.startsWith('Exception: ') 
+            ? errorString.substring(11) 
+            : errorString;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      });
+    }
 
     return Form(
       key: _formKey,
@@ -96,10 +83,9 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           AppTextField(
             controller: _emailCtrl,
             label: 'Email',
-            hint: 'tu@email.com',
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
-            errorText: _fieldErrors?['email'],
+            validator: Validators.email,
           ),
           const SizedBox(height: 12),
           AppPasswordField(
@@ -109,7 +95,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             onFieldSubmitted: (_) {
               if (!isLoading) _submit();
             },
-            errorText: _fieldErrors?['password'],
+            validator: Validators.password,
           ),
           const SizedBox(height: 20),
           AppFormSubmit(

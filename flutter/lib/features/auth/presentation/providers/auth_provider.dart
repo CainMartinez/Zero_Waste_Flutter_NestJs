@@ -1,195 +1,166 @@
-import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:pub_diferent/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:pub_diferent/features/auth/data/datasources/auth_local_datasource.dart';
+import 'package:pub_diferent/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:pub_diferent/features/auth/domain/repositories/auth_repository.dart';
+import 'package:pub_diferent/features/auth/domain/usecases/auth_usecase.dart';
 
 import 'package:pub_diferent/features/auth/domain/entities/user_session.dart';
 import 'package:pub_diferent/features/auth/domain/entities/admin_session.dart';
-import 'package:pub_diferent/features/auth/domain/entities/auth_tokens.dart';
 import 'package:pub_diferent/features/auth/domain/entities/user.dart';
 import 'package:pub_diferent/features/auth/domain/entities/admin.dart';
-import 'package:pub_diferent/features/auth/domain/repositories/auth_repository.dart';
+import 'package:pub_diferent/features/auth/domain/entities/auth_tokens.dart';
 
-import 'package:http/http.dart' as http;
-import 'package:pub_diferent/features/auth/data/datasources/login_user_remote_datasource.dart';
-import 'package:pub_diferent/features/auth/data/datasources/login_admin_remote_datasource.dart';
-import 'package:pub_diferent/features/auth/data/datasources/register_user_remote_datasource.dart';
-import 'package:pub_diferent/features/auth/data/datasources/logout_user_remote_datasource.dart';
-import 'package:pub_diferent/features/auth/data/datasources/logout_admin_remote_datasource.dart';
-import 'package:pub_diferent/features/auth/data/repositories/auth_repository_impl.dart';
-
-/// Clave de almacenamiento en SharedPreferences
-const _authKey = 'auth_session_v1';
-
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  final client = http.Client();
-  return AuthRepositoryImpl(
-    loginUserDataSource: LoginUserRemoteDataSource(client: client),
-    loginAdminDataSource: AdminLoginRemoteDataSource(client: client),
-    registerUserDataSource: RegisterUserRemoteDataSource(client: client),
-    logoutUserDataSource: LogoutUserRemoteDataSource(client: client),
-    logoutAdminDataSource: LogoutAdminRemoteDataSource(client: client),
-  );
-});
-
-class AuthState {
+class AuthViewState {
   final UserSession? userSession;
   final AdminSession? adminSession;
-  final bool isLoading;
-  final bool hydrated;
 
-  const AuthState({
+  const AuthViewState({
     this.userSession,
     this.adminSession,
-    this.isLoading = false,
-    this.hydrated = false,
   });
 
+  const AuthViewState.anonymous()
+      : userSession = null,
+        adminSession = null;
+
   bool get isAuthenticated => userSession != null || adminSession != null;
+  bool get isAnonymous => !isAuthenticated;
   bool get isAdmin => adminSession != null;
 
-  AuthState copyWith({
-    UserSession? userSession,
-    AdminSession? adminSession,
-    bool? isLoading,
-    bool? hydrated,
-  }) {
-    return AuthState(
-      userSession: userSession ?? this.userSession,
-      adminSession: adminSession ?? this.adminSession,
-      isLoading: isLoading ?? this.isLoading,
-      hydrated: hydrated ?? this.hydrated,
+  String? get displayName =>
+      userSession?.user.name ?? adminSession?.admin.name;
+
+  String? get avatarUrl =>
+      userSession?.user.avatarUrl ?? adminSession?.admin.avatarUrl;
+}
+
+class AuthNotifier extends AsyncNotifier<AuthViewState> {
+  late final AuthUseCases _auth;
+
+  @override
+  Future<AuthViewState> build() async {
+    // Orquestación de dependencias
+    final remote = AuthRemoteDataSource();
+    final local = AuthLocalDataSource();
+    final AuthRepository repo = AuthRepositoryImpl(remote, local);
+    _auth = AuthUseCases(repo);
+
+    final stored = await _auth.readStoredSession();
+    final access = stored.accessToken;
+    if (access == null || access.isEmpty) {
+      return const AuthViewState.anonymous();
+    }
+
+    // Relleno extendido desde storage local (según role)
+    final name = await local.readSessionName();
+    final email = await local.readSessionEmail();
+    final avatar = await local.readSessionAvatar();
+
+    final role = stored.role; // 'admin' | 'user'
+
+    if (role == 'admin') {
+      final admin = Admin(
+        id: null,
+        uuid: null,
+        email: email ?? '',
+        name: name ?? '',
+        avatarUrl: avatar,
+        isActive: true,
+        createdAt: null,
+        updatedAt: null,
+      );
+
+      return AuthViewState(
+        adminSession: AdminSession(
+          tokens: AuthTokens(accessToken: access),
+          admin: admin,
+        ),
+      );
+    }
+
+    // Usuario normal
+    final user = User(
+      id: null,
+      uuid: null,
+      email: email ?? '',
+      name: name ?? '',
+      avatarUrl: avatar,
+      isActive: true,
+      createdAt: null,
+      updatedAt: null,
+    );
+
+    return AuthViewState(
+      userSession: UserSession(
+        tokens: AuthTokens(
+          accessToken: access,
+          refreshToken: stored.refreshToken,
+        ),
+        user: user,
+      ),
     );
   }
 
-  factory AuthState.initial() => const AuthState();
-
-}
-
-class AuthController extends StateNotifier<AuthState> {
-  AuthController(this._repo) : super(AuthState.initial()) {
-    _loadFromPrefs();
-  }
-
-  final AuthRepository _repo;
-
-  Future<void> _loadFromPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
-    final jsonString = prefs.getString(_authKey);
-
-    if (jsonString == null) {
-      state = state.copyWith(hydrated: true);
-      return;
-    }
-
-    try {
-      final Map<String, dynamic> data = jsonDecode(jsonString);
-      final type = data['type'];
-
-      if (type == 'user') {
-        final user = User(
-          id: data['id'],
-          uuid: data['uuid'],
-          email: data['email'],
-          name: data['name'],
-          avatarUrl: data['avatarUrl'],
-        );
-        final session = UserSession(
-          tokens: AuthTokens(accessToken: data['accessToken']),
-          user: user,
-        );
-        state = AuthState(userSession: session, hydrated: true);
-      } else if (type == 'admin') {
-        final admin = Admin(
-          id: data['id'],
-          uuid: data['uuid'],
-          email: data['email'],
-          name: data['name'],
-          avatarUrl: data['avatarUrl'],
-        );
-        final session = AdminSession(
-          tokens: AuthTokens(accessToken: data['accessToken']),
-          admin: admin,
-        );
-        state = AuthState(adminSession: session, hydrated: true);
-      }
-    } catch (_) {
-      await prefs.remove(_authKey);
-      state = state.copyWith(hydrated: true);
-    }
-  }
-
-  Future<void> _saveToPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    if (state.userSession != null) {
-      final s = state.userSession!;
-      await prefs.setString(
-        _authKey,
-        jsonEncode({
-          'type': 'user',
-          'accessToken': s.tokens.accessToken,
-          'id': s.user.id,
-          'uuid': s.user.uuid,
-          'email': s.user.email,
-          'name': s.user.name,
-          'avatarUrl': s.user.avatarUrl,
-        }),
-      );
-    } else if (state.adminSession != null) {
-      final s = state.adminSession!;
-      await prefs.setString(
-        _authKey,
-        jsonEncode({
-          'type': 'admin',
-          'accessToken': s.tokens.accessToken,
-          'id': s.admin.id,
-          'uuid': s.admin.uuid,
-          'email': s.admin.email,
-          'name': s.admin.name,
-          'avatarUrl': s.admin.avatarUrl,
-        }),
-      );
-    } else {
-      await prefs.remove(_authKey);
-    }
-  }
-
-  Future<void> _clearPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_authKey);
-  }
-
   Future<void> loginUser(String email, String password) async {
-    state = state.copyWith(isLoading: true);
     try {
-      final session = await _repo.loginUser(email: email, password: password);
-      state = AuthState(userSession: session, hydrated: true);
-      await _saveToPrefs();
-    } catch (_) {
-      state = AuthState(hydrated: true);
+      state = const AsyncLoading();
+      final session = await _auth.loginUser(email: email, password: password);
+      state = AsyncValue.data(AuthViewState(userSession: session));
+    } catch (e, st) {
+      state = AsyncError(e, st);
     }
   }
 
   Future<void> loginAdmin(String email, String password) async {
-    state = state.copyWith(isLoading: true);
     try {
-      final session = await _repo.loginAdmin(email: email, password: password);
-      state = AuthState(adminSession: session, hydrated: true);
-      await _saveToPrefs();
-    } catch (_) {
-      state = AuthState(hydrated: true);
+      state = const AsyncLoading();
+      final session = await _auth.loginAdmin(email: email, password: password);
+      state = AsyncValue.data(AuthViewState(adminSession: session));
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
+  }
+
+  Future<User?> registerUser({
+    required String email,
+    required String name,
+    required String password,
+  }) async {
+    try {
+      state = const AsyncLoading();
+      final user = await _auth.registerUser(
+        email: email,
+        name: name,
+        password: password,
+      );
+      state = const AsyncValue.data(AuthViewState.anonymous());
+      return user;
+    } catch (e, st) {
+      state = AsyncError(e, st);
+      return null;
     }
   }
 
   Future<void> logout() async {
-    await _clearPrefs();
-    state = AuthState(hydrated: true);
+    final current = state.hasValue ? state.value : null;
+    state = const AsyncLoading();
+
+    try {
+      if (current != null && current.isAdmin) {
+        await _auth.logoutAdmin();
+      } else {
+        await _auth.logoutUser();
+      }
+      state = const AsyncValue.data(AuthViewState.anonymous());
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
   }
 }
 
 final authProvider =
-    StateNotifierProvider<AuthController, AuthState>((ref) {
-  final repo = ref.watch(authRepositoryProvider);
-  return AuthController(repo);
+    AsyncNotifierProvider<AuthNotifier, AuthViewState>(() {
+  return AuthNotifier();
 });
