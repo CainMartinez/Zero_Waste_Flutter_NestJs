@@ -1,0 +1,22 @@
+import 'package:pub_diferent/features/profile/domain/entities/profile.dart';
+
+abstract class ProfileRepository {
+  Future<Profile> getProfile();
+  
+  Future<Profile> updateProfile({
+    String? phone,
+    String? addressLine1,
+    String? addressLine2,
+    String? city,
+    String? postalCode,
+    String? countryCode,
+    String? avatarUrl,
+  });
+  
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  });
+  
+  Future<void> logout();
+}
