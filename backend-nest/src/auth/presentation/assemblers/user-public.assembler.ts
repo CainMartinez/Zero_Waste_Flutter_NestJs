@@ -13,7 +13,9 @@ export class UserPublicAssembler {
     dto.uuid = user.uuid ?? null;
     dto.email = user.email;
     dto.name = user.name;
+    dto.role = "user";
     dto.avatarUrl = user.avatarUrl ?? null;
+    dto.isActive = user.isActive;
     dto.createdAt = user.createdAt;
     dto.updatedAt = user.updatedAt;
     return dto;

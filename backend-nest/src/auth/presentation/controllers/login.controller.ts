@@ -56,10 +56,11 @@ export class LoginController {
     @Body() dto: LoginRequestDto,
   ): Promise<LoginResponseDto> {
     // Se delega la lógica de negocio al caso de uso
-    const { user, accessToken } = await this.loginUseCase.execute(dto);
+    const { user, accessToken, refreshToken } = await this.loginUseCase.execute(dto);
     // El assembler transforma la entidad de dominio a DTO público
     return {
       accessToken,
+      refreshToken,
       user: this.assembler.toDto(user),
     };
   }

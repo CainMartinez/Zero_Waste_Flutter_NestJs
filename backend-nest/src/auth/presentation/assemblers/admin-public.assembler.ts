@@ -13,6 +13,7 @@ export class AdminPublicAssembler {
     dto.email = admin.email;
     dto.name = admin.name;
     dto.avatarUrl = admin.avatarUrl;
+    dto.role = 'admin';
     return dto;
   }
 }

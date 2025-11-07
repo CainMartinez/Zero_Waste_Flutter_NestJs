@@ -20,8 +20,7 @@ export class LogoutController {
   /**
    * POST /auth/logout
    *
-   * Revoca el access token actual (añadiéndolo a la blacklist)
-   * y los refresh tokens activos del usuario.
+   * Revoca el access token actual añadiéndolo a la blacklist.
    */
   @Post('logout')
   @UseGuards(JwtAuthGuard)
