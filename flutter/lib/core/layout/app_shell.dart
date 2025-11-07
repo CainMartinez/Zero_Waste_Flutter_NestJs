@@ -4,14 +4,19 @@ import 'package:go_router/go_router.dart';
 import 'package:pub_diferent/features/settings/presentation/pages/settings_page.dart';
 import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart';
 
-class AppShell extends ConsumerWidget {
+class AppShell extends ConsumerStatefulWidget {
   const AppShell({
     super.key,
-    required this.navigationShell,
+    required this.child,
   });
 
-  final StatefulNavigationShell navigationShell;
+  final Widget child;
 
+  @override
+  ConsumerState<AppShell> createState() => _AppShellState();
+}
+
+class _AppShellState extends ConsumerState<AppShell> {
   void _openSettings(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -21,19 +26,34 @@ class AppShell extends ConsumerWidget {
   }
 
   void _onDestinationSelected(int index) {
-    navigationShell.goBranch(index);
+    final paths = ['/home', '/menu', '/orders', '/profile'];
+    context.go(paths[index]);
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
 
-    final currentIndex = navigationShell.currentIndex;
+    // Obtener el índice actual basado en la ruta
+    final location = GoRouterState.of(context).uri.path;
+    final currentIndex = switch (location) {
+      '/home' => 0,
+      '/menu' => 1,
+      '/orders' => 2,
+      '/profile' => 3,
+      _ => 0,
+    };
+
     final titles = ['Inicio', 'Menú', 'Pedidos', 'Perfil'];
     final currentTitle = titles[currentIndex];
 
     final authAsync = ref.watch(authProvider);
-    final auth = authAsync.asData?.value;
+        
+    final auth = authAsync.when(
+      data: (value) => value,
+      loading: () => null,
+      error: (e, st) => null,
+    );
 
     final isLogged = auth?.isAuthenticated ?? false;
     final displayName = auth?.displayName;
@@ -46,7 +66,7 @@ class AppShell extends ConsumerWidget {
           children: [
             const SizedBox(width: 12),
             GestureDetector(
-              onTap: () => navigationShell.goBranch(0),
+              onTap: () => context.go('/home'),
               child: Row(
                 children: [
                   Image.asset('assets/images/logo.jpg', height: 72),
@@ -79,16 +99,40 @@ class AppShell extends ConsumerWidget {
         actions: [
           if (isLogged && displayName != null) ...[
             GestureDetector(
-              onTap: () => navigationShell.goBranch(3),
-              child: Text(
-                'Hola, $displayName',
-                style: Theme.of(context).textTheme.bodyMedium,
+              onTap: () => context.go('/profile'),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Hola, $displayName',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  if (auth?.isAdmin == true) ...[
+                    const SizedBox(width: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.1),
+                        border: Border.all(color: Colors.red, width: 1),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Text(
+                        'ADMIN',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
             const SizedBox(width: 8),
           ],
           GestureDetector(
-            onTap: () => navigationShell.goBranch(3),
+            onTap: () => context.go('/profile'),
             child: Padding(
               padding: const EdgeInsets.only(right: 4),
               child: CircleAvatar(
@@ -111,7 +155,7 @@ class AppShell extends ConsumerWidget {
           const SizedBox(width: 6),
         ],
       ),
-      body: navigationShell,
+      body: widget.child,
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentIndex,
         onDestinationSelected: _onDestinationSelected,

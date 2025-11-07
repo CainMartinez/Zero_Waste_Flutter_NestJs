@@ -27,8 +27,24 @@ class Validators {
     if (!RegExp(r'[A-Z]').hasMatch(value)) {
       return 'Debe contener al menos una mayúscula';
     }
+    if (!RegExp(r'[a-z]').hasMatch(value)) {
+      return 'Debe contener al menos una minúscula';
+    }
     if (!RegExp(r'[0-9]').hasMatch(value)) {
       return 'Debe contener al menos un número';
+    }
+    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
+      return 'Debe contener al menos un carácter especial';
+    }
+    return null;
+  }
+
+  static String? confirmPassword(String? value, String? originalPassword) {
+    if (value == null || value.isEmpty) {
+      return 'Confirma tu contraseña';
+    }
+    if (value != originalPassword) {
+      return 'Las contraseñas no coinciden';
     }
     return null;
   }

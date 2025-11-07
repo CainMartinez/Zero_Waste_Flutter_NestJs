@@ -4,82 +4,52 @@ import 'package:go_router/go_router.dart';
 
 import 'package:pub_diferent/core/layout/app_shell.dart';
 import 'package:pub_diferent/features/home/presentation/pages/home_page.dart';
+import 'package:pub_diferent/features/profile/presentation/pages/profile_page.dart';
 
 import 'package:pub_diferent/features/auth/presentation/pages/auth_page.dart';
 import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart';
 
-final _rootKey = GlobalKey<NavigatorState>();
-final _homeNavKey = GlobalKey<NavigatorState>(debugLabel: 'homeNav');
-final _menuNavKey = GlobalKey<NavigatorState>(debugLabel: 'menuNav');
-final _ordersNavKey = GlobalKey<NavigatorState>(debugLabel: 'ordersNav');
-final _profileNavKey = GlobalKey<NavigatorState>(debugLabel: 'profileNav');
+final _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
 GoRouter createRouter() {
   return GoRouter(
     navigatorKey: _rootKey,
     initialLocation: '/home',
     routes: [
-      StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) => AppShell(
-          navigationShell: navigationShell,
+      ShellRoute(
+        builder: (context, state, child) => AppShell(
+          child: child,
         ),
-        branches: [
-          // HOME
-          StatefulShellBranch(
-            navigatorKey: _homeNavKey,
-            routes: [
-              GoRoute(
-                path: '/home',
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: HomePage(),
-                ),
-              ),
-            ],
+        routes: [
+          GoRoute(
+            path: '/home',
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: HomePage(),
+            ),
           ),
-
-          // MENÚ
-          StatefulShellBranch(
-            navigatorKey: _menuNavKey,
-            routes: [
-              GoRoute(
-                path: '/menu',
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: Center(child: Text('Página de menú')),
-                ),
-              ),
-            ],
+          GoRoute(
+            path: '/menu',
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: Center(child: Text('Página de menú')),
+            ),
           ),
-
-          // PEDIDOS (guard en pageBuilder)
-          StatefulShellBranch(
-            navigatorKey: _ordersNavKey,
-            routes: [
-              GoRoute(
-                path: '/orders',
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: _AuthGate(
-                    logged: Center(child: Text('Listado de pedidos')),
-                    anonymous: AuthPage(),
-                  ),
-                ),
+          GoRoute(
+            path: '/orders',
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: _AuthGate(
+                logged: const Center(child: Text('Listado de pedidos')),
+                anonymous: const AuthPage(key: ValueKey('orders-auth')),
               ),
-            ],
+            ),
           ),
-
-          // PERFIL (guard en pageBuilder)
-          StatefulShellBranch(
-            navigatorKey: _profileNavKey,
-            routes: [
-              GoRoute(
-                path: '/profile',
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: _AuthGate(
-                    logged: Center(child: Text('Página de perfil')),
-                    anonymous: AuthPage(),
-                  ),
-                ),
+          GoRoute(
+            path: '/profile',
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: _AuthGate(
+                logged: const ProfilePage(),
+                anonymous: const AuthPage(key: ValueKey('profile-auth')),
               ),
-            ],
+            ),
           ),
         ],
       ),
@@ -101,20 +71,13 @@ class _AuthGate extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authProvider);
 
-    // Cargando/recuperando sesión (evita parpadeos y rutas equivocadas)
-    if (auth.isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    // Si tenemos valor, decidimos por sesión
-    final value = auth.hasValue ? auth.value : null;
-    final isLogged = _isLogged(value);
-
-    return isLogged ? logged : anonymous;
+    return auth.when(
+      data: (authState) {
+        final isLogged = authState.userSession != null || authState.adminSession != null;
+        return isLogged ? logged : anonymous;
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (_, __) => anonymous,
+    );
   }
-}
-
-bool _isLogged(AuthViewState? s) {
-  if (s == null) return false;
-  return s.userSession != null || s.adminSession != null;
 }
