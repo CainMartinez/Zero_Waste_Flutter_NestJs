@@ -13,6 +13,12 @@ export class LoginResponseDto {
   accessToken!: string;
 
   @ApiProperty({
+    description: 'Token JWT de actualización (utilizado para obtener un nuevo access token).',
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+  })
+  refreshToken!: string;
+
+  @ApiProperty({
     description: 'Datos públicos del usuario autenticado.',
     type: UserPublicResponseDto,
   })

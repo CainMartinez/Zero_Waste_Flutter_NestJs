@@ -17,6 +17,9 @@ export class AdminLoginResponseDto {
   @ApiProperty({ example: 'Administrador General' })
   name!: string;
 
+  @ApiProperty({ example: 'Rol de usuario' })
+  role!: string;
+
   @ApiProperty({
     example: 'https://i.pravatar.cc/300?img=name',
     nullable: true,

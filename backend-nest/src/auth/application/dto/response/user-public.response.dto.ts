@@ -34,6 +34,15 @@ export class UserPublicResponseDto {
   })
   avatarUrl!: string | null;
 
+  @ApiProperty({ example: 'Rol de usuario' })
+  role!: string;
+
+  @ApiProperty({ 
+    example: true,
+    description: 'Indica si el usuario está activo.',
+  })
+  isActive!: boolean;
+
   @ApiProperty({
     example: '2025-10-16T03:25:41.000Z',
     description: 'Fecha de creación.',
