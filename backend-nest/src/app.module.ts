@@ -7,6 +7,7 @@ import { LoyaltyModule } from './loyalty/loyalty.module';
 import { AuthModule } from './auth/auth.module';
 import { LocationsModule } from './locations/locations.module';
 import { ThrottlerModule } from '@nestjs/throttler/dist/throttler.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ThrottlerModule } from '@nestjs/throttler/dist/throttler.module';
     LoyaltyModule,
     AuthModule,
     LocationsModule,
+    ProfileModule,
   ],
 })
 export class AppModule {}
