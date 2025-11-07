@@ -46,6 +46,9 @@ class AuthLocalDataSource {
     } else {
       await AppServices.storage.delete(key: _sessionAvatarKey);
     }
+
+    // Delay para esperar a que el storage termine de escribir
+    await Future.delayed(const Duration(milliseconds: 50));
   }
 
   Future<String?> readAccessToken() =>
@@ -67,11 +70,19 @@ class AuthLocalDataSource {
       AppServices.storage.read(key: _sessionAvatarKey);
 
   Future<void> clearAll() async {
+    // Eliminar de una en una para evitar problemas de caché
     await AppServices.storage.delete(key: tokenKey);
     await AppServices.storage.delete(key: refreshKey);
     await AppServices.storage.delete(key: authRoleKey);
     await AppServices.storage.delete(key: _sessionNameKey);
     await AppServices.storage.delete(key: _sessionEmailKey);
     await AppServices.storage.delete(key: _sessionAvatarKey);
+    
+    // Forzar flush escribiendo y borrando una key dummy
+    await AppServices.storage.write(key: '_flush', value: 'flush');
+    await AppServices.storage.delete(key: '_flush');
+    
+    // Esperar a que se complete
+    await Future.delayed(const Duration(milliseconds: 100));
   }
 }

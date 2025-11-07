@@ -12,6 +12,8 @@ import 'package:pub_diferent/features/auth/domain/entities/user.dart';
 import 'package:pub_diferent/features/auth/domain/entities/admin.dart';
 import 'package:pub_diferent/features/auth/domain/entities/auth_tokens.dart';
 
+import 'package:pub_diferent/features/profile/presentation/providers/profile_provider.dart';
+
 class AuthViewState {
   final UserSession? userSession;
   final AdminSession? adminSession;
@@ -36,12 +38,22 @@ class AuthViewState {
       userSession?.user.avatarUrl ?? adminSession?.admin.avatarUrl;
 }
 
-class AuthNotifier extends AsyncNotifier<AuthViewState> {
-  late final AuthUseCases _auth;
-
+class AuthNotifier extends Notifier<AsyncValue<AuthViewState>> {
+  late AuthUseCases _auth;
+  bool _initialized = false;
+  bool _manuallySet = false;
+  
   @override
-  Future<AuthViewState> build() async {
-    // Orquestación de dependencias
+  AsyncValue<AuthViewState> build() {
+    if (!_initialized) {
+      _initialized = true;
+      _initialize();
+    }
+    
+    return const AsyncValue.loading();
+  }
+
+  Future<void> _initialize() async {
     final remote = AuthRemoteDataSource();
     final local = AuthLocalDataSource();
     final AuthRepository repo = AuthRepositoryImpl(remote, local);
@@ -49,17 +61,22 @@ class AuthNotifier extends AsyncNotifier<AuthViewState> {
 
     final stored = await _auth.readStoredSession();
     final access = stored.accessToken;
+    
+    if (_manuallySet) {
+      return;
+    }
+    
     if (access == null || access.isEmpty) {
-      return const AuthViewState.anonymous();
+      state = const AsyncValue.data(AuthViewState.anonymous());
+      return;
     }
 
-    // Relleno extendido desde storage local (según role)
     final name = await local.readSessionName();
     final email = await local.readSessionEmail();
     final avatar = await local.readSessionAvatar();
 
     final role = stored.role; // 'admin' | 'user'
-
+    
     if (role == 'admin') {
       final admin = Admin(
         id: null,
@@ -72,12 +89,13 @@ class AuthNotifier extends AsyncNotifier<AuthViewState> {
         updatedAt: null,
       );
 
-      return AuthViewState(
+      state = AsyncValue.data(AuthViewState(
         adminSession: AdminSession(
           tokens: AuthTokens(accessToken: access),
           admin: admin,
         ),
-      );
+      ));
+      return;
     }
 
     // Usuario normal
@@ -92,7 +110,7 @@ class AuthNotifier extends AsyncNotifier<AuthViewState> {
       updatedAt: null,
     );
 
-    return AuthViewState(
+    state = AsyncValue.data(AuthViewState(
       userSession: UserSession(
         tokens: AuthTokens(
           accessToken: access,
@@ -100,26 +118,32 @@ class AuthNotifier extends AsyncNotifier<AuthViewState> {
         ),
         user: user,
       ),
-    );
+    ));
   }
 
   Future<void> loginUser(String email, String password) async {
     try {
-      state = const AsyncLoading();
+      _manuallySet = true;
+      state = const AsyncValue.loading();
       final session = await _auth.loginUser(email: email, password: password);
       state = AsyncValue.data(AuthViewState(userSession: session));
+      ref.invalidate(profileProvider);
     } catch (e, st) {
-      state = AsyncError(e, st);
+      _manuallySet = false;
+      state = AsyncValue.error(e, st);
     }
   }
 
   Future<void> loginAdmin(String email, String password) async {
     try {
-      state = const AsyncLoading();
+      _manuallySet = true;
+      state = const AsyncValue.loading();
       final session = await _auth.loginAdmin(email: email, password: password);
       state = AsyncValue.data(AuthViewState(adminSession: session));
+      ref.invalidate(profileProvider);
     } catch (e, st) {
-      state = AsyncError(e, st);
+      _manuallySet = false;
+      state = AsyncValue.error(e, st);
     }
   }
 
@@ -144,23 +168,25 @@ class AuthNotifier extends AsyncNotifier<AuthViewState> {
   }
 
   Future<void> logout() async {
-    final current = state.hasValue ? state.value : null;
-    state = const AsyncLoading();
-
+    final current = state.value;
+    
     try {
       if (current != null && current.isAdmin) {
         await _auth.logoutAdmin();
       } else {
         await _auth.logoutUser();
       }
+      
       state = const AsyncValue.data(AuthViewState.anonymous());
+      ref.invalidate(profileProvider);
     } catch (e, st) {
-      state = AsyncError(e, st);
+      state = const AsyncValue.data(AuthViewState.anonymous());
+      ref.invalidate(profileProvider);
+      state = AsyncValue.error(e, st);
     }
   }
 }
 
-final authProvider =
-    AsyncNotifierProvider<AuthNotifier, AuthViewState>(() {
+final authProvider = NotifierProvider<AuthNotifier, AsyncValue<AuthViewState>>(() {
   return AuthNotifier();
 });

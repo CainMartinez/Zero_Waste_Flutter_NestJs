@@ -22,13 +22,15 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
   }) async {
-    // Backend
+    await _local.clearAll();
+    await Future.delayed(const Duration(milliseconds: 100));
+    
     final data = await _remote.loginUser(email: email, password: password);
+    
     final access = data['accessToken'] as String;
     final refresh = data['refreshToken'] as String?;
     final u = data['user'] as Map<String, dynamic>;
 
-    // Map a dominio
     final user = User(
       id: u['id'] as int,
       uuid: u['uuid'] as String?,
@@ -48,7 +50,6 @@ class AuthRepositoryImpl implements AuthRepository {
           : null,
     );
 
-    // Persistencia local (tokens + identidad + role=user)
     await _local.saveUserSession(
       accessToken: access,
       refreshToken: refresh,
@@ -69,13 +70,15 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
   }) async {
-    // Backend
+    await _local.clearAll();
+    await Future.delayed(const Duration(milliseconds: 100));
+    
     final data = await _remote.loginAdmin(email: email, password: password);
+    
     final access = data['accessToken'] as String;
 
-    // Map a dominio - el admin login devuelve los datos en el root, no en un objeto anidado
     final admin = Admin(
-      id: null, // El backend no devuelve el ID en admin login
+      id: null,
       uuid: null,
       email: data['email'] as String,
       name: data['name'] as String,
@@ -85,7 +88,6 @@ class AuthRepositoryImpl implements AuthRepository {
       updatedAt: null,
     );
 
-    // Persistencia local (solo access + identidad + role=admin; sin refresh)
     await _local.saveUserSession(
       accessToken: access,
       refreshToken: null,
