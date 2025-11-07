@@ -4,60 +4,64 @@ import 'package:pub_diferent/features/auth/domain/entities/user.dart';
 import 'package:pub_diferent/features/auth/domain/entities/admin.dart';
 import 'package:pub_diferent/features/auth/domain/entities/user_session.dart';
 import 'package:pub_diferent/features/auth/domain/entities/admin_session.dart';
-import 'package:pub_diferent/features/auth/data/dto/request/login_request_dto.dart';
-import 'package:pub_diferent/features/auth/data/dto/request/admin_login_request_dto.dart';
-import 'package:pub_diferent/features/auth/data/dto/request/register_user_request_dto.dart';
-import 'package:pub_diferent/features/auth/data/datasources/login_user_remote_datasource.dart';
-import 'package:pub_diferent/features/auth/data/datasources/login_admin_remote_datasource.dart';
-import 'package:pub_diferent/features/auth/data/datasources/register_user_remote_datasource.dart';
-import 'package:pub_diferent/features/auth/data/datasources/logout_user_remote_datasource.dart';
-import 'package:pub_diferent/features/auth/data/datasources/logout_admin_remote_datasource.dart';
-import 'package:pub_diferent/features/auth/data/dto/response/user_dto.dart';
-import 'package:pub_diferent/features/auth/data/dto/response/admin_dto.dart';
-import 'package:pub_diferent/features/auth/data/dto/response/auth_user_login_response_dto.dart';
-import 'package:pub_diferent/features/auth/data/dto/response/auth_admin_login_response_dto.dart';
-import 'package:pub_diferent/features/auth/data/dto/response/register_user_response_dto.dart';
 
-/// Implementación de AuthRepository en la capa de datos.
-/// - Orquesta datasources.
-/// - Convierte DTOs ⇢ Entidades de dominio.
+import 'package:pub_diferent/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:pub_diferent/features/auth/data/datasources/auth_local_datasource.dart';
+
 class AuthRepositoryImpl implements AuthRepository {
-  final LoginUserRemoteDataSource _loginUserDS;
-  final AdminLoginRemoteDataSource _loginAdminDS;
-  final RegisterUserRemoteDataSource _registerUserDS;
-  final LogoutUserRemoteDataSource _logoutUserDS;
-  final LogoutAdminRemoteDataSource _logoutAdminDS;
+  final AuthRemoteDataSource _remote;
+  final AuthLocalDataSource _local;
 
-  const AuthRepositoryImpl({
-    required LoginUserRemoteDataSource loginUserDataSource,
-    required AdminLoginRemoteDataSource loginAdminDataSource,
-    required RegisterUserRemoteDataSource registerUserDataSource,
-    required LogoutUserRemoteDataSource logoutUserDataSource,
-    required LogoutAdminRemoteDataSource logoutAdminDataSource,
-  })  : _loginUserDS = loginUserDataSource,
-        _loginAdminDS = loginAdminDataSource,
-        _registerUserDS = registerUserDataSource,
-        _logoutUserDS = logoutUserDataSource,
-        _logoutAdminDS = logoutAdminDataSource;
+  const AuthRepositoryImpl(
+    this._remote,
+    this._local,
+  );
 
   @override
   Future<UserSession> loginUser({
     required String email,
     required String password,
   }) async {
-    final req = LoginRequestDto.create(email: email, password: password);
+    // Backend
+    final data = await _remote.loginUser(email: email, password: password);
+    final access = data['accessToken'] as String;
+    final refresh = data['refreshToken'] as String?;
+    final u = data['user'] as Map<String, dynamic>;
 
-    final errors = req.validate();
-    if (errors != null) {
-      throw ArgumentError('Login inválido: ${errors.values.join(', ')}');
-    }
+    // Map a dominio
+    final user = User(
+      id: u['id'] as int,
+      uuid: u['uuid'] as String?,
+      email: u['email'] as String,
+      name: u['name'] as String,
+      avatarUrl: u['avatarUrl'] as String?,
+      isActive: u['isActive'] as bool?,
+      createdAt: u['createdAt'] != null 
+          ? (u['createdAt'] is String 
+              ? DateTime.tryParse(u['createdAt'] as String)
+              : u['createdAt'] as DateTime?)
+          : null,
+      updatedAt: u['updatedAt'] != null
+          ? (u['updatedAt'] is String
+              ? DateTime.tryParse(u['updatedAt'] as String)
+              : u['updatedAt'] as DateTime?)
+          : null,
+    );
 
-    final AuthUserLoginResponseDto dto = await _loginUserDS.call(req);
+    // Persistencia local (tokens + identidad + role=user)
+    await _local.saveUserSession(
+      accessToken: access,
+      refreshToken: refresh,
+      role: 'user',
+      name: user.name,
+      email: user.email,
+      avatarUrl: user.avatarUrl,
+    );
 
-    final tokens = AuthTokens(accessToken: dto.accessToken);
-    final user = _mapUserDtoToDomain(dto.user);
-
-    return UserSession(tokens: tokens, user: user);
+    return UserSession(
+      tokens: AuthTokens(accessToken: access, refreshToken: refresh),
+      user: user,
+    );
   }
 
   @override
@@ -65,18 +69,36 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
   }) async {
-    final req = AdminLoginRequestDto.create(email: email, password: password);
-    final errors = req.validate();
-    if (errors != null) {
-      throw ArgumentError('Login admin inválido: ${errors.values.join(', ')}');
-    }
+    // Backend
+    final data = await _remote.loginAdmin(email: email, password: password);
+    final access = data['accessToken'] as String;
 
-    final AuthAdminLoginResponseDto dto = await _loginAdminDS.call(req);
+    // Map a dominio - el admin login devuelve los datos en el root, no en un objeto anidado
+    final admin = Admin(
+      id: null, // El backend no devuelve el ID en admin login
+      uuid: null,
+      email: data['email'] as String,
+      name: data['name'] as String,
+      avatarUrl: data['avatarUrl'] as String?,
+      isActive: true,
+      createdAt: null,
+      updatedAt: null,
+    );
 
-    final tokens = AuthTokens(accessToken: dto.accessToken);
-    final admin = _mapAdminDtoToDomain(dto.admin);
+    // Persistencia local (solo access + identidad + role=admin; sin refresh)
+    await _local.saveUserSession(
+      accessToken: access,
+      refreshToken: null,
+      role: 'admin',
+      name: admin.name,
+      email: admin.email,
+      avatarUrl: admin.avatarUrl,
+    );
 
-    return AdminSession(tokens: tokens, admin: admin);
+    return AdminSession(
+      tokens: AuthTokens(accessToken: access),
+      admin: admin,
+    );
   }
 
   @override
@@ -85,54 +107,54 @@ class AuthRepositoryImpl implements AuthRepository {
     required String name,
     required String password,
   }) async {
-    final req = RegisterUserRequestDto.create(
+    final data = await _remote.registerUser(
       email: email,
       name: name,
       password: password,
     );
 
-    final errors = req.validate();
-    if (errors != null) {
-      throw ArgumentError('Registro inválido: ${errors.values.join(', ')}');
-    }
-
-    final RegisterUserResponseDto dto = await _registerUserDS.call(req);
-    return _mapUserDtoToDomain(dto.user);
-  }
-
-  @override
-  Future<void> logoutUser({required String accessToken}) {
-    return _logoutUserDS.call(accessToken: accessToken);
-  }
-
-  @override
-  Future<void> logoutAdmin({required String accessToken}) {
-    return _logoutAdminDS.call(accessToken: accessToken);
-  }
-
-  User _mapUserDtoToDomain(UserDto d) {
     return User(
-      id: d.id,
-      uuid: d.uuid,
-      email: d.email,
-      name: d.name,
-      avatarUrl: d.avatarUrl,
-      isActive: d.isActive ?? true,
-      createdAt: d.createdAt,
-      updatedAt: d.updatedAt,
+      id: data['id'] as int?,
+      uuid: data['uuid'] as String?,
+      email: data['email'] as String?,
+      name: data['name'] as String?,
+      avatarUrl: data['avatarUrl'] as String?,
+      isActive: data['isActive'] as bool?,
+      createdAt: data['createdAt'] != null
+          ? (data['createdAt'] is String
+              ? DateTime.tryParse(data['createdAt'] as String)
+              : data['createdAt'] as DateTime?)
+          : null,
+      updatedAt: data['updatedAt'] != null
+          ? (data['updatedAt'] is String
+              ? DateTime.tryParse(data['updatedAt'] as String)
+              : data['updatedAt'] as DateTime?)
+          : null,
     );
   }
 
-  Admin _mapAdminDtoToDomain(AdminDto d) {
-    return Admin(
-      id: d.id,
-      uuid: d.uuid,
-      email: d.email,
-      name: d.name,
-      avatarUrl: d.avatarUrl,
-      isActive: d.isActive ?? true,
-      createdAt: d.createdAt,
-      updatedAt: d.updatedAt,
+  @override
+  Future<void> logoutUser() async {
+    await _remote.logoutUser();
+    await _local.clearAll();
+  }
+
+  @override
+  Future<void> logoutAdmin() async {
+    await _remote.logoutAdmin();
+    await _local.clearAll();
+  }
+
+  /// Recupera lo que haya en secure storage y lo entrega tal cual.
+  Future<({String? accessToken, String? refreshToken, String? role})>
+      readStoredSession() async {
+    final accessToken = await _local.readAccessToken();
+    final refreshToken = await _local.readRefreshToken();
+    final role = await _local.readAuthRole();
+    return (
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      role: role,
     );
   }
 }
