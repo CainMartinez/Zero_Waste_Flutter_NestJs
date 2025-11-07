@@ -1,9 +1,9 @@
 class User {
-  final int id;
+  final int? id;
   final String? uuid;
 
-  final String email;
-  final String name;
+  final String? email;
+  final String? name;
   final String? avatarUrl;
 
   final bool? isActive;
@@ -12,9 +12,9 @@ class User {
   final DateTime? updatedAt;
 
   const User({
-    required this.id,
-    required this.email,
-    required this.name,
+    this.id,
+    this.email,
+    this.name,
     this.uuid,
     this.avatarUrl,
     this.isActive,

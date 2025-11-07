@@ -21,6 +21,10 @@ class AdminSession {
   }
 
   @override
-  String toString() =>
-      'AdminSession(admin: ${admin.email}, token: ${tokens.accessToken.substring(0, 10)}...)';
+  String toString() {
+    final preview = tokens.accessToken.isNotEmpty
+        ? '${tokens.accessToken.substring(0, 10)}...'
+        : 'empty';
+    return 'AdminSession(admin: ${admin.email}, access: $preview)';
+  }
 }

@@ -20,7 +20,13 @@ class UserSession {
     );
   }
 
+  bool get hasRefresh => tokens.hasRefresh;
+
   @override
-  String toString() =>
-      'UserSession(user: ${user.email}, token: ${tokens.accessToken.substring(0, 10)}...)';
+  String toString() {
+    final preview = tokens.accessToken.isNotEmpty
+        ? '${tokens.accessToken.substring(0, 10)}...'
+        : 'empty';
+    return 'UserSession(user: ${user.email}, access: $preview, refresh: ${tokens.hasRefresh ? "****" : "null"})';
+  }
 }
