@@ -21,4 +21,9 @@ export abstract class IUsersRepository {
    * @param user Entidad de dominio (ya validada y con hash aplicado)
    */
   abstract createUser(user: User): Promise<User>;
+
+  /**
+   * Actualiza un usuario existente.
+   */
+  abstract updateUser(user: User): Promise<User>;
 }

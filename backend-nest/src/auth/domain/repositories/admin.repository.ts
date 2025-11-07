@@ -10,4 +10,9 @@ export abstract class IAdminsRepository {
    * Devuelve la entidad de dominio o null si no existe.
    */
   abstract findByEmail(email: string): Promise<Admin | null>;
+
+  /**
+   * Actualiza un administrador existente.
+   */
+  abstract updateAdmin(admin: Admin): Promise<Admin>;
 }

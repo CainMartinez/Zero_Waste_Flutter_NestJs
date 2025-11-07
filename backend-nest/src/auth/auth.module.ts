@@ -14,9 +14,6 @@ import { JwtTokenService } from './infrastructure/token/jwt-token.service';
 import { LoginController } from './presentation/controllers/login.controller';
 import { RefreshController } from './presentation/controllers/refresh-token.controller';
 import { JwtStrategy } from './infrastructure/strategies/jwt.strategy';
-import { RefreshTokenOrmEntity } from './infrastructure/typeorm/entities-orm/refresh-token.orm-entity';
-import { RefreshTokenTypeOrmRepository } from './infrastructure/typeorm/repositories/refresh-token.typeorm.repository';
-import { IRefreshTokensRepository } from './domain/repositories/refresh-token.repository';
 import { RefreshAccessTokenUseCase } from './application/use_cases/refresh-access-token.usecase';
 import { JwtBlacklistOrmEntity } from './infrastructure/typeorm/entities-orm/blacklist.orm-entity';
 import { JwtBlacklistTypeOrmRepository } from './infrastructure/typeorm/repositories/jwt-blacklist.typeorm.repository';
@@ -30,9 +27,11 @@ import { IAdminsRepository } from './domain/repositories/admin.repository';
 import { AdminPublicAssembler } from './presentation/assemblers/admin-public.assembler';
 import { AdminLogoutController } from './presentation/controllers/admin-logout.controller';
 import { AdminLogoutUseCase } from './application/use_cases/admin-logout.usecase';
+import { ChangePasswordController } from './presentation/controllers/change-password.controller';
+import { ChangePasswordUseCase } from './application/use_cases/change-password.usecase';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UsersOrmEntity, AdminsOrmEntity, RefreshTokenOrmEntity, JwtBlacklistOrmEntity]),
+  imports: [TypeOrmModule.forFeature([UsersOrmEntity, AdminsOrmEntity, JwtBlacklistOrmEntity]),
     JwtModule.register({
       secret: process.env.JWT_SECRET ?? 'dev-secret-change-me',
       signOptions: {
@@ -41,7 +40,7 @@ import { AdminLogoutUseCase } from './application/use_cases/admin-logout.usecase
       },
     }),
   ],
-  controllers: [RegisterController, LoginController, RefreshController, LogoutController, AdminLoginController, AdminLogoutController],
+  controllers: [RegisterController, LoginController, RefreshController, LogoutController, AdminLoginController, AdminLogoutController, ChangePasswordController],
   providers: [
     RegisterUserUseCase,
     PasswordHasherService,
@@ -51,17 +50,13 @@ import { AdminLogoutUseCase } from './application/use_cases/admin-logout.usecase
     JwtTokenService,
     RefreshAccessTokenUseCase,
     JwtStrategy,
-    RefreshTokenTypeOrmRepository,
     JwtBlacklistTypeOrmRepository,
     LogoutUseCase,
     AdminLoginUseCase,
     AdminsTypeOrmRepository,
     AdminPublicAssembler,
     AdminLogoutUseCase,
-    {
-      provide: IRefreshTokensRepository,
-      useExisting: RefreshTokenTypeOrmRepository,
-    },
+    ChangePasswordUseCase,
     {
       provide: IUsersRepository,
       useExisting: UsersTypeOrmRepository,
@@ -80,10 +75,7 @@ import { AdminLogoutUseCase } from './application/use_cases/admin-logout.usecase
     JwtModule,
     JwtTokenService,
     PasswordHasherService,
-    {
-      provide: IRefreshTokensRepository,
-      useExisting: RefreshTokenTypeOrmRepository,
-    },
+    RefreshAccessTokenUseCase,
     {
       provide: IUsersRepository,
       useExisting: UsersTypeOrmRepository,
