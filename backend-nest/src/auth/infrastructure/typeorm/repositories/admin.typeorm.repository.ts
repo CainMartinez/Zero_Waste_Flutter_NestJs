@@ -17,6 +17,22 @@ export class AdminsTypeOrmRepository implements IAdminsRepository {
     return found ? this.toDomain(found) : null;
   }
 
+  async updateAdmin(admin: Admin): Promise<Admin> {
+    const orm = await this.repo.findOne({ where: { id: admin.id } });
+    if (!orm) {
+      throw new Error(`Admin with id ${admin.id} not found`);
+    }
+
+    orm.name = admin.name;
+    orm.passwordHash = admin.passwordHash;
+    orm.avatarUrl = admin.avatarUrl;
+    orm.isActive = admin.isActive;
+    orm.updatedAt = new Date();
+
+    const saved = await this.repo.save(orm);
+    return this.toDomain(saved);
+  }
+
   private toDomain(orm: AdminsOrmEntity): Admin {
     return new Admin({
       id: orm.id,

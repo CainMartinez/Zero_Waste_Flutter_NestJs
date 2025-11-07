@@ -25,11 +25,12 @@ export class JwtTokenService {
     return this.parseExpires(process.env.JWT_REFRESH_EXPIRES_IN, '7d' as MsStringValue);
   }
 
-    async signAccessToken(user: User): Promise<{ token: string; jti: string; exp: number }> {
+    async signAccessToken(user: User, ownerType: 'user' | 'admin' = 'user'): Promise<{ token: string; jti: string; exp: number }> {
         const jti = uuidv4();
 
         const payload = {
             email: user.email,
+            ownerType,
             jti,
             typ: 'access',
         };
@@ -45,11 +46,12 @@ export class JwtTokenService {
         return { token, jti, exp: this.decodeExp(token) };
     }
 
-    async signRefreshToken(user: User): Promise<{ token: string; jti: string; exp: number }> {
+    async signRefreshToken(user: User, ownerType: 'user' | 'admin' = 'user'): Promise<{ token: string; jti: string; exp: number }> {
         const jti = uuidv4();
 
         const payload = {
             email: user.email,
+            ownerType,
             jti,
             typ: 'refresh',
         };

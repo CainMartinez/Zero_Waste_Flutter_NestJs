@@ -36,6 +36,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('Access token revocado.');
     }
 
-    return { sub: payload.sub, email: payload.email, jti };
+    return { 
+      sub: payload.sub, 
+      email: payload.email, 
+      ownerType: payload.ownerType || 'user',
+      jti,
+      exp: payload.exp,
+    };
   }
 }

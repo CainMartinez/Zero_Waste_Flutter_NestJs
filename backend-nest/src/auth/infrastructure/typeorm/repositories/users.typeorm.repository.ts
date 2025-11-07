@@ -50,6 +50,22 @@ export class UsersTypeOrmRepository extends IUsersRepository {
     }
   }
 
+  async updateUser(user: User): Promise<User> {
+    const orm = await this.repo.findOne({ where: { id: user.id } });
+    if (!orm) {
+      throw new Error(`User with id ${user.id} not found`);
+    }
+
+    orm.name = user.name;
+    orm.passwordHash = user.passwordHash;
+    orm.avatarUrl = user.avatarUrl;
+    orm.isActive = user.isActive;
+    orm.updatedAt = new Date();
+
+    const saved = await this.repo.save(orm);
+    return this.mapOrmToDomain(saved);
+  }
+
   // ---------- helpers ----------
   private mapOrmToDomain(orm: UsersOrmEntity): User {
     return new User({
