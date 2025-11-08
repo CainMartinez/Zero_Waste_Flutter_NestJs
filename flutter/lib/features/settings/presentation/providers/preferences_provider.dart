@@ -94,7 +94,8 @@ class PreferencesNotifier extends AsyncNotifier<Preferences> {
     state = AsyncValue.data(newPreference); // Actualiza el estado inmediatamente (optimistic update)
 
     try {
-      await preferencesUseCases.setPreferences(newPreference, key); // Guarda en SharedPreferences
+      // Guarda en SharedPreferences
+      await preferencesUseCases.setPreferences(newPreference, key);
       // Recarga desde SharedPreferences para confirmar
       state = await AsyncValue.guard(() => preferencesUseCases.getPreferences());
     } catch (error, stack) {

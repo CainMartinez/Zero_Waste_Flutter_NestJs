@@ -11,8 +11,8 @@ class PubDiferentApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Inicializa el router principal.
-    final router = createRouter();
+    // Usa el router desde el provider (no se recrea en cada build)
+    final router = ref.watch(routerProvider);
     
     // Observa las preferencias para obtener el modo oscuro
     final preferencesAsync = ref.watch(preferencesProvider);

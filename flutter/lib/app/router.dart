@@ -11,7 +11,8 @@ import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.
 
 final _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
-GoRouter createRouter() {
+/// Provider del router para evitar recrearlo en cada build
+final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     navigatorKey: _rootKey,
     initialLocation: '/home',
@@ -21,12 +22,15 @@ GoRouter createRouter() {
           child: child,
         ),
         routes: [
+          // Ruta de inicio para USUARIOS
           GoRoute(
             path: '/home',
             pageBuilder: (context, state) => const NoTransitionPage(
               child: HomePage(),
             ),
           ),
+          
+          // Rutas para USUARIOS
           GoRoute(
             path: '/menu',
             pageBuilder: (context, state) => const NoTransitionPage(
@@ -42,6 +46,37 @@ GoRouter createRouter() {
               ),
             ),
           ),
+          
+          // Rutas para ADMIN
+          GoRoute(
+            path: '/dashboard',
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: _AuthGate(
+                logged: const Center(child: Text('Dashboard - Datos globales de la aplicación')),
+                anonymous: const AuthPage(key: ValueKey('dashboard-auth')),
+              ),
+            ),
+          ),
+          GoRoute(
+            path: '/products',
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: _AuthGate(
+                logged: const Center(child: Text('Gestión de productos')),
+                anonymous: const AuthPage(key: ValueKey('products-auth')),
+              ),
+            ),
+          ),
+          GoRoute(
+            path: '/billing',
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: _AuthGate(
+                logged: const Center(child: Text('Facturación')),
+                anonymous: const AuthPage(key: ValueKey('billing-auth')),
+              ),
+            ),
+          ),
+          
+          // Ruta de perfil (común)
           GoRoute(
             path: '/profile',
             pageBuilder: (context, state) => NoTransitionPage(
@@ -55,7 +90,7 @@ GoRouter createRouter() {
       ),
     ],
   );
-}
+});
 
 /// Pequeño gate que decide qué mostrar en función del estado de auth
 class _AuthGate extends ConsumerWidget {
