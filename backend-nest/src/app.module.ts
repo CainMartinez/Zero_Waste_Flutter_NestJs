@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 import { ShopModule } from './shop/shop.module';
 import { OrdersModule } from './orders/orders.module';
 import { BillingModule } from './billing/billing.module';
@@ -8,9 +9,14 @@ import { AuthModule } from './auth/auth.module';
 import { LocationsModule } from './locations/locations.module';
 import { ThrottlerModule } from '@nestjs/throttler/dist/throttler.module';
 import { ProfileModule } from './profile/profile.module';
+import { MediaModule } from './media/media.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST ?? process.env.MYSQL_HOST ?? 'localhost',
@@ -33,6 +39,7 @@ import { ProfileModule } from './profile/profile.module';
     AuthModule,
     LocationsModule,
     ProfileModule,
+    MediaModule,
   ],
 })
 export class AppModule {}

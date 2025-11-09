@@ -10,7 +10,7 @@ import { ProductTypeOrmRepository } from './infrastructure/typeorm/repositories/
 import { AllergenOrmEntity } from './infrastructure/typeorm/entities-orm/allergen.orm-entity';
 import { RescueMenuOrmEntity } from './infrastructure/typeorm/entities-orm/rescue-menu.orm-entity';
 import { ProductAllergenOrmEntity } from './infrastructure/typeorm/entities-orm/product-allergen.orm-entity';
-import { SeedOnBootProvider } from './../db/seed-on-boot.provider';
+// import { SeedOnBootProvider } from './../db/seed-on-boot.provider';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ProductOrmEntity, CategoryOrmEntity, AllergenOrmEntity, RescueMenuOrmEntity, ProductAllergenOrmEntity])],
@@ -19,7 +19,7 @@ import { SeedOnBootProvider } from './../db/seed-on-boot.provider';
     ProductAssembler,
     ListProductsUseCase,
     ProductTypeOrmRepository,
-    SeedOnBootProvider,
+    // SeedOnBootProvider,
     {
       provide: IProductRepository,
       useExisting: ProductTypeOrmRepository,
