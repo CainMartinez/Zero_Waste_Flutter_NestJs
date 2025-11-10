@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pub_diferent/core/layout/app_shell.dart';
 import 'package:pub_diferent/features/home/presentation/pages/home_page.dart';
 import 'package:pub_diferent/features/profile/presentation/pages/profile_page.dart';
+import 'package:pub_diferent/features/shop/presentation/pages/shop_page.dart';
 
 import 'package:pub_diferent/features/auth/presentation/pages/auth_page.dart';
 import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart';
@@ -34,7 +35,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/menu',
             pageBuilder: (context, state) => const NoTransitionPage(
-              child: Center(child: Text('Página de menú')),
+              child: ShopPage(),
             ),
           ),
           GoRoute(

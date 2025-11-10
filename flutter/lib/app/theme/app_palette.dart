@@ -7,6 +7,8 @@ class AppPalette {
   final Color onSecondary;
   final Color danger;
   final Color onDanger;
+  final Color success;
+  final Color warning;
 
   const AppPalette({
     required this.primary,
@@ -15,6 +17,8 @@ class AppPalette {
     required this.onSecondary,
     required this.danger,
     required this.onDanger,
+    required this.success,
+    required this.warning,
   });
 }
 
@@ -26,6 +30,8 @@ const appPaletteLight = AppPalette(
   onSecondary: Colors.white,
   danger: Color(0xFFEA4335), // Rojo
   onDanger: Colors.white,
+  success: Color(0xFF34A853), // Verde (eco, sostenible)
+  warning: Color(0xFFFFA726), // Amarillo/Naranja (rápido, urgente)
 );
 
 /// Paleta para tema oscuro (marca) — superficies se toman del ThemeData oscuro en gris
@@ -36,6 +42,8 @@ const appPaletteDark = AppPalette(
   onSecondary: Colors.white,
   danger: Color(0xFFEA4335),
   onDanger: Colors.white,
+  success: Color(0xFF34A853), // Verde (eco, sostenible)
+  warning: Color(0xFFFFA726), // Amarillo/Naranja (rápido, urgente)
 );
 
 /// Devuelve la paleta adecuada según el brillo del tema activo.
