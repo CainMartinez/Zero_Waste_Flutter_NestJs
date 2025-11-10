@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ListProductsUseCase } from './application/use_cases/list-products.usecase';
-import { ProductAssembler } from './presentation/assemblers/product.assembler';
 import { ProductsController } from './presentation/controllers/product.controller';
 import { IProductRepository } from './domain/repositories/product.repository';
 import { ProductOrmEntity } from './infrastructure/typeorm/entities-orm/product.orm-entity';
@@ -10,21 +8,40 @@ import { ProductTypeOrmRepository } from './infrastructure/typeorm/repositories/
 import { AllergenOrmEntity } from './infrastructure/typeorm/entities-orm/allergen.orm-entity';
 import { RescueMenuOrmEntity } from './infrastructure/typeorm/entities-orm/rescue-menu.orm-entity';
 import { ProductAllergenOrmEntity } from './infrastructure/typeorm/entities-orm/product-allergen.orm-entity';
+import { QueryCatalogUseCase } from './application/use_cases/query-catalog.usecase';
+import { CatalogAssembler } from './presentation/assemblers/catalog.assembler';
+import { IRescueMenuRepository } from './domain/repositories/rescue-menu.repository';
+import { RescueMenuTypeOrmRepository } from './infrastructure/typeorm/repositories/rescue-menu.typeorm.repository';
+import { ImageOrmEntity } from '../media/infrastructure/typeorm/entities-orm/image.orm-entity';
 // import { SeedOnBootProvider } from './../db/seed-on-boot.provider';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProductOrmEntity, CategoryOrmEntity, AllergenOrmEntity, RescueMenuOrmEntity, ProductAllergenOrmEntity])],
+  imports: [
+    TypeOrmModule.forFeature([
+      ProductOrmEntity,
+      CategoryOrmEntity,
+      AllergenOrmEntity,
+      RescueMenuOrmEntity,
+      ProductAllergenOrmEntity,
+      ImageOrmEntity,
+    ]),
+  ],
   controllers: [ProductsController],
   providers: [
-    ProductAssembler,
-    ListProductsUseCase,
+    CatalogAssembler,
+    QueryCatalogUseCase,
     ProductTypeOrmRepository,
+    RescueMenuTypeOrmRepository,
     // SeedOnBootProvider,
     {
       provide: IProductRepository,
       useExisting: ProductTypeOrmRepository,
     },
+    {
+      provide: IRescueMenuRepository,
+      useExisting: RescueMenuTypeOrmRepository,
+    },
   ],
-  exports: [ListProductsUseCase],
+  exports: [QueryCatalogUseCase],
 })
 export class ShopModule {}

@@ -72,7 +72,7 @@ export class MinioClientService {
     const slug = `${bucket}-${timestamp}-${sanitizedName}`;
     
     // Path relativo: /images/{bucket}/{fileName}
-    const path = `/images/${bucket}/${fileName}`;
+    const path = `/${bucket}/${fileName}`;
 
     try {
       await this.minioClient.putObject(
