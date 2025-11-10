@@ -1,0 +1,228 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
+import { Repository, SelectQueryBuilder } from 'typeorm';
+import { RescueMenu } from '../../../domain/entities/rescue-menu.entity';
+import { IRescueMenuRepository } from '../../../domain/repositories/rescue-menu.repository';
+import { CatalogFilters, PaginatedResult } from '../../../domain/types/catalog-filters.type';
+import { MenuWithDetails } from '../../../domain/types/catalog-types.type';
+import { RescueMenuOrmEntity } from '../entities-orm/rescue-menu.orm-entity';
+
+@Injectable()
+export class RescueMenuTypeOrmRepository extends IRescueMenuRepository {
+  constructor(
+    @InjectRepository(RescueMenuOrmEntity)
+    private readonly repository: Repository<RescueMenuOrmEntity>,
+    private readonly configService: ConfigService,
+  ) {
+    super();
+  }
+
+  async findWithFilters(filters: CatalogFilters): Promise<PaginatedResult<MenuWithDetails>> {
+    const limit = filters.limit || 20;
+    const MENU_CATEGORY_CODE = 'MENUS';
+    
+    // Si se filtra por categoría y NO es 'MENUS', retornar vacío
+    if (filters.categoryCode && filters.categoryCode.toUpperCase() !== MENU_CATEGORY_CODE) {
+      return {
+        items: [],
+        total: 0,
+        nextCursor: null,
+      };
+    }
+
+    // Query principal
+    const query = this.repository
+      .createQueryBuilder('menu')
+      .where('menu.isActive = :isActive', { isActive: true });
+
+    // Aplicar filtros
+    await this.applyFilters(query, filters);
+
+    // Aplicar ordenamiento
+    this.applySorting(query, filters);
+
+    // Cursor pagination
+    if (filters.cursor) {
+      query.andWhere('menu.id > :cursor', { cursor: filters.cursor });
+    }
+
+    // Obtener total antes de paginar
+    const total = await query.getCount();
+
+    // Aplicar límite (+1 para saber si hay más páginas)
+    query.limit(limit + 1);
+
+    // Ejecutar query
+    const records = await query.getMany();
+
+    // Determinar si hay más páginas
+    const hasMore = records.length > limit;
+    const items = hasMore ? records.slice(0, limit) : records;
+    const nextCursor = hasMore && items.length > 0 ? items[items.length - 1].id : null;
+
+    // Enriquecer con alérgenos e imágenes
+    const menusWithDetails = await this.enrichWithAllergens(items);
+
+    return {
+      items: menusWithDetails,
+      total,
+      nextCursor,
+    };
+  }
+
+  private async applyFilters(query: SelectQueryBuilder<RescueMenuOrmEntity>, filters: CatalogFilters): Promise<void> {
+    // Filtro por vegano
+    if (filters.isVegan !== undefined) {
+      // Convertir explícitamente a número para MySQL tinyint
+      const veganValue = filters.isVegan ? 1 : 0;
+      query.andWhere('menu.is_vegan = :isVegan', { isVegan: veganValue });
+    }
+
+    // Filtro por alérgenos (INVERSO: excluir menús cuyos productos contengan estos alérgenos)
+    if (filters.excludeAllergens && filters.excludeAllergens.length > 0) {
+      
+      // Ensure it's an array
+      const allergensList = Array.isArray(filters.excludeAllergens) 
+        ? filters.excludeAllergens 
+        : [filters.excludeAllergens];
+      
+      // Un menú se excluye si CUALQUIERA de sus productos contiene los alérgenos
+      query.andWhere((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select('DISTINCT rm.id')
+          .from('rescue_menus', 'rm')
+          .innerJoin('product_allergen', 'pa1', 'pa1.productId = rm.drink_id')
+          .innerJoin('product_allergen', 'pa2', 'pa2.productId = rm.starter_id')
+          .innerJoin('product_allergen', 'pa3', 'pa3.productId = rm.main_id')
+          .innerJoin('product_allergen', 'pa4', 'pa4.productId = rm.dessert_id')
+          .where('pa1.allergenCode IN (:...allergens) AND pa1.contains = true', { allergens: allergensList })
+          .orWhere('pa2.allergenCode IN (:...allergens) AND pa2.contains = true')
+          .orWhere('pa3.allergenCode IN (:...allergens) AND pa3.contains = true')
+          .orWhere('pa4.allergenCode IN (:...allergens) AND pa4.contains = true')
+          .getQuery();
+        return `menu.id NOT IN ${subQuery}`;
+      });
+    }
+  }
+
+  private applySorting(query: SelectQueryBuilder<RescueMenuOrmEntity>, filters: CatalogFilters): void {
+    const sortBy = filters.sortBy || 'createdAt';
+    const sortOrder = filters.sortOrder || 'asc';
+
+    switch (sortBy) {
+      case 'price':
+        query.orderBy('menu.price', sortOrder.toUpperCase() as 'ASC' | 'DESC');
+        break;
+      case 'name':
+        query.orderBy('menu.nameEs', sortOrder.toUpperCase() as 'ASC' | 'DESC');
+        break;
+      case 'createdAt':
+      default:
+        query.orderBy('menu.createdAt', sortOrder.toUpperCase() as 'ASC' | 'DESC');
+        break;
+    }
+    // Ordenamiento secundario por ID para garantizar consistencia
+    query.addOrderBy('menu.id', 'ASC');
+  }
+
+  private async enrichWithAllergens(menus: RescueMenuOrmEntity[]): Promise<MenuWithDetails[]> {
+    if (menus.length === 0) return [];
+
+    const menuIds = menus.map(m => m.id);
+
+    // Obtener todos los product IDs de los menús
+    const productIds = menus.flatMap(m => [
+      m.drinkId,
+      m.starterId,
+      m.mainId,
+      m.dessertId,
+    ]);
+
+    // Obtener alérgenos con nombres de todos los productos
+    const allergens = await this.repository
+      .createQueryBuilder('menu')
+      .leftJoin('product_allergen', 'pa', 
+        'pa.productId = menu.drink_id OR pa.productId = menu.starter_id OR pa.productId = menu.main_id OR pa.productId = menu.dessert_id')
+      .leftJoin('allergens', 'a', 'a.code = pa.allergenCode')
+      .select('menu.id', 'menuId')
+      .addSelect('GROUP_CONCAT(DISTINCT CONCAT(pa.allergenCode, "|", a.name_es, "|", a.name_en))', 'allergens')
+      .where('menu.id IN (:...menuIds)', { menuIds })
+      .andWhere('pa.contains = true')
+      .groupBy('menu.id')
+      .getRawMany();
+
+    const allergensMap = new Map<number, Array<{ code: string; nameEs: string; nameEn: string }>>();
+    allergens.forEach((row: any) => {
+      if (row.allergens) {
+        const allergenList = row.allergens.split(',').map((item: string) => {
+          const [code, nameEs, nameEn] = item.split('|');
+          return { code, nameEs, nameEn };
+        });
+        allergensMap.set(row.menuId, allergenList);
+      } else {
+        allergensMap.set(row.menuId, []);
+      }
+    });
+
+    // Obtener imágenes de los menús
+    const images = await this.repository
+      .createQueryBuilder('menu')
+      .leftJoin('images', 'img', 'img.menu_id = menu.id')
+      .select('menu.id', 'menuId')
+      .addSelect('GROUP_CONCAT(DISTINCT img.path)', 'images')
+      .where('menu.id IN (:...menuIds)', { menuIds })
+      .andWhere('img.is_active = true')
+      .groupBy('menu.id')
+      .getRawMany();
+
+    const imagesMap = new Map<number, string[]>();
+    const baseUrl = this.configService.get<string>('MINIO_PUBLIC_URL') || 'http://localhost:9000';
+    
+    images.forEach((row: any) => {
+      const paths = row.images ? row.images.split(',') : [];
+      // Construir URLs completas: baseUrl + path
+      const fullUrls = paths.map((path: string) => `${baseUrl}${path}`);
+      imagesMap.set(row.menuId, fullUrls);
+    });
+
+    return menus.map((menu) => {
+      const allergenCodes = allergensMap.get(menu.id) || [];
+      const imagePaths = imagesMap.get(menu.id) || [];
+      
+      const baseMenu = RescueMenu.fromPrimitives({
+        id: menu.id,
+        uuid: menu.uuid,
+        nameEs: menu.nameEs,
+        nameEn: menu.nameEn,
+        descriptionEs: menu.descriptionEs,
+        descriptionEn: menu.descriptionEn,
+        drinkProductId: menu.drinkId,
+        starterProductId: menu.starterId,
+        mainProductId: menu.mainId,
+        dessertProductId: menu.dessertId,
+        price: Number(menu.price),
+        currency: menu.currency,
+        isVegan: Boolean(menu.isVegan),
+        isActive: Boolean(menu.isActive),
+        createdAt: menu.createdAt,
+        updatedAt: menu.updatedAt,
+      });
+
+      // Construir objeto de categoría para menús
+      const categoryInfo = {
+        code: 'MENUS',
+        nameEs: 'Menús',
+        nameEn: 'Menus',
+      };
+
+      return {
+        ...baseMenu,
+        allergens: allergenCodes,
+        images: imagePaths,
+        category: categoryInfo,
+      };
+    });
+  }
+}

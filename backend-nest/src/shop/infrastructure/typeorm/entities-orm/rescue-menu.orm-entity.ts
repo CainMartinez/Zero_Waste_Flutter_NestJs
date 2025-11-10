@@ -63,10 +63,28 @@ export class RescueMenuOrmEntity {
   @Column({ type: 'varchar', length: 3, default: () => "'EUR'" })
   currency: string;
 
-  @Column({ name: 'is_vegan', type: 'tinyint', width: 1, default: () => '0' })
+  @Column({ 
+    name: 'is_vegan', 
+    type: 'tinyint', 
+    width: 1, 
+    default: () => '0',
+    transformer: {
+      to: (value: boolean): number => value ? 1 : 0,
+      from: (value: number): boolean => Boolean(value)
+    }
+  })
   isVegan: boolean;
 
-  @Column({ name: 'is_active', type: 'tinyint', width: 1, default: () => '1' })
+  @Column({ 
+    name: 'is_active', 
+    type: 'tinyint', 
+    width: 1, 
+    default: () => '1',
+    transformer: {
+      to: (value: boolean): number => value ? 1 : 0,
+      from: (value: number): boolean => Boolean(value)
+    }
+  })
   isActive: boolean;
 
   // --- Timestamps ---
