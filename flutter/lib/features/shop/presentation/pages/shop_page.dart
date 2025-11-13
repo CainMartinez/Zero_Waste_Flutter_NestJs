@@ -8,6 +8,7 @@ import '../providers/catalog_provider.dart';
 import '../widgets/product_card.dart';
 import '../widgets/product_detail_modal.dart';
 import '../../../cart/presentation/providers/cart_provider.dart';
+import '../../../cart/presentation/pages/cart_page.dart';
 import '../../../../core/widgets/app_filter_chip.dart';
 
 class ShopPage extends ConsumerStatefulWidget {
@@ -313,7 +314,12 @@ class _ShopPageState extends ConsumerState<ShopPage> {
               IconButton(
                 icon: const Icon(Icons.shopping_cart),
                 onPressed: () {
-                  // TODO: Navegar a página del carrito
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CartPage(),
+                    ),
+                  );
                 },
               ),
               if (cartItemCount > 0)
