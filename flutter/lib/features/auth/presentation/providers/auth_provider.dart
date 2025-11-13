@@ -185,6 +185,12 @@ class AuthNotifier extends Notifier<AsyncValue<AuthViewState>> {
       state = AsyncValue.error(e, st);
     }
   }
+
+  void clearError() {
+    if (state.hasError) {
+      state = const AsyncValue.data(AuthViewState.anonymous());
+    }
+  }
 }
 
 final authProvider = NotifierProvider<AuthNotifier, AsyncValue<AuthViewState>>(() {

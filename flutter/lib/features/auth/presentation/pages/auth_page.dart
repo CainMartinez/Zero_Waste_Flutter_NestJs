@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pub_diferent/core/widgets/app_header_logo.dart';
 import 'package:pub_diferent/features/auth/presentation/widgets/login_form.dart';
 import 'package:pub_diferent/features/auth/presentation/widgets/register_form.dart';
+import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart';
 
 enum AuthMode { login, register }
 enum AuthRole { user, admin }
@@ -40,7 +41,10 @@ class _AuthPageState extends ConsumerState<AuthPage> {
 
               _AuthModeSwitcher(
                 mode: _mode,
-                onChanged: (m) => setState(() => _mode = m),
+                onChanged: (m) {
+                  ref.read(authProvider.notifier).clearError();
+                  setState(() => _mode = m);
+                },
               ),
               const SizedBox(height: 14),
 
