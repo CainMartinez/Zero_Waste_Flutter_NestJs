@@ -10,6 +10,7 @@ import { LocationsModule } from './locations/locations.module';
 import { ThrottlerModule } from '@nestjs/throttler/dist/throttler.module';
 import { ProfileModule } from './profile/profile.module';
 import { MediaModule } from './media/media.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { MediaModule } from './media/media.module';
     LocationsModule,
     ProfileModule,
     MediaModule,
+    AdminModule,
   ],
 })
 export class AppModule {}
