@@ -100,4 +100,32 @@ export class ProductAdminResponseDto {
     example: '2024-01-01T12:00:00.000Z',
   })
   updatedAt: Date;
+
+  @ApiProperty({
+    description: 'Imágenes del producto',
+    example: [
+      {
+        id: 1,
+        path: '/images/products/pizza-margarita.jpg',
+        fileName: 'pizza-margarita.jpg',
+      },
+    ],
+    isArray: true,
+  })
+  images: Array<{ id: number; path: string; fileName: string }>;
+
+  @ApiProperty({
+    description: 'Alérgenos del producto',
+    example: [
+      {
+        code: 'gluten',
+        nameEs: 'Gluten',
+        nameEn: 'Gluten',
+        contains: true,
+        mayContain: false,
+      },
+    ],
+    isArray: true,
+  })
+  allergens: Array<{ code: string; nameEs: string; nameEn: string; contains: boolean; mayContain: boolean }>;
 }

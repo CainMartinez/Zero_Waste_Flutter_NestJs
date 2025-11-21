@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { IProductAdminRepository } from '../../domain/repositories/product-admin.repository';
 import { ProductAdminResponseDto } from '../../application/dto/response/product-admin.response.dto';
 import { Product } from '../../../shop/domain/entities/product.entity';
@@ -6,6 +6,7 @@ import { Product } from '../../../shop/domain/entities/product.entity';
 @Injectable()
 export class GetProductByIdUseCase {
   constructor(
+    @Inject('IProductAdminRepository')
     private readonly productAdminRepo: IProductAdminRepository,
   ) {}
 
@@ -19,7 +20,11 @@ export class GetProductByIdUseCase {
     return this.toDto(product);
   }
 
-  private toDto(product: Product & { categoryData?: { id: number; code: string; nameEs: string; nameEn: string } }): ProductAdminResponseDto {
+  private toDto(product: Product & { 
+    categoryData?: { id: number; code: string; nameEs: string; nameEn: string };
+    images?: Array<{ id: number; path: string; fileName: string }>;
+    allergens?: Array<{ code: string; nameEs: string; nameEn: string; contains: boolean; mayContain: boolean }>;
+  }): ProductAdminResponseDto {
     return {
       id: product.id,
       uuid: product.uuid,
@@ -37,6 +42,8 @@ export class GetProductByIdUseCase {
       categoryNameEn: product.categoryData?.nameEn || null,
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,
+      images: product.images || [],
+      allergens: product.allergens || [],
     };
   }
 }
