@@ -24,8 +24,8 @@ export class UploadImageUseCase {
     const validProductId = productId && !isNaN(Number(productId)) ? Number(productId) : undefined;
     const validMenuId = menuId && !isNaN(Number(menuId)) ? Number(menuId) : undefined;
 
-    // Determinar el tipo de bucket según la entidad (prioridad: product > menu > category)
-    let type: 'product' | 'menu' | 'category' = 'category';
+    // Determinar el tipo de bucket según la entidad (prioridad: product > menu)
+    let type: 'product' | 'menu'  = 'product';
     if (validProductId) {
       type = 'product';
     } else if (validMenuId) {

@@ -16,6 +16,7 @@ import { GetImageBySlugUseCase } from '../../application/use_cases/get-image-by-
 import { GetImagesByProductUseCase } from '../../application/use_cases/get-images-by-product.usecase';
 import { GetImagesByMenuUseCase } from '../../application/use_cases/get-images-by-menu.usecase';
 import { DeleteImageUseCase } from '../../application/use_cases/delete-image.usecase';
+import { DeleteImageByIdUseCase } from '../../application/use_cases/delete-image-by-id.usecase';
 import { GetPresignedUrlUseCase } from '../../application/use_cases/get-presigned-url.usecase';
 import { UploadImageRequestDto } from '../../application/dto/request/upload-image.request.dto';
 import { ImageResponseDto } from '../../application/dto/response/image.response.dto';
@@ -30,6 +31,7 @@ export class MediaController {
     private readonly getImagesByProductUseCase: GetImagesByProductUseCase,
     private readonly getImagesByMenuUseCase: GetImagesByMenuUseCase,
     private readonly deleteImageUseCase: DeleteImageUseCase,
+    private readonly deleteImageByIdUseCase: DeleteImageByIdUseCase,
     private readonly getPresignedUrlUseCase: GetPresignedUrlUseCase,
     private readonly imageAssembler: ImageAssembler,
   ) {}
@@ -153,8 +155,17 @@ export class MediaController {
     return { url };
   }
 
+  @Delete(':id')
+  @ApiOperation({ summary: 'Eliminar una imagen por ID' })
+  @ApiResponse({ status: 200, description: 'Imagen eliminada exitosamente' })
+  @ApiResponse({ status: 404, description: 'Imagen no encontrada' })
+  async deleteImageById(@Param('id') id: number): Promise<{ message: string }> {
+    await this.deleteImageByIdUseCase.execute(Number(id));
+    return { message: 'Imagen eliminada exitosamente' };
+  }
+
   @Delete('slug/:slug')
-  @ApiOperation({ summary: 'Eliminar una imagen' })
+  @ApiOperation({ summary: 'Eliminar una imagen por slug' })
   @ApiResponse({ status: 200, description: 'Imagen eliminada exitosamente' })
   @ApiResponse({ status: 404, description: 'Imagen no encontrada' })
   async deleteImage(@Param('slug') slug: string): Promise<{ message: string }> {

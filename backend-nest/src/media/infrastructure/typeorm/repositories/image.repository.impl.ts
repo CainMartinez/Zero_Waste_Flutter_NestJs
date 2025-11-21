@@ -65,11 +65,13 @@ export class ImageRepositoryImpl implements ImageRepository {
   }
 
   async delete(id: number): Promise<void> {
-    await this.imageRepository.update(id, { isActive: false });
+    // Hard delete - eliminar físicamente de la base de datos
+    await this.imageRepository.delete(id);
   }
 
   async deleteBySlug(slug: string): Promise<void> {
-    await this.imageRepository.update({ slug }, { isActive: false });
+    // Hard delete - eliminar físicamente de la base de datos
+    await this.imageRepository.delete({ slug });
   }
 
   private toDomain(orm: ImageOrmEntity): Image {

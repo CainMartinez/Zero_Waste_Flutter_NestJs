@@ -8,7 +8,6 @@ export class MinioClientService {
   private readonly buckets = {
     products: 'products',
     menus: 'menus',
-    categories: 'categories',
   };
   private readonly logger = new Logger(MinioClientService.name);
 
@@ -61,7 +60,7 @@ export class MinioClientService {
    */
   async uploadFile(
     file: Express.Multer.File,
-    type: 'product' | 'menu' | 'category',
+    type: 'product' | 'menu',
   ): Promise<{ slug: string; fileName: string; path: string }> {
     const bucket = this.buckets[`${type}s`];
     const timestamp = Date.now();
@@ -142,7 +141,7 @@ export class MinioClientService {
   /**
    * Obtiene el nombre del bucket según el tipo
    */
-  getBucketName(type: 'product' | 'menu' | 'category'): string {
+  getBucketName(type: 'product' | 'menu'): string {
     return this.buckets[`${type}s`];
   }
 }

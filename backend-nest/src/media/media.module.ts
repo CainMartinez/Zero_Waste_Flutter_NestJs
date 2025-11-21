@@ -9,6 +9,7 @@ import { GetImageBySlugUseCase } from './application/use_cases/get-image-by-slug
 import { GetImagesByProductUseCase } from './application/use_cases/get-images-by-product.usecase';
 import { GetImagesByMenuUseCase } from './application/use_cases/get-images-by-menu.usecase';
 import { DeleteImageUseCase } from './application/use_cases/delete-image.usecase';
+import { DeleteImageByIdUseCase } from './application/use_cases/delete-image-by-id.usecase';
 import { GetPresignedUrlUseCase } from './application/use_cases/get-presigned-url.usecase';
 import { MediaController } from './presentation/controllers/media.controller';
 import { ImageAssembler } from './presentation/assemblers/image.assembler';
@@ -30,6 +31,7 @@ import { ImageAssembler } from './presentation/assemblers/image.assembler';
     GetImagesByProductUseCase,
     GetImagesByMenuUseCase,
     DeleteImageUseCase,
+    DeleteImageByIdUseCase,
     GetPresignedUrlUseCase,
     ImageAssembler,
   ],
@@ -39,6 +41,7 @@ import { ImageAssembler } from './presentation/assemblers/image.assembler';
     GetImagesByProductUseCase,
     GetImagesByMenuUseCase,
     DeleteImageUseCase,
+    DeleteImageByIdUseCase,
     GetPresignedUrlUseCase,
     MinioClientService,
   ],
