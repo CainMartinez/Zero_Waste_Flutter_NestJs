@@ -141,12 +141,16 @@ export class QueryCatalogUseCase {
     cursor: number | undefined,
     limit: number,
   ): CatalogItem[] {
-    // If cursor is provided, filter items after cursor
-    const startIndex = cursor 
-      ? items.findIndex(item => item.id === cursor) + 1 
-      : 0;
+    let filteredItems = items;
+    
+    if (cursor) {
+      const cursorIndex = items.findIndex(item => item.id === cursor);
+      
+      if (cursorIndex >= 0) {
+        filteredItems = items.slice(cursorIndex + 1);
+      }
+    }
 
-    // Return limit + 1 items to check if there are more
-    return items.slice(startIndex, startIndex + limit + 1);
+    return filteredItems.slice(0, limit + 1);
   }
 }

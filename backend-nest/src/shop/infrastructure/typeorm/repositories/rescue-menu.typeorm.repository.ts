@@ -140,29 +140,69 @@ export class RescueMenuTypeOrmRepository extends IRescueMenuRepository {
       m.dessertId,
     ]);
 
-    // Obtener alérgenos con nombres de todos los productos
+    // Obtener alérgenos con nombres de todos los productos del menú
+    // Obtenemos todos los alérgenos de los productos y luego consolidamos en TypeScript
     const allergens = await this.repository
       .createQueryBuilder('menu')
       .leftJoin('product_allergen', 'pa', 
         'pa.productId = menu.drink_id OR pa.productId = menu.starter_id OR pa.productId = menu.main_id OR pa.productId = menu.dessert_id')
       .leftJoin('allergens', 'a', 'a.code = pa.allergenCode')
       .select('menu.id', 'menuId')
-      .addSelect('GROUP_CONCAT(DISTINCT CONCAT(pa.allergenCode, "|", a.name_es, "|", a.name_en))', 'allergens')
+      .addSelect('pa.allergenCode', 'allergenCode')
+      .addSelect('a.name_es', 'nameEs')
+      .addSelect('a.name_en', 'nameEn')
+      .addSelect('pa.contains', 'contains')
+      .addSelect('pa.mayContain', 'mayContain')
       .where('menu.id IN (:...menuIds)', { menuIds })
-      .andWhere('pa.contains = true')
-      .groupBy('menu.id')
+      .andWhere('pa.isActive = true')
       .getRawMany();
 
-    const allergensMap = new Map<number, Array<{ code: string; nameEs: string; nameEn: string }>>();
+    // Consolidar alérgenos por menú
+    // Si algún producto del menú tiene contains=true para un alérgeno, el menú lo contiene
+    // Si ninguno tiene contains=true pero alguno tiene mayContain=true, el menú puede contenerlo
+    const menuAllergens = new Map<number, Map<string, { code: string; nameEs: string; nameEn: string; contains: boolean; mayContain: boolean }>>();
+    
     allergens.forEach((row: any) => {
-      if (row.allergens) {
-        const allergenList = row.allergens.split(',').map((item: string) => {
-          const [code, nameEs, nameEn] = item.split('|');
-          return { code, nameEs, nameEn };
-        });
-        allergensMap.set(row.menuId, allergenList);
+      const menuId = row.menuId;
+      const code = row.allergenCode;
+      const nameEs = row.nameEs;
+      const nameEn = row.nameEn;
+      const contains = row.contains === 1 || row.contains === true;
+      const mayContain = row.mayContain === 1 || row.mayContain === true;
+      
+      if (!menuAllergens.has(menuId)) {
+        menuAllergens.set(menuId, new Map());
+      }
+      
+      const allergenMap = menuAllergens.get(menuId)!;
+      const existing = allergenMap.get(code);
+      
+      if (!existing) {
+        allergenMap.set(code, { code, nameEs, nameEn, contains, mayContain });
       } else {
-        allergensMap.set(row.menuId, []);
+        // Combinar valores: si alguno tiene contains=true, el resultado es contains=true
+        allergenMap.set(code, {
+          code,
+          nameEs,
+          nameEn,
+          contains: existing.contains || contains,
+          mayContain: existing.mayContain || mayContain,
+        });
+      }
+    });
+    
+    // Convertir el mapa a la estructura final
+    const allergensMap = new Map<number, Array<{ code: string; nameEs: string; nameEn: string; contains: boolean; mayContain: boolean }>>();
+    
+    menuAllergens.forEach((allergenMap, menuId) => {
+      const allergenArray = Array.from(allergenMap.values());
+      allergensMap.set(menuId, allergenArray);
+    });
+    
+    // Inicializar menús sin alérgenos
+    menuIds.forEach(id => {
+      if (!allergensMap.has(id)) {
+        allergensMap.set(id, []);
       }
     });
 

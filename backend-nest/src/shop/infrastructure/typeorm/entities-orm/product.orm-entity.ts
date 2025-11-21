@@ -1,5 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CategoryOrmEntity } from './category.orm-entity';
+import { ImageOrmEntity } from '../../../../media/infrastructure/typeorm/entities-orm/image.orm-entity';
+import { ProductAllergenOrmEntity } from './product-allergen.orm-entity';
 
 @Entity({ name: 'products' })
 export class ProductOrmEntity {
@@ -54,6 +56,12 @@ export class ProductOrmEntity {
   @ManyToOne(() => CategoryOrmEntity, (category) => category.products, { eager: false })
   @JoinColumn({ name: 'category_id' })
   category: CategoryOrmEntity;
+
+  @OneToMany(() => ImageOrmEntity, (image) => image.product, { eager: false })
+  images: ImageOrmEntity[];
+
+  @OneToMany(() => ProductAllergenOrmEntity, (pa) => pa.product, { eager: false })
+  allergens: ProductAllergenOrmEntity[];
 
   @Column({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;

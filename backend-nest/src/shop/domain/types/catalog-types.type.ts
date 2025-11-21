@@ -5,6 +5,8 @@ export interface AllergenInfo {
   code: string;
   nameEs: string;
   nameEn: string;
+  contains: boolean;
+  mayContain: boolean;
 }
 
 export interface CategoryInfo {

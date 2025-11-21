@@ -136,18 +136,24 @@ export class ProductTypeOrmRepository extends IProductRepository {
       .leftJoin('product_allergen', 'pa', 'pa.productId = product.id')
       .leftJoin('allergens', 'a', 'a.code = pa.allergenCode')
       .select('product.id', 'productId')
-      .addSelect('GROUP_CONCAT(DISTINCT CONCAT(pa.allergenCode, "|", a.name_es, "|", a.name_en))', 'allergens')
+      .addSelect('GROUP_CONCAT(DISTINCT CONCAT(pa.allergenCode, "|", a.name_es, "|", a.name_en, "|", pa.contains, "|", pa.mayContain))', 'allergens')
       .where('product.id IN (:...productIds)', { productIds })
-      .andWhere('pa.contains = true')
+      .andWhere('pa.isActive = true')
       .groupBy('product.id')
       .getRawMany();
 
-    const allergensMap = new Map<number, Array<{ code: string; nameEs: string; nameEn: string }>>();
+    const allergensMap = new Map<number, Array<{ code: string; nameEs: string; nameEn: string; contains: boolean; mayContain: boolean }>>();
     allergens.forEach((row: any) => {
       if (row.allergens) {
         const allergenList = row.allergens.split(',').map((item: string) => {
-          const [code, nameEs, nameEn] = item.split('|');
-          return { code, nameEs, nameEn };
+          const [code, nameEs, nameEn, contains, mayContain] = item.split('|');
+          return { 
+            code, 
+            nameEs, 
+            nameEn,
+            contains: contains === '1' || contains === 'true',
+            mayContain: mayContain === '1' || mayContain === 'true',
+          };
         });
         allergensMap.set(row.productId, allergenList);
       } else {

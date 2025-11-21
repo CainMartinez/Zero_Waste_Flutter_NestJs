@@ -39,12 +39,12 @@ export class CatalogItemResponseDto {
 
   @ApiProperty({
     example: [
-      { code: 'GLUTEN', nameEs: 'Gluten', nameEn: 'Gluten' },
-      { code: 'MILK', nameEs: 'Lácteos', nameEn: 'Milk' }
+      { code: 'GLUTEN', nameEs: 'Gluten', nameEn: 'Gluten', contains: true, mayContain: false },
+      { code: 'MILK', nameEs: 'Lácteos', nameEn: 'Milk', contains: false, mayContain: true }
     ],
-    description: 'Alérgenos que contiene el producto/menú con nombres en español e inglés',
+    description: 'Alérgenos del producto/menú con nombres e información de contiene/puede contener',
   })
-  allergens: Array<{ code: string; nameEs: string; nameEn: string }>;
+  allergens: Array<{ code: string; nameEs: string; nameEn: string; contains: boolean; mayContain: boolean }>;
 
   @ApiProperty({
     example: [],
