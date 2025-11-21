@@ -235,24 +235,59 @@ class _ProductDetailModalState extends State<ProductDetailModal> {
                                 runSpacing: 8,
                                 children: widget.item.allergens.map((allergen) {
                                   final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+                                  final bool isContains = allergen.contains;
+                                  final bool isMayContain = allergen.mayContain;
+
+                                  // Determinar el color según la prioridad: contains > mayContain
+                                  final bool useRedStyle = isContains;
+                                  final bool useOrangeStyle = !isContains && isMayContain;
+                                  
                                   return Chip(
-                                    label: Text(allergen.nameEs),
-                                    avatar: Icon(
-                                      Icons.warning_amber, 
-                                      size: 18,
-                                      color: isDarkMode ? Colors.orange.shade300 : Colors.orange.shade800,
+                                    label: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(allergen.nameEs),
+                                        if (isContains || isMayContain) ...[
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            isContains ? '✓' : '~',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: isDarkMode
+                                                  ? (useRedStyle ? Colors.red.shade300 : Colors.orange.shade300)
+                                                  : (useRedStyle ? Colors.red.shade800 : Colors.orange.shade800),
+                                            ),
+                                          ),
+                                        ],
+                                      ],
                                     ),
-                                    backgroundColor: isDarkMode 
-                                        ? Colors.orange.shade900.withOpacity(0.3)
-                                        : Colors.orange.shade100,
+                                    avatar: Icon(
+                                      useRedStyle ? Icons.warning : (useOrangeStyle ? Icons.info_outline : Icons.info),
+                                      size: 18,
+                                      color: isDarkMode
+                                          ? (useRedStyle ? Colors.red.shade300 : (useOrangeStyle ? Colors.orange.shade300 : Colors.grey.shade400))
+                                          : (useRedStyle ? Colors.red.shade800 : (useOrangeStyle ? Colors.orange.shade800 : Colors.grey.shade600)),
+                                    ),
+                                    backgroundColor: isDarkMode
+                                        ? (useRedStyle ? Colors.red.shade900.withOpacity(0.3) : (useOrangeStyle ? Colors.orange.shade900.withOpacity(0.3) : Colors.grey.shade800.withOpacity(0.3)))
+                                        : (useRedStyle ? Colors.red.shade100 : (useOrangeStyle ? Colors.orange.shade100 : Colors.grey.shade100)),
                                     labelStyle: TextStyle(
-                                      color: isDarkMode 
-                                          ? Colors.orange.shade200
-                                          : Colors.orange.shade900,
+                                      color: isDarkMode
+                                          ? (useRedStyle ? Colors.red.shade200 : (useOrangeStyle ? Colors.orange.shade200 : Colors.grey.shade300))
+                                          : (useRedStyle ? Colors.red.shade900 : (useOrangeStyle ? Colors.orange.shade900 : Colors.grey.shade700)),
                                       fontWeight: FontWeight.w500,
                                     ),
                                   );
                                 }).toList(),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                '✓ Contiene • ~ Puede contener trazas',
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: Colors.grey,
+                                  fontStyle: FontStyle.italic,
+                                ),
                               ),
                               const SizedBox(height: 24),
                             ],

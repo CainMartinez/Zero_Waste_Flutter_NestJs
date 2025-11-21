@@ -3,11 +3,15 @@ class Allergen {
   final String code;
   final String nameEs;
   final String nameEn;
+  final bool contains;
+  final bool mayContain;
 
   const Allergen({
     required this.code,
     required this.nameEs,
     required this.nameEn,
+    this.contains = false,
+    this.mayContain = false,
   });
 
   factory Allergen.fromJson(Map<String, dynamic> json) {
@@ -15,6 +19,16 @@ class Allergen {
       code: json['code'] as String,
       nameEs: json['nameEs'] as String,
       nameEn: json['nameEn'] as String,
+      contains: _parseBool(json['contains']),
+      mayContain: _parseBool(json['mayContain']),
     );
+  }
+
+  static bool _parseBool(dynamic value) {
+    if (value == null) return false;
+    if (value is bool) return value;
+    if (value is int) return value != 0;
+    if (value is String) return value.toLowerCase() == 'true' || value == '1';
+    return false;
   }
 }

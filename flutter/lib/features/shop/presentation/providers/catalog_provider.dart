@@ -38,6 +38,7 @@ final getCategoriesUseCaseProvider = Provider<GetCategoriesUseCase>((ref) {
 /// Notificador del catálogo con paginación
 class CatalogNotifier extends Notifier<CatalogState> {
   CatalogFilters _currentFilters = const CatalogFilters(limit: 20);
+  bool _isLoadingMore = false;
 
   @override
   CatalogState build() => CatalogState.initial();
@@ -63,21 +64,31 @@ class CatalogNotifier extends Notifier<CatalogState> {
 
   /// Carga más items (infinite scroll)
   Future<void> loadMore() async {
-    if (!state.hasMore || state.isLoading || state.nextCursor == null) return;
+    // Evitar múltiples llamadas simultáneas
+    if (_isLoadingMore || !state.hasMore || state.isLoading || state.nextCursor == null) return;
 
-    state = state.loading();
+    _isLoadingMore = true;
+    
+    // NO cambiar isLoading a true, mantener los items actuales visibles
+    final currentItems = state.items;
 
     try {
       final filters = _currentFilters.copyWith(cursor: int.tryParse(state.nextCursor ?? ''));
       final result = await _getCatalogUseCase.execute(filters);
 
+      // Filtrar duplicados por ID
+      final existingIds = currentItems.map((item) => item.id).toSet();
+      final newItems = result.items.where((item) => !existingIds.contains(item.id)).toList();
+
       state = state.withData(
-        items: [...state.items, ...result.items],
+        items: [...currentItems, ...newItems],
         hasMore: result.hasMore,
         nextCursor: result.nextCursor?.toString(),
       );
     } catch (e) {
       state = state.withError(e.toString());
+    } finally {
+      _isLoadingMore = false;
     }
   }
 }
