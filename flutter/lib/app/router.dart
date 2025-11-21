@@ -6,6 +6,7 @@ import 'package:pub_diferent/core/layout/app_shell.dart';
 import 'package:pub_diferent/features/home/presentation/pages/home_page.dart';
 import 'package:pub_diferent/features/profile/presentation/pages/profile_page.dart';
 import 'package:pub_diferent/features/shop/presentation/pages/shop_page.dart';
+import 'package:pub_diferent/features/admin/presentation/pages/products_admin_page.dart';
 
 import 'package:pub_diferent/features/auth/presentation/pages/auth_page.dart';
 import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart';
@@ -62,7 +63,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/products',
             pageBuilder: (context, state) => NoTransitionPage(
               child: _AuthGate(
-                logged: const Center(child: Text('Gestión de productos')),
+                logged: const ProductsAdminPage(),
                 anonymous: const AuthPage(key: ValueKey('products-auth')),
               ),
             ),
