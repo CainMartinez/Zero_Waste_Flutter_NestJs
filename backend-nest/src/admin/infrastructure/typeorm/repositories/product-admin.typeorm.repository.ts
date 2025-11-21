@@ -19,7 +19,7 @@ export class ProductAdminTypeOrmRepository implements IProductAdminRepository {
 
   async findAll(): Promise<Product[]> {
     const entities = await this.productRepo.find({
-      relations: ['category'],
+      relations: ['category', 'images', 'allergens', 'allergens.allergen'],
       order: { createdAt: 'DESC' },
     });
 
@@ -29,7 +29,7 @@ export class ProductAdminTypeOrmRepository implements IProductAdminRepository {
   async findById(id: number): Promise<Product | null> {
     const entity = await this.productRepo.findOne({
       where: { id },
-      relations: ['category'],
+      relations: ['category', 'images', 'allergens', 'allergens.allergen'],
     });
 
     return entity ? this.toDomainWithCategoryData(entity) : null;
@@ -38,7 +38,7 @@ export class ProductAdminTypeOrmRepository implements IProductAdminRepository {
   async findByUuid(uuid: string): Promise<Product | null> {
     const entity = await this.productRepo.findOne({
       where: { uuid },
-      relations: ['category'],
+      relations: ['category', 'images', 'allergens', 'allergens.allergen'],
     });
 
     return entity ? this.toDomainWithCategoryData(entity) : null;
@@ -140,7 +140,11 @@ export class ProductAdminTypeOrmRepository implements IProductAdminRepository {
     return this.toDomainWithCategoryData(saved);
   }
 
-  private toDomainWithCategoryData(entity: ProductOrmEntity): Product & { categoryData?: { id: number; code: string; nameEs: string; nameEn: string } } {
+  private toDomainWithCategoryData(entity: ProductOrmEntity): Product & { 
+    categoryData?: { id: number; code: string; nameEs: string; nameEn: string };
+    images?: Array<{ id: number; path: string; fileName: string }>;
+    allergens?: Array<{ code: string; nameEs: string; nameEn: string; contains: boolean; mayContain: boolean }>;
+  } {
     const product = new Product({
       id: entity.id,
       uuid: entity.uuid,
@@ -157,7 +161,7 @@ export class ProductAdminTypeOrmRepository implements IProductAdminRepository {
       updatedAt: entity.updatedAt,
     });
 
-    // Añadir datos extra de categoría
+    // Añadir datos extra de categoría, imágenes y alérgenos
     return Object.assign(product, {
       categoryData: entity.category ? {
         id: entity.category.id,
@@ -165,6 +169,18 @@ export class ProductAdminTypeOrmRepository implements IProductAdminRepository {
         nameEs: entity.category.nameEs || '',
         nameEn: entity.category.nameEn || '',
       } : undefined,
+      images: entity.images?.map(img => ({
+        id: img.id,
+        path: img.path,
+        fileName: img.fileName,
+      })) || [],
+      allergens: entity.allergens?.filter(pa => pa.isActive).map(pa => ({
+        code: pa.allergenCode,
+        nameEs: pa.allergen?.nameEs || pa.allergenCode,
+        nameEn: pa.allergen?.nameEn || pa.allergenCode,
+        contains: pa.contains,
+        mayContain: pa.mayContain,
+      })) || [],
     });
   }
 }

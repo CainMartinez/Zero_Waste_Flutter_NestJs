@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductOrmEntity } from '../shop/infrastructure/typeorm/entities-orm/product.orm-entity';
 import { CategoryOrmEntity } from '../shop/infrastructure/typeorm/entities-orm/category.orm-entity';
+import { ProductAllergenOrmEntity } from '../shop/infrastructure/typeorm/entities-orm/product-allergen.orm-entity';
 import { ProductsAdminController } from './presentation/controllers/products-admin.controller';
 import { IProductAdminRepository } from './domain/repositories/product-admin.repository';
 import { ProductAdminTypeOrmRepository } from './infrastructure/typeorm/repositories/product-admin.typeorm.repository';
@@ -11,12 +12,14 @@ import { CreateProductUseCase } from './application/use_cases/create-product.use
 import { UpdateProductUseCase } from './application/use_cases/update-product.usecase';
 import { DeleteProductUseCase } from './application/use_cases/delete-product.usecase';
 import { ReactivateProductUseCase } from './application/use_cases/reactivate-product.usecase';
+import { UpdateProductAllergensUseCase } from './application/use_cases/update-product-allergens.usecase';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       ProductOrmEntity,
       CategoryOrmEntity,
+      ProductAllergenOrmEntity,
     ]),
   ],
   controllers: [ProductsAdminController],
@@ -28,11 +31,12 @@ import { ReactivateProductUseCase } from './application/use_cases/reactivate-pro
     UpdateProductUseCase,
     DeleteProductUseCase,
     ReactivateProductUseCase,
+    UpdateProductAllergensUseCase,
 
     // Repositories
     ProductAdminTypeOrmRepository,
     {
-      provide: IProductAdminRepository,
+      provide: 'IProductAdminRepository',
       useExisting: ProductAdminTypeOrmRepository,
     },
   ],

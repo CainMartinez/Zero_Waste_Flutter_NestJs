@@ -27,9 +27,11 @@ import { CreateProductUseCase } from '../../application/use_cases/create-product
 import { UpdateProductUseCase } from '../../application/use_cases/update-product.usecase';
 import { DeleteProductUseCase } from '../../application/use_cases/delete-product.usecase';
 import { ReactivateProductUseCase } from '../../application/use_cases/reactivate-product.usecase';
+import { UpdateProductAllergensUseCase } from '../../application/use_cases/update-product-allergens.usecase';
 import { ProductAdminResponseDto } from '../../application/dto/response/product-admin.response.dto';
 import { CreateProductRequestDto } from '../../application/dto/request/create-product.request.dto';
 import { UpdateProductRequestDto } from '../../application/dto/request/update-product.request.dto';
+import { UpdateProductAllergensRequestDto } from '../../application/dto/request/update-product-allergens.request.dto';
 
 @ApiTags('Admin - Products')
 @ApiBearerAuth()
@@ -43,6 +45,7 @@ export class ProductsAdminController {
     private readonly updateProduct: UpdateProductUseCase,
     private readonly deleteProduct: DeleteProductUseCase,
     private readonly reactivateProduct: ReactivateProductUseCase,
+    private readonly updateProductAllergens: UpdateProductAllergensUseCase,
   ) {}
 
   @Get()
@@ -113,5 +116,17 @@ export class ProductsAdminController {
   @ApiUnauthorizedResponse({ description: 'Token inválido o usuario no es admin' })
   async reactivate(@Param('id', ParseIntPipe) id: number): Promise<ProductAdminResponseDto> {
     return this.reactivateProduct.execute(id);
+  }
+
+  @Patch(':id/allergens')
+  @ApiOperation({ summary: 'Actualizar alérgenos de un producto' })
+  @ApiNoContentResponse({ description: 'Alérgenos actualizados correctamente' })
+  @ApiNotFoundResponse({ description: 'Producto no encontrado' })
+  @ApiUnauthorizedResponse({ description: 'Token inválido o usuario no es admin' })
+  async updateAllergens(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateProductAllergensRequestDto,
+  ): Promise<void> {
+    return this.updateProductAllergens.execute(id, dto.allergens);
   }
 }
