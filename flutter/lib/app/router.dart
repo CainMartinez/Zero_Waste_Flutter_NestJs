@@ -8,8 +8,7 @@ import 'package:pub_diferent/features/profile/presentation/pages/profile_page.da
 import 'package:pub_diferent/features/shop/presentation/pages/shop_page.dart';
 import 'package:pub_diferent/features/admin/presentation/pages/products_admin_page.dart';
 
-import 'package:pub_diferent/features/auth/presentation/pages/auth_page.dart';
-import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart';
+import 'package:pub_diferent/core/widgets/auth_gate.dart';
 
 final _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
@@ -41,10 +40,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/orders',
-            pageBuilder: (context, state) => NoTransitionPage(
-              child: _AuthGate(
-                logged: const Center(child: Text('Listado de pedidos')),
-                anonymous: const AuthPage(key: ValueKey('orders-auth')),
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: AuthGate(
+                child: Center(child: Text('Listado de pedidos')),
+                authPageKey: ValueKey('orders-auth'),
               ),
             ),
           ),
@@ -52,28 +51,28 @@ final routerProvider = Provider<GoRouter>((ref) {
           // Rutas para ADMIN
           GoRoute(
             path: '/dashboard',
-            pageBuilder: (context, state) => NoTransitionPage(
-              child: _AuthGate(
-                logged: const Center(child: Text('Dashboard - Datos globales de la aplicación')),
-                anonymous: const AuthPage(key: ValueKey('dashboard-auth')),
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: AuthGate(
+                child: Center(child: Text('Dashboard - Datos globales de la aplicación')),
+                authPageKey: ValueKey('dashboard-auth'),
               ),
             ),
           ),
           GoRoute(
             path: '/products',
-            pageBuilder: (context, state) => NoTransitionPage(
-              child: _AuthGate(
-                logged: const ProductsAdminPage(),
-                anonymous: const AuthPage(key: ValueKey('products-auth')),
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: AuthGate(
+                child: ProductsAdminPage(),
+                authPageKey: ValueKey('products-auth'),
               ),
             ),
           ),
           GoRoute(
             path: '/billing',
-            pageBuilder: (context, state) => NoTransitionPage(
-              child: _AuthGate(
-                logged: const Center(child: Text('Facturación')),
-                anonymous: const AuthPage(key: ValueKey('billing-auth')),
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: AuthGate(
+                child: Center(child: Text('Facturación')),
+                authPageKey: ValueKey('billing-auth'),
               ),
             ),
           ),
@@ -81,10 +80,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           // Ruta de perfil (común)
           GoRoute(
             path: '/profile',
-            pageBuilder: (context, state) => NoTransitionPage(
-              child: _AuthGate(
-                logged: const ProfilePage(),
-                anonymous: const AuthPage(key: ValueKey('profile-auth')),
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: AuthGate(
+                child: ProfilePage(),
+                authPageKey: ValueKey('profile-auth'),
               ),
             ),
           ),
@@ -93,28 +92,3 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
-
-/// Pequeño gate que decide qué mostrar en función del estado de auth
-class _AuthGate extends ConsumerWidget {
-  const _AuthGate({
-    required this.logged,
-    required this.anonymous,
-  });
-
-  final Widget logged;
-  final Widget anonymous;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final auth = ref.watch(authProvider);
-
-    return auth.when(
-      data: (authState) {
-        final isLogged = authState.userSession != null || authState.adminSession != null;
-        return isLogged ? logged : anonymous;
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (_, __) => anonymous,
-    );
-  }
-}
