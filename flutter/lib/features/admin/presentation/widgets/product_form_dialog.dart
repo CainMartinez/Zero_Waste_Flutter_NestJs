@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import 'package:pub_diferent/features/admin/domain/entities/product_admin.dart';
 import 'package:pub_diferent/features/admin/presentation/providers/product_admin_provider.dart';
-import 'package:pub_diferent/core/config/env.dart';
+import 'form_sections/product_basic_info_form.dart';
+import 'form_sections/product_category_selector.dart';
+import 'form_sections/product_image_section.dart';
+import 'form_sections/product_allergen_section.dart';
 
 class ProductFormDialog extends ConsumerStatefulWidget {
   final ProductAdmin? product; // null = crear, no null = editar
@@ -104,17 +104,6 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
   void _removeNewImage(int index) {
     setState(() {
       _newImages.removeAt(index);
-    });
-  }
-
-  // Método para marcar una imagen existente para eliminación
-  void _removeExistingImage(int index) {
-    final image = _existingImages[index];
-    setState(() {
-      // Marcar para eliminar al actualizar
-      if (!_imagesToDelete.contains(image.id)) {
-        _imagesToDelete.add(image.id);
-      }
     });
   }
 
@@ -263,12 +252,6 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(productAdminProvider);
-    final categories = state.categories;
-    final isLoadingCategories = state.isLoadingCategories;
-    final isEditing = widget.product != null;
-    final baseUrl = Env.minioBaseUrl;
-
     return AlertDialog(
       title: Text(widget.product == null ? 'Crear Producto' : 'Editar Producto'),
       content: SingleChildScrollView(
@@ -279,388 +262,58 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Nombre ES
-                TextFormField(
-                  controller: _nameEsCtrl,
-                  decoration: const InputDecoration(
-                    labelText: 'Nombre (ES) *',
-                    prefixIcon: Icon(Icons.text_fields),
-                  ),
-                  validator: (v) =>
-                      v == null || v.trim().isEmpty ? 'Requerido' : null,
-                  textCapitalization: TextCapitalization.sentences,
+                // Información básica
+                ProductBasicInfoForm(
+                  nameEsCtrl: _nameEsCtrl,
+                  nameEnCtrl: _nameEnCtrl,
+                  descEsCtrl: _descEsCtrl,
+                  descEnCtrl: _descEnCtrl,
+                  priceCtrl: _priceCtrl,
+                  isVegan: _isVegan,
+                  onVeganChanged: (value) => setState(() => _isVegan = value),
                 ),
                 const SizedBox(height: 16),
 
-                // Nombre EN
-                TextFormField(
-                  controller: _nameEnCtrl,
-                  decoration: const InputDecoration(
-                    labelText: 'Nombre (EN) *',
-                    prefixIcon: Icon(Icons.text_fields),
-                  ),
-                  validator: (v) =>
-                      v == null || v.trim().isEmpty ? 'Requerido' : null,
-                  textCapitalization: TextCapitalization.sentences,
+                // Selector de categoría
+                ProductCategorySelector(
+                  selectedCategoryId: _categoryId,
+                  onCategoryChanged: (value) => setState(() => _categoryId = value),
                 ),
                 const SizedBox(height: 16),
 
-                // Descripción ES
-                TextFormField(
-                  controller: _descEsCtrl,
-                  decoration: const InputDecoration(
-                    labelText: 'Descripción (ES) *',
-                    prefixIcon: Icon(Icons.description_outlined),
-                  ),
-                  maxLines: 3,
-                  validator: (v) =>
-                      v == null || v.trim().isEmpty ? 'Requerido' : null,
-                  textCapitalization: TextCapitalization.sentences,
-                ),
-                const SizedBox(height: 16),
-
-                // Descripción EN
-                TextFormField(
-                  controller: _descEnCtrl,
-                  decoration: const InputDecoration(
-                    labelText: 'Descripción (EN) *',
-                    prefixIcon: Icon(Icons.description_outlined),
-                  ),
-                  maxLines: 3,
-                  validator: (v) =>
-                      v == null || v.trim().isEmpty ? 'Requerido' : null,
-                  textCapitalization: TextCapitalization.sentences,
-                ),
-                const SizedBox(height: 16),
-
-                // Precio
-                TextFormField(
-                  controller: _priceCtrl,
-                  decoration: const InputDecoration(
-                    labelText: 'Precio *',
-                    prefixIcon: Icon(Icons.euro),
-                  ),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
-                  ],
-                  validator: (v) {
-                    if (v == null || v.trim().isEmpty) return 'Requerido';
-                    final val = double.tryParse(v);
-                    if (val == null || val < 0) {
-                      return 'Debe ser un número válido >= 0';
-                    }
-                    return null;
+                // Sección de imágenes
+                ProductImageSection(
+                  existingImages: _existingImages,
+                  newImages: _newImages,
+                  imagesToDelete: _imagesToDelete,
+                  onPickImages: _pickImages,
+                  onRemoveNewImage: (index) {
+                    setState(() => _removeNewImage(index));
                   },
-                ),
-                const SizedBox(height: 16),
-
-                // Dropdown de categorías
-                isLoadingCategories
-                  ? const Center(child: CircularProgressIndicator())
-                  : DropdownButtonFormField<int>(
-                      value: _categoryId,
-                      decoration: const InputDecoration(
-                        labelText: 'Categoría *',
-                        prefixIcon: Icon(Icons.category_outlined),
-                      ),
-                      items: categories.map((cat) {
-                        return DropdownMenuItem<int>(
-                          value: cat['id'] as int,
-                          child: Text(cat['nameEs'] as String),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() => _categoryId = value);
-                      },
-                      validator: (v) => v == null ? 'Selecciona una categoría' : null,
-                    ),
-                const SizedBox(height: 16),
-
-                // Sección de imágenes existentes (solo al editar)
-                if (isEditing && _existingImages.isNotEmpty) ...[
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Imágenes actuales:',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    height: 100,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _existingImages.length,
-                      itemBuilder: (context, index) {
-                        final image = _existingImages[index];
-                        final isMarkedForDeletion = _imagesToDelete.contains(image.id);
-                        
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Stack(
-                            children: [
-                              Opacity(
-                                opacity: isMarkedForDeletion ? 0.3 : 1.0,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.network(
-                                    '$baseUrl${image.path}',
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(
-                                        width: 100,
-                                        height: 100,
-                                        color: Colors.grey[300],
-                                        child: const Icon(Icons.broken_image),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                              if (isMarkedForDeletion)
-                                Container(
-                                  width: 100,
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: Colors.red.withOpacity(0.5),
-                                  ),
-                                  child: const Center(
-                                    child: Icon(
-                                      Icons.delete_outline,
-                                      color: Colors.white,
-                                      size: 40,
-                                    ),
-                                  ),
-                                ),
-                              Positioned(
-                                top: 4,
-                                right: 4,
-                                child: IconButton(
-                                  icon: Icon(
-                                    isMarkedForDeletion ? Icons.undo : Icons.close,
-                                    color: Colors.white,
-                                  ),
-                                  style: IconButton.styleFrom(
-                                    backgroundColor: isMarkedForDeletion ? Colors.orange : Colors.red,
-                                    padding: EdgeInsets.zero,
-                                    minimumSize: const Size(24, 24),
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      if (isMarkedForDeletion) {
-                                        // Desmarcar para eliminación
-                                        _imagesToDelete.remove(image.id);
-                                      } else {
-                                        // Marcar para eliminación
-                                        _removeExistingImage(index);
-                                      }
-                                    });
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                ],
-
-                // Botón para añadir nuevas imágenes
-                OutlinedButton.icon(
-                  onPressed: _pickImages,
-                  icon: const Icon(Icons.add_photo_alternate),
-                  label: Text(_newImages.isEmpty 
-                    ? 'Agregar imágenes' 
-                    : 'Agregar más imágenes (${_newImages.length} seleccionadas)'),
-                ),
-                const SizedBox(height: 8),
-
-                // Preview de nuevas imágenes seleccionadas
-                if (_newImages.isNotEmpty) ...[
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Imágenes nuevas a subir:',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    height: 100,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _newImages.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: kIsWeb
-                                  ? Image.network(
-                                      _newImages[index].path,
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.file(
-                                      File(_newImages[index].path),
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.cover,
-                                    ),
-                              ),
-                              Positioned(
-                                top: 4,
-                                right: 4,
-                                child: IconButton(
-                                  icon: const Icon(Icons.close, color: Colors.white),
-                                  style: IconButton.styleFrom(
-                                    backgroundColor: Colors.black54,
-                                    padding: EdgeInsets.zero,
-                                    minimumSize: const Size(24, 24),
-                                  ),
-                                  onPressed: () => _removeNewImage(index),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                ],
-
-                // Checkbox vegano
-                CheckboxListTile(
-                  value: _isVegan,
-                  onChanged: (val) => setState(() => _isVegan = val ?? false),
-                  title: const Text('Es vegano'),
-                  controlAffinity: ListTileControlAffinity.leading,
-                  contentPadding: EdgeInsets.zero,
+                  onToggleDeleteExisting: (imageId) {
+                    setState(() {
+                      if (_imagesToDelete.contains(imageId)) {
+                        _imagesToDelete.remove(imageId);
+                      } else {
+                        _imagesToDelete.add(imageId);
+                      }
+                    });
+                  },
                 ),
                 const SizedBox(height: 16),
 
                 // Sección de alérgenos
-                const Text(
-                  'Alérgenos',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Consumer(
-                  builder: (context, ref, child) {
-                    final state = ref.watch(productAdminProvider);
-                    
-                    if (state.isLoadingAllergens) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    
-                    if (state.allergens.isEmpty) {
-                      return const Text('No hay alérgenos disponibles');
-                    }
-                    
-                    return Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: state.allergens.map((allergen) {
-                        final code = allergen['code'] as String;
-                        final nameEs = allergen['nameEs'] as String;
-                        final isSelected = _selectedAllergens.containsKey(code);
-                        final contains = _selectedAllergens[code]?['contains'] ?? true;
-                        
-                        return InkWell(
-                          onTap: () {
-                            setState(() {
-                              if (!isSelected) {
-                                // Primera selección: contiene
-                                _selectedAllergens[code] = {
-                                  'contains': true,
-                                  'mayContain': false,
-                                };
-                              } else if (contains) {
-                                // Segunda selección: puede contener trazas
-                                _selectedAllergens[code] = {
-                                  'contains': false,
-                                  'mayContain': true,
-                                };
-                              } else {
-                                // Tercera selección: deseleccionar
-                                _selectedAllergens.remove(code);
-                              }
-                            });
-                          },
-                          borderRadius: BorderRadius.circular(8),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? (contains ? Colors.red.shade100 : Colors.orange.shade100)
-                                  : Colors.grey.shade200,
-                              border: Border.all(
-                                color: isSelected
-                                    ? (contains ? Colors.red.shade400 : Colors.orange.shade400)
-                                    : Colors.grey.shade400,
-                                width: 2,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  isSelected
-                                      ? (contains ? Icons.warning : Icons.info_outline)
-                                      : Icons.circle_outlined,
-                                  size: 18,
-                                  color: isSelected
-                                      ? (contains ? Colors.red.shade700 : Colors.orange.shade700)
-                                      : Colors.grey.shade600,
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  nameEs,
-                                  style: TextStyle(
-                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                                    color: isSelected
-                                        ? (contains ? Colors.red.shade900 : Colors.orange.shade900)
-                                        : Colors.grey.shade800,
-                                  ),
-                                ),
-                                if (isSelected) ...[
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    contains ? '✓' : '~',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: contains ? Colors.red.shade700 : Colors.orange.shade700,
-                                    ),
-                                  ),
-                                ],
-                              ],
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    );
+                ProductAllergenSection(
+                  selectedAllergens: _selectedAllergens,
+                  onAllergenChanged: (code, value) {
+                    setState(() {
+                      if (value == null) {
+                        _selectedAllergens.remove(code);
+                      } else {
+                        _selectedAllergens[code] = value;
+                      }
+                    });
                   },
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Toca una vez: contiene • Toca dos veces: puede contener trazas • Toca tres veces: quitar',
-                  style: TextStyle(fontSize: 11, color: Colors.grey, fontStyle: FontStyle.italic),
                 ),
               ],
             ),
