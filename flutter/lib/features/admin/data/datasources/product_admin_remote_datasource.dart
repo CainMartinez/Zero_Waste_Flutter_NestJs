@@ -191,7 +191,7 @@ class ProductAdminRemoteDataSource {
 
       final formData = FormData.fromMap({
         'file': multipartFile,
-        'productId': productId.toString(), // Enviar como string para mejor compatibilidad
+        'productId': productId, // Enviar como número
       });
 
       final response = await _dio.post(

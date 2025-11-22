@@ -87,10 +87,13 @@ export class MediaController {
       throw new BadRequestException('El archivo es demasiado grande. Máximo 5MB');
     }
 
+    const productId = uploadDto.productId ? Number(uploadDto.productId) : undefined;
+    const menuId = uploadDto.menuId ? Number(uploadDto.menuId) : undefined;
+
     const image = await this.uploadImageUseCase.execute(
       file,
-      uploadDto.productId,
-      uploadDto.menuId,
+      productId,
+      menuId,
     );
 
     return this.imageAssembler.toDto(image);
