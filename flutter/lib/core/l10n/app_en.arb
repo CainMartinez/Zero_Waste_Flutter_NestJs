@@ -1,0 +1,860 @@
+{
+  "appTitle": "Pub Diferent",
+  "@appTitle": {
+    "description": "Application name"
+  },
+  "homePageTitle": "Delicious Food",
+  "@homePageTitle": {
+    "description": "Main title of the home page"
+  },
+  "homePageTitleAccent": "Zero Waste",
+  "@homePageTitleAccent": {
+    "description": "Highlighted secondary title of the home page"
+  },
+  "homePageSubtitle": "Enjoy the best takeaway food while we take care of our planet. Reusable containers, local ingredients and zero waste.",
+  "@homePageSubtitle": {
+    "description": "Descriptive subtitle of the home page"
+  },
+  "badgeZeroWaste": "Zero Waste",
+  "@badgeZeroWaste": {
+    "description": "Zero waste badge"
+  },
+  "badgeVeganMenus": "Vegan Menus",
+  "@badgeVeganMenus": {
+    "description": "Vegan menus badge"
+  },
+  "featureEcoFriendlyFood": "Eco-Friendly Food",
+  "@featureEcoFriendlyFood": {
+    "description": "Eco-friendly food feature"
+  },
+  "featureZeroWaste": "Zero Waste",
+  "@featureZeroWaste": {
+    "description": "Short description of zero waste"
+  },
+  "featureFastPickup": "Fast Pickup",
+  "@featureFastPickup": {
+    "description": "Fast pickup feature"
+  },
+  "featureNoWaiting": "No Waiting",
+  "@featureNoWaiting": {
+    "description": "No waiting description"
+  },
+  "featuredCard100Sustainable": "100% Sustainable",
+  "@featuredCard100Sustainable": {
+    "description": "100% sustainable badge"
+  },
+  "featuredCardTitle": "Compostable and reusable containers",
+  "@featuredCardTitle": {
+    "description": "Featured card title"
+  },
+  "loyaltyBannerTitle": "LOYALTY PROGRAM! 10 purchases = 1 FREE menu",
+  "@loyaltyBannerTitle": {
+    "description": "Loyalty banner title"
+  },
+  "loyaltyBannerSubtitle": "Accumulate points and redeem them for delicious rewards.",
+  "@loyaltyBannerSubtitle": {
+    "description": "Loyalty banner subtitle"
+  },
+  "preferences": "Preferences",
+  "@preferences": {
+    "description": "Preferences page title"
+  },
+  "notificationsSection": "Notifications",
+  "@notificationsSection": {
+    "description": "Notifications section title"
+  },
+  "appNotifications": "App Notifications",
+  "@appNotifications": {
+    "description": "App notifications toggle"
+  },
+  "emailNotifications": "Email Notifications",
+  "@emailNotifications": {
+    "description": "Email notifications toggle"
+  },
+  "whatsappNotifications": "WhatsApp Notifications",
+  "@whatsappNotifications": {
+    "description": "WhatsApp notifications toggle"
+  },
+  "appearanceSection": "Appearance",
+  "@appearanceSection": {
+    "description": "Appearance section title"
+  },
+  "darkMode": "Dark Mode",
+  "@darkMode": {
+    "description": "Dark mode toggle"
+  },
+  "languageSection": "Language",
+  "@languageSection": {
+    "description": "Language section title"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language selector label"
+  },
+  "languageSpanish": "Spanish",
+  "@languageSpanish": {
+    "description": "Spanish language option"
+  },
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "English language option"
+  },
+  "viewCatalog": "View Catalog",
+  "@viewCatalog": {
+    "description": "Button to view the catalog"
+  },
+  "errorLoadingPreferences": "Error loading preferences: {error}",
+  "@errorLoadingPreferences": {
+    "description": "Error loading preferences with dynamic parameter",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "shopPageTitle": "Menu",
+  "@shopPageTitle": {
+    "description": "Menu/catalog page title"
+  },
+  "filterByCategory": "Category",
+  "@filterByCategory": {
+    "description": "Category filter label"
+  },
+  "allCategories": "All",
+  "@allCategories": {
+    "description": "Option to show all categories"
+  },
+  "filterByAllergens": "Allergens",
+  "@filterByAllergens": {
+    "description": "Allergens filter label"
+  },
+  "noAllergensSelected": "No filter",
+  "@noAllergensSelected": {
+    "description": "Text when no allergens are selected"
+  },
+  "allergensSelectedCount": "{count} selected",
+  "@allergensSelectedCount": {
+    "description": "Counter of selected allergens",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "veganOnly": "Vegan Only",
+  "@veganOnly": {
+    "description": "Filter to show only vegan products"
+  },
+  "sortBy": "Sort by",
+  "@sortBy": {
+    "description": "Sort selector label"
+  },
+  "sortByNewest": "Newest",
+  "@sortByNewest": {
+    "description": "Sort by newest"
+  },
+  "sortByNameAsc": "Name (A-Z)",
+  "@sortByNameAsc": {
+    "description": "Sort by name ascending"
+  },
+  "sortByNameDesc": "Name (Z-A)",
+  "@sortByNameDesc": {
+    "description": "Sort by name descending"
+  },
+  "sortByPriceAsc": "Price (lowest)",
+  "@sortByPriceAsc": {
+    "description": "Sort by price ascending"
+  },
+  "sortByPriceDesc": "Price (highest)",
+  "@sortByPriceDesc": {
+    "description": "Sort by price descending"
+  },
+  "clearFilters": "Clear filters",
+  "@clearFilters": {
+    "description": "Button to clear all filters"
+  },
+  "applyFilters": "Apply",
+  "@applyFilters": {
+    "description": "Button to apply filters"
+  },
+  "noProductsFound": "No products found",
+  "@noProductsFound": {
+    "description": "Message when no products match the filters"
+  },
+  "tryAdjustingFilters": "Try adjusting the filters",
+  "@tryAdjustingFilters": {
+    "description": "Suggestion when no results"
+  },
+  "loadingProducts": "Loading products...",
+  "@loadingProducts": {
+    "description": "Loading products message"
+  },
+  "errorLoadingProducts": "Error loading products",
+  "@errorLoadingProducts": {
+    "description": "Error loading products message"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Button to retry an action"
+  },
+  "addToCart": "Add to cart",
+  "@addToCart": {
+    "description": "Button to add product to cart"
+  },
+  "addedToCart": "{itemName} added to cart",
+  "@addedToCart": {
+    "description": "Confirmation message when added to cart",
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "productDetails": "Product details",
+  "@productDetails": {
+    "description": "Details modal title"
+  },
+  "description": "Description",
+  "@description": {
+    "description": "Description label"
+  },
+  "allergens": "Allergens",
+  "@allergens": {
+    "description": "Allergens label"
+  },
+  "contains": "Contains",
+  "@contains": {
+    "description": "Indicates it contains an allergen"
+  },
+  "mayContain": "May contain",
+  "@mayContain": {
+    "description": "Indicates it may contain an allergen"
+  },
+  "noAllergens": "No allergens declared",
+  "@noAllergens": {
+    "description": "Message when there are no allergens"
+  },
+  "menuComposition": "Menu composition",
+  "@menuComposition": {
+    "description": "Menu composition section title"
+  },
+  "mainCourse": "Main course",
+  "@mainCourse": {
+    "description": "Main course label"
+  },
+  "sideDish": "Side dish",
+  "@sideDish": {
+    "description": "Side dish label"
+  },
+  "drink": "Drink",
+  "@drink": {
+    "description": "Drink label"
+  },
+  "dessert": "Dessert",
+  "@dessert": {
+    "description": "Dessert label"
+  },
+  "menuBadge": "Menu",
+  "@menuBadge": {
+    "description": "Badge indicating it's a menu"
+  },
+
+  "myCart": "My Cart",
+  "@myCart": {
+    "description": "Cart page title"
+  },
+  "clearCartTooltip": "Clear cart",
+  "@clearCartTooltip": {
+    "description": "Tooltip for clear cart button"
+  },
+  "emptyCartTitle": "Your cart is empty",
+  "@emptyCartTitle": {
+    "description": "Title shown when cart is empty"
+  },
+  "emptyCartMessage": "Add products from the menu",
+  "@emptyCartMessage": {
+    "description": "Message shown when cart is empty"
+  },
+  "viewMenu": "View Menu",
+  "@viewMenu": {
+    "description": "Button to navigate to menu/shop"
+  },
+  "subtotal": "Subtotal",
+  "@subtotal": {
+    "description": "Subtotal label in cart summary"
+  },
+  "totalItems": "Total items",
+  "@totalItems": {
+    "description": "Total items count label"
+  },
+  "total": "Total",
+  "@total": {
+    "description": "Total price label"
+  },
+  "confirmOrder": "Confirm Order",
+  "@confirmOrder": {
+    "description": "Button to confirm order"
+  },
+  "orderPendingImplementation": "Order feature pending implementation",
+  "@orderPendingImplementation": {
+    "description": "Message shown when order feature is not implemented"
+  },
+  "clearCartDialogTitle": "Clear cart",
+  "@clearCartDialogTitle": {
+    "description": "Clear cart confirmation dialog title"
+  },
+  "clearCartDialogMessage": "Are you sure you want to remove all products from the cart?",
+  "@clearCartDialogMessage": {
+    "description": "Clear cart confirmation dialog message"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "clear": "Clear",
+  "@clear": {
+    "description": "Clear/Empty button text"
+  },
+
+  "productManagement": "Product Management",
+  "@productManagement": {
+    "description": "Product administration page title"
+  },
+  "reload": "Reload",
+  "@reload": {
+    "description": "Reload button tooltip"
+  },
+  "errorLoadingProducts": "Error loading products",
+  "@errorLoadingProducts": {
+    "description": "Error message when loading products"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Button to retry action"
+  },
+  "noProducts": "No products",
+  "@noProducts": {
+    "description": "Message when there are no products"
+  },
+  "createFirstProduct": "Create your first product using the + button",
+  "@createFirstProduct": {
+    "description": "Instructions message to create first product"
+  },
+  "newProduct": "New Product",
+  "@newProduct": {
+    "description": "Button to create new product"
+  },
+  "createProduct": "Create Product",
+  "@createProduct": {
+    "description": "Dialog title for creating product"
+  },
+  "editProduct": "Edit Product",
+  "@editProduct": {
+    "description": "Dialog title for editing product"
+  },
+  "nameEs": "Name (ES) *",
+  "@nameEs": {
+    "description": "Label for name in Spanish"
+  },
+  "nameEn": "Name (EN) *",
+  "@nameEn": {
+    "description": "Label for name in English"
+  },
+  "descriptionEs": "Description (ES) *",
+  "@descriptionEs": {
+    "description": "Label for description in Spanish"
+  },
+  "descriptionEn": "Description (EN) *",
+  "@descriptionEn": {
+    "description": "Label for description in English"
+  },
+  "price": "Price *",
+  "@price": {
+    "description": "Label for price"
+  },
+  "isVegan": "Is vegan",
+  "@isVegan": {
+    "description": "Vegan checkbox label"
+  },
+  "category": "Category *",
+  "@category": {
+    "description": "Label for category"
+  },
+  "required": "Required",
+  "@required": {
+    "description": "Validation message for required field"
+  },
+  "mustBeValidNumber": "Must be a valid number >= 0",
+  "@mustBeValidNumber": {
+    "description": "Validation message for number"
+  },
+  "mustSelectCategory": "You must select a category",
+  "@mustSelectCategory": {
+    "description": "Error message when category not selected"
+  },
+  "errorSelectingImages": "Error selecting images",
+  "@errorSelectingImages": {
+    "description": "Error message when selecting images"
+  },
+  "errorDeletingImage": "Error deleting image",
+  "@errorDeletingImage": {
+    "description": "Error message when deleting image"
+  },
+  "errorUploadingImage": "Error uploading image",
+  "@errorUploadingImage": {
+    "description": "Error message when uploading image"
+  },
+  "errorUpdatingAllergens": "Error updating allergens",
+  "@errorUpdatingAllergens": {
+    "description": "Error message when updating allergens"
+  },
+  "unknownError": "Unknown error",
+  "@unknownError": {
+    "description": "Unknown error message"
+  },
+  "productCreatedSuccessfully": "Product created successfully",
+  "@productCreatedSuccessfully": {
+    "description": "Success message when creating product"
+  },
+  "productUpdatedSuccessfully": "Product updated successfully",
+  "@productUpdatedSuccessfully": {
+    "description": "Success message when updating product"
+  },
+  "create": "Create",
+  "@create": {
+    "description": "Create button"
+  },
+  "update": "Update",
+  "@update": {
+    "description": "Update button"
+  },
+  "noAllergensAvailable": "No allergens available",
+  "@noAllergensAvailable": {
+    "description": "Message when there are no allergens"
+  },
+  "allergensOptional": "Allergens (optional)",
+  "@allergensOptional": {
+    "description": "Allergens section title"
+  },
+  "selectAllergens": "Select the allergens that apply to this product:",
+  "@selectAllergens": {
+    "description": "Instructions for selecting allergens"
+  },
+  "imagesOptional": "Images (optional)",
+  "@imagesOptional": {
+    "description": "Images section title"
+  },
+  "existingImages": "Existing images:",
+  "@existingImages": {
+    "description": "Title for existing images"
+  },
+  "addImages": "Add images",
+  "@addImages": {
+    "description": "Button to add images"
+  },
+  "selectedImagesWillBeUploaded": "Selected images (will be uploaded on save):",
+  "@selectedImagesWillBeUploaded": {
+    "description": "Explanatory text for images to upload"
+  },
+  "reactivate": "Reactivate",
+  "@reactivate": {
+    "description": "Button to reactivate product"
+  },
+  "productReactivated": "Product reactivated",
+  "@productReactivated": {
+    "description": "Success message when reactivating product"
+  },
+  "errorReactivatingProduct": "Error reactivating product",
+  "@errorReactivatingProduct": {
+    "description": "Error message when reactivating product"
+  },
+  "deactivate": "Deactivate",
+  "@deactivate": {
+    "description": "Button to deactivate product"
+  },
+  "confirmDeactivation": "Confirm deactivation",
+  "@confirmDeactivation": {
+    "description": "Deactivation confirmation dialog title"
+  },
+  "confirmDeactivationMessage": "Are you sure you want to deactivate the product '{productName}'?",
+  "@confirmDeactivationMessage": {
+    "description": "Deactivation confirmation dialog message",
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
+  },
+  "productDeactivated": "Product deactivated",
+  "@productDeactivated": {
+    "description": "Success message when deactivating product"
+  },
+  "errorDeactivatingProduct": "Error deactivating product",
+  "@errorDeactivatingProduct": {
+    "description": "Error message when deactivating product"
+  },
+  "vegan": "Vegan",
+  "@vegan": {
+    "description": "Vegan label"
+  },
+  "active": "Active",
+  "@active": {
+    "description": "Active status"
+  },
+  "inactive": "Inactive",
+  "@inactive": {
+    "description": "Inactive status"
+  },
+  "noCategory": "No category",
+  "@noCategory": {
+    "description": "Text when no category is assigned"
+  },
+
+  "hello": "Hello",
+  "@hello": {
+    "description": "Greeting"
+  },
+  "preferences": "Preferences",
+  "@preferences": {
+    "description": "Preferences tooltip"
+  },
+  "dashboard": "Dashboard",
+  "@dashboard": {
+    "description": "Dashboard navigation"
+  },
+  "products": "Products",
+  "@products": {
+    "description": "Products navigation"
+  },
+  "billing": "Billing",
+  "@billing": {
+    "description": "Billing navigation"
+  },
+  "profile": "Profile",
+  "@profile": {
+    "description": "Profile navigation"
+  },
+  "home": "Home",
+  "@home": {
+    "description": "Home navigation"
+  },
+  "menu": "Menu",
+  "@menu": {
+    "description": "Menu navigation"
+  },
+  "orders": "Orders",
+  "@orders": {
+    "description": "Orders navigation"
+  },
+
+  "fieldRequired": "{field} is required",
+  "@fieldRequired": {
+    "description": "Generic required field validation message",
+    "placeholders": {
+      "field": {
+        "type": "String"
+      }
+    }
+  },
+  "emailRequired": "Email is required",
+  "@emailRequired": {
+    "description": "Email required validation message"
+  },
+  "invalidEmail": "Invalid email",
+  "@invalidEmail": {
+    "description": "Invalid email validation message"
+  },
+  "passwordRequired": "Password is required",
+  "@passwordRequired": {
+    "description": "Password required validation message"
+  },
+  "passwordMinLength": "Minimum 8 characters",
+  "@passwordMinLength": {
+    "description": "Password minimum length validation message"
+  },
+  "passwordUppercase": "Must contain at least one uppercase letter",
+  "@passwordUppercase": {
+    "description": "Password uppercase validation message"
+  },
+  "passwordLowercase": "Must contain at least one lowercase letter",
+  "@passwordLowercase": {
+    "description": "Password lowercase validation message"
+  },
+  "passwordNumber": "Must contain at least one number",
+  "@passwordNumber": {
+    "description": "Password number validation message"
+  },
+  "passwordSpecialChar": "Must contain at least one special character",
+  "@passwordSpecialChar": {
+    "description": "Password special character validation message"
+  },
+  "confirmPasswordRequired": "Confirm your password",
+  "@confirmPasswordRequired": {
+    "description": "Confirm password required validation message"
+  },
+  "passwordsDoNotMatch": "Passwords do not match",
+  "@passwordsDoNotMatch": {
+    "description": "Passwords do not match validation message"
+  },
+  "nameRequired": "Name is required",
+  "@nameRequired": {
+    "description": "Name required validation message"
+  },
+  "nameTooShort": "Name too short",
+  "@nameTooShort": {
+    "description": "Name too short validation message"
+  },
+
+  "myProfile": "My Profile",
+  "@myProfile": {
+    "description": "Profile page title"
+  },
+  "administrator": "Administrator",
+  "@administrator": {
+    "description": "Administrator role"
+  },
+  "user": "User",
+  "@user": {
+    "description": "User role"
+  },
+  "personalInfo": "Personal Information",
+  "@personalInfo": {
+    "description": "Personal information section title"
+  },
+  "phone": "Phone",
+  "@phone": {
+    "description": "Phone label"
+  },
+  "notProvided": "Not provided",
+  "@notProvided": {
+    "description": "Text when data is not provided"
+  },
+  "address": "Address",
+  "@address": {
+    "description": "Address label"
+  },
+  "city": "City",
+  "@city": {
+    "description": "City label"
+  },
+  "postalCode": "Postal Code",
+  "@postalCode": {
+    "description": "Postal code label"
+  },
+  "country": "Country",
+  "@country": {
+    "description": "Country label"
+  },
+  "editProfile": "Edit Profile",
+  "@editProfile": {
+    "description": "Edit profile button"
+  },
+  "changePassword": "Change Password",
+  "@changePassword": {
+    "description": "Change password button"
+  },
+  "logout": "Logout",
+  "@logout": {
+    "description": "Logout button"
+  },
+  "errorLoadingProfile": "Error loading profile",
+  "@errorLoadingProfile": {
+    "description": "Error loading profile message"
+  },
+  "logoutConfirmTitle": "Logout",
+  "@logoutConfirmTitle": {
+    "description": "Logout confirmation dialog title"
+  },
+  "logoutConfirmMessage": "Are you sure you want to logout?",
+  "@logoutConfirmMessage": {
+    "description": "Logout confirmation dialog message"
+  },
+  "errorLoggingOut": "Error logging out",
+  "@errorLoggingOut": {
+    "description": "Error logging out message"
+  },
+  "avatarUrl": "Avatar URL",
+  "@avatarUrl": {
+    "description": "Avatar URL label"
+  },
+  "addressLine1": "Address (Line 1)",
+  "@addressLine1": {
+    "description": "Address line 1 label"
+  },
+  "addressLine2": "Address (Line 2)",
+  "@addressLine2": {
+    "description": "Address line 2 label"
+  },
+  "countryCode": "Country Code",
+  "@countryCode": {
+    "description": "Country code label"
+  },
+  "saveChanges": "Save Changes",
+  "@saveChanges": {
+    "description": "Save changes button"
+  },
+  "profileUpdatedSuccessfully": "Profile updated successfully",
+  "@profileUpdatedSuccessfully": {
+    "description": "Profile updated successfully message"
+  },
+  "errorUpdatingProfile": "Error updating profile",
+  "@errorUpdatingProfile": {
+    "description": "Error updating profile message"
+  },
+  "currentPassword": "Current Password",
+  "@currentPassword": {
+    "description": "Current password label"
+  },
+  "newPassword": "New Password",
+  "@newPassword": {
+    "description": "New password label"
+  },
+  "confirmNewPassword": "Confirm New Password",
+  "@confirmNewPassword": {
+    "description": "Confirm new password label"
+  },
+  "passwordRequirements": "Password must be at least 8 characters long and include uppercase, lowercase, numbers and special characters.",
+  "@passwordRequirements": {
+    "description": "Password requirements message"
+  },
+  "passwordUpdatedSuccessfully": "Password updated successfully",
+  "@passwordUpdatedSuccessfully": {
+    "description": "Password updated successfully message"
+  },
+  "errorChangingPassword": "Error changing password",
+  "@errorChangingPassword": {
+    "description": "Error changing password message"
+  },
+  "errorUserNotFound": "No user found with that email",
+  "@errorUserNotFound": {
+    "description": "User not found error"
+  },
+  "errorInvalidPassword": "The password entered is incorrect",
+  "@errorInvalidPassword": {
+    "description": "Invalid password error"
+  },
+  "errorEmailAlreadyInUse": "This email is already registered",
+  "@errorEmailAlreadyInUse": {
+    "description": "Email already in use error"
+  },
+  "errorWeakPassword": "Password does not meet security requirements",
+  "@errorWeakPassword": {
+    "description": "Weak password error"
+  },
+  "errorUnauthorized": "You are not authenticated. Please log in",
+  "@errorUnauthorized": {
+    "description": "Unauthorized error"
+  },
+  "errorForbidden": "You don't have permission to perform this action",
+  "@errorForbidden": {
+    "description": "Forbidden error"
+  },
+  "errorTokenExpired": "Your session has expired. Please log in again",
+  "@errorTokenExpired": {
+    "description": "Token expired error"
+  },
+  "errorInvalidToken": "Invalid token. Please log in again",
+  "@errorInvalidToken": {
+    "description": "Invalid token error"
+  },
+  "errorTokenNotProvided": "Authentication token not provided",
+  "@errorTokenNotProvided": {
+    "description": "Token not provided error"
+  },
+  "errorNotFound": "The requested resource was not found",
+  "@errorNotFound": {
+    "description": "Not found error"
+  },
+  "errorBadRequest": "The request contains invalid data",
+  "@errorBadRequest": {
+    "description": "Bad request error"
+  },
+  "errorInternalServer": "Internal server error. Try again later",
+  "@errorInternalServer": {
+    "description": "Internal server error"
+  },
+  "errorNetwork": "Connection error. Check your internet",
+  "@errorNetwork": {
+    "description": "Network/connection error"
+  },
+  "errorGeneric": "An error occurred. Please try again",
+  "@errorGeneric": {
+    "description": "Generic error"
+  },
+  "loginTitle": "Sign in",
+  "@loginTitle": {
+    "description": "Login title"
+  },
+  "registerTitle": "Create your account",
+  "@registerTitle": {
+    "description": "Register title"
+  },
+  "authSubtitle": "Zero waste meals, pickup without waiting.",
+  "@authSubtitle": {
+    "description": "Auth subtitle"
+  },
+  "loginButton": "Login",
+  "@loginButton": {
+    "description": "Login button"
+  },
+  "registerButton": "Register",
+  "@registerButton": {
+    "description": "Register button"
+  },
+  "clientRole": "Client",
+  "@clientRole": {
+    "description": "Client role"
+  },
+  "adminRole": "Admin",
+  "@adminRole": {
+    "description": "Admin role"
+  },
+  "loggingIn": "Logging in...",
+  "@loggingIn": {
+    "description": "Logging in state"
+  },
+  "login": "Sign in",
+  "@login": {
+    "description": "Sign in button"
+  },
+  "creatingAccount": "Creating account...",
+  "@creatingAccount": {
+    "description": "Creating account state"
+  },
+  "createAccount": "Create account",
+  "@createAccount": {
+    "description": "Create account button"
+  },
+  "name": "Name",
+  "@name": {
+    "description": "Name label"
+  },
+  "password": "Password",
+  "@password": {
+    "description": "Password label"
+  },
+  "authAcceptTerms": "By continuing you accept fast pickup and the loyalty points system.",
+  "@authAcceptTerms": {
+    "description": "Accept terms text"
+  },
+  "registerSuccessMessage": "Successfully registered {name} with email {email}!",
+  "@registerSuccessMessage": {
+    "description": "Register success message",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "errorLoginFailed": "Login failed",
+  "@errorLoginFailed": {
+    "description": "Login failed error"
+  },
+  "errorRegisterFailed": "Registration error",
+  "@errorRegisterFailed": {
+    "description": "Register failed error"
+  }
+}
