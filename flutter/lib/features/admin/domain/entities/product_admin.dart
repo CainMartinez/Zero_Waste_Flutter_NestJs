@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class ProductImage {
   final int id;
   final String path;
@@ -56,6 +58,11 @@ class ProductAllergen {
     if (value is int) return value != 0;
     if (value is String) return value.toLowerCase() == 'true' || value == '1';
     return false;
+  }
+
+  String name(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    return locale.languageCode == 'en' ? nameEn : nameEs;
   }
 
   Map<String, dynamic> toJson() {
@@ -142,6 +149,22 @@ class ProductAdmin {
     if (value is int) return value != 0;
     if (value is String) return value.toLowerCase() == 'true' || value == '1';
     return false;
+  }
+
+  String name(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    return locale.languageCode == 'en' ? nameEn : nameEs;
+  }
+
+  String description(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    return locale.languageCode == 'en' ? descriptionEn : descriptionEs;
+  }
+
+  String? categoryName(BuildContext context) {
+    if (categoryNameEs == null || categoryNameEn == null) return null;
+    final locale = Localizations.localeOf(context);
+    return locale.languageCode == 'en' ? categoryNameEn : categoryNameEs;
   }
 
   Map<String, dynamic> toJson() {

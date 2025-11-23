@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
 import 'package:pub_diferent/features/admin/presentation/providers/product_admin_provider.dart';
 
 class ProductAllergenSection extends ConsumerWidget {
@@ -21,15 +22,16 @@ class ProductAllergenSection extends ConsumerWidget {
     }
 
     if (state.allergens.isEmpty) {
-      return const Text('No hay alérgenos disponibles');
+      return Text(AppLocalizations.of(context)!.noAllergensAvailable);
     }
 
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Alérgenos',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        Text(
+          l10n.allergensOptional,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         const SizedBox(height: 8),
         Wrap(
@@ -38,6 +40,9 @@ class ProductAllergenSection extends ConsumerWidget {
           children: state.allergens.map((allergen) {
             final code = allergen['code'] as String;
             final nameEs = allergen['nameEs'] as String;
+            final nameEn = allergen['nameEn'] as String;
+            final locale = Localizations.localeOf(context);
+            final name = locale.languageCode == 'en' ? nameEn : nameEs;
             final isSelected = selectedAllergens.containsKey(code);
             final contains = selectedAllergens[code]?['contains'] ?? true;
 
@@ -80,7 +85,7 @@ class ProductAllergenSection extends ConsumerWidget {
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      nameEs,
+                      name,
                       style: TextStyle(
                         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                         color: isSelected
@@ -106,9 +111,9 @@ class ProductAllergenSection extends ConsumerWidget {
           }).toList(),
         ),
         const SizedBox(height: 8),
-        const Text(
-          'Toca una vez: contiene • Toca dos veces: puede contener trazas • Toca tres veces: quitar',
-          style: TextStyle(fontSize: 11, color: Colors.grey, fontStyle: FontStyle.italic),
+        Text(
+          l10n.selectAllergens,
+          style: const TextStyle(fontSize: 11, color: Colors.grey, fontStyle: FontStyle.italic),
         ),
       ],
     );

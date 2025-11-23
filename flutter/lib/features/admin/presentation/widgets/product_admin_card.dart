@@ -4,6 +4,7 @@ import 'package:pub_diferent/features/admin/presentation/widgets/product_form_di
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pub_diferent/features/admin/presentation/providers/product_admin_provider.dart';
 import 'package:pub_diferent/core/config/env.dart';
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
 
 class ProductAdminCard extends ConsumerWidget {
   final ProductAdmin product;
@@ -76,7 +77,7 @@ class ProductAdminCard extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          product.nameEs,
+                          product.name(context),
                           style: tt.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: product.isActive ? cs.onSurface : cs.onSurfaceVariant,
@@ -85,7 +86,7 @@ class ProductAdminCard extends ConsumerWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          product.categoryNameEs ?? 'Sin categoría',
+                          product.categoryName(context) ?? AppLocalizations.of(context)!.noCategory,
                           style: tt.bodySmall?.copyWith(
                             color: cs.primary,
                             fontWeight: FontWeight.w500,
@@ -120,7 +121,7 @@ class ProductAdminCard extends ConsumerWidget {
                                   Icon(Icons.eco, size: 14, color: Colors.green.shade700),
                                   const SizedBox(width: 4),
                                   Text(
-                                    'Vegano',
+                                    AppLocalizations.of(context)!.vegan,
                                     style: tt.bodySmall?.copyWith(
                                       color: Colors.green.shade700,
                                       fontWeight: FontWeight.w500,
@@ -139,7 +140,7 @@ class ProductAdminCard extends ConsumerWidget {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
-                              product.isActive ? 'Activo' : 'Inactivo',
+                              product.isActive ? AppLocalizations.of(context)!.active : AppLocalizations.of(context)!.inactive,
                               style: tt.bodySmall?.copyWith(
                                 color: product.isActive ? Colors.green.shade700 : Colors.red.shade700,
                                 fontWeight: FontWeight.w500,
@@ -154,7 +155,7 @@ class ProductAdminCard extends ConsumerWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                product.descriptionEs,
+                product.description(context),
                 style: tt.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -166,15 +167,16 @@ class ProductAdminCard extends ConsumerWidget {
                   if (!product.isActive)
                     TextButton.icon(
                       icon: const Icon(Icons.restore, size: 18),
-                      label: const Text('Reactivar'),
+                      label: Text(AppLocalizations.of(context)!.reactivate),
                       onPressed: () async {
+                        final l10n = AppLocalizations.of(context)!;
                         final success = await notifier.reactivateProduct(product.id);
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(success
-                                  ? 'Producto reactivado'
-                                  : 'Error al reactivar producto'),
+                                  ? l10n.productReactivated
+                                  : l10n.errorReactivatingProduct),
                               backgroundColor: success ? Colors.green : Colors.red,
                             ),
                           );
@@ -184,24 +186,25 @@ class ProductAdminCard extends ConsumerWidget {
                   if (product.isActive)
                     TextButton.icon(
                       icon: const Icon(Icons.delete_outline, size: 18),
-                      label: const Text('Desactivar'),
+                      label: Text(AppLocalizations.of(context)!.deactivate),
                       style: TextButton.styleFrom(foregroundColor: cs.error),
                       onPressed: () async {
+                        final l10n = AppLocalizations.of(context)!;
                         final confirm = await showDialog<bool>(
                           context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Confirmar desactivación'),
+                          builder: (dialogContext) => AlertDialog(
+                            title: Text(l10n.confirmDeactivation),
                             content: Text(
-                              '¿Estás seguro de que quieres desactivar "${product.nameEs}"?',
+                              l10n.confirmDeactivationMessage(product.name(dialogContext)),
                             ),
                             actions: [
                               TextButton(
-                                onPressed: () => Navigator.of(context).pop(false),
-                                child: const Text('Cancelar'),
+                                onPressed: () => Navigator.of(dialogContext).pop(false),
+                                child: Text(l10n.cancel),
                               ),
                               TextButton(
-                                onPressed: () => Navigator.of(context).pop(true),
-                                child: const Text('Desactivar'),
+                                onPressed: () => Navigator.of(dialogContext).pop(true),
+                                child: Text(l10n.deactivate),
                               ),
                             ],
                           ),
@@ -213,8 +216,8 @@ class ProductAdminCard extends ConsumerWidget {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(success
-                                    ? 'Producto desactivado'
-                                    : 'Error al desactivar producto'),
+                                    ? l10n.productDeactivated
+                                    : l10n.errorDeactivatingProduct),
                                 backgroundColor: success ? Colors.orange : Colors.red,
                               ),
                             );

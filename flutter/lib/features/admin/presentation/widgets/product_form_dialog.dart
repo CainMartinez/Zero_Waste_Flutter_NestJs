@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
 import 'package:pub_diferent/features/admin/domain/entities/product_admin.dart';
 import 'package:pub_diferent/features/admin/presentation/providers/product_admin_provider.dart';
 import 'form_sections/product_basic_info_form.dart';
@@ -94,7 +95,7 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al seleccionar imágenes: $e')),
+          SnackBar(content: Text('${AppLocalizations.of(context)!.errorSelectingImages}: $e')),
         );
       }
     }
@@ -112,8 +113,8 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
 
     if (_categoryId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Debes seleccionar una categoría'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.mustSelectCategory),
           backgroundColor: Colors.orange,
         ),
       );
@@ -165,7 +166,7 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Error al eliminar imagen: $e'),
+                content: Text('${AppLocalizations.of(context)!.errorDeletingImage}: $e'),
                 backgroundColor: Colors.orange,
               ),
             );
@@ -186,7 +187,7 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Error al subir imagen: $e'),
+                content: Text('${AppLocalizations.of(context)!.errorUploadingImage}: $e'),
                 backgroundColor: Colors.orange,
               ),
             );
@@ -213,7 +214,7 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Error al actualizar alérgenos: $e'),
+              content: Text('${AppLocalizations.of(context)!.errorUpdatingAllergens}: $e'),
               backgroundColor: Colors.orange,
             ),
           );
@@ -229,20 +230,21 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
     setState(() => _isLoading = false);
 
     if (mounted) {
+      final l10n = AppLocalizations.of(context)!;
       if (success) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(widget.product == null
-                ? 'Producto creado correctamente'
-                : 'Producto actualizado correctamente'),
+                ? l10n.productCreatedSuccessfully
+                : l10n.productUpdatedSuccessfully),
             backgroundColor: Colors.green,
           ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(ref.read(productAdminProvider).errorMessage ?? 'Error desconocido'),
+            content: Text(ref.read(productAdminProvider).errorMessage ?? l10n.unknownError),
             backgroundColor: Colors.red,
           ),
         );
@@ -252,8 +254,9 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AlertDialog(
-      title: Text(widget.product == null ? 'Crear Producto' : 'Editar Producto'),
+      title: Text(widget.product == null ? l10n.createProduct : l10n.editProduct),
       content: SingleChildScrollView(
         child: SizedBox(
           width: 500,
@@ -323,7 +326,7 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
       actions: [
         TextButton(
           onPressed: (_isLoading || _uploadingImages) ? null : () => Navigator.of(context).pop(),
-          child: const Text('Cancelar'),
+          child: Text(l10n.cancel),
         ),
         ElevatedButton(
           onPressed: (_isLoading || _uploadingImages) ? null : _submit,
@@ -333,7 +336,7 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
                   height: 20,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
-              : Text(widget.product == null ? 'Crear' : 'Actualizar'),
+              : Text(widget.product == null ? l10n.create : l10n.update),
         ),
       ],
     );

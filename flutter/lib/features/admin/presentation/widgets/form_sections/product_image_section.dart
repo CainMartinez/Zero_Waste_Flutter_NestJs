@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:image_picker/image_picker.dart';
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
 import 'package:pub_diferent/features/admin/domain/entities/product_admin.dart';
 import 'package:pub_diferent/core/config/env.dart';
 
@@ -31,9 +32,9 @@ class ProductImageSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (existingImages.isNotEmpty) ...[
-          const Text(
-            'Imágenes actuales:',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            AppLocalizations.of(context)!.existingImages,
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           SizedBox(
@@ -112,15 +113,13 @@ class ProductImageSection extends StatelessWidget {
         OutlinedButton.icon(
           onPressed: onPickImages,
           icon: const Icon(Icons.add_photo_alternate),
-          label: Text(newImages.isEmpty 
-            ? 'Agregar imágenes' 
-            : 'Agregar más imágenes (${newImages.length} seleccionadas)'),
+          label: Text(AppLocalizations.of(context)!.addImages),
         ),
         const SizedBox(height: 8),
         if (newImages.isNotEmpty) ...[
-          const Text(
-            'Imágenes nuevas a subir:',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            AppLocalizations.of(context)!.selectedImagesWillBeUploaded,
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           SizedBox(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
 import 'package:pub_diferent/features/admin/presentation/providers/product_admin_provider.dart';
 import 'package:pub_diferent/features/admin/presentation/widgets/product_admin_card.dart';
 import 'package:pub_diferent/features/admin/presentation/widgets/product_form_dialog.dart';
@@ -28,14 +29,16 @@ class _ProductsAdminPageState extends ConsumerState<ProductsAdminPage> {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
 
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gestión de Productos'),
+        title: Text(l10n.productManagement),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () => notifier.loadProducts(),
-            tooltip: 'Recargar',
+            tooltip: l10n.reload,
           ),
         ],
       ),
@@ -49,7 +52,7 @@ class _ProductsAdminPageState extends ConsumerState<ProductsAdminPage> {
                       Icon(Icons.error_outline, size: 64, color: cs.error),
                       const SizedBox(height: 16),
                       Text(
-                        'Error al cargar productos',
+                        l10n.errorLoadingProducts,
                         style: tt.titleLarge,
                       ),
                       const SizedBox(height: 8),
@@ -61,7 +64,7 @@ class _ProductsAdminPageState extends ConsumerState<ProductsAdminPage> {
                       const SizedBox(height: 16),
                       ElevatedButton.icon(
                         icon: const Icon(Icons.refresh),
-                        label: const Text('Reintentar'),
+                        label: Text(l10n.retry),
                         onPressed: () => notifier.loadProducts(),
                       ),
                     ],
@@ -75,12 +78,12 @@ class _ProductsAdminPageState extends ConsumerState<ProductsAdminPage> {
                           Icon(Icons.inventory_2_outlined, size: 64, color: cs.onSurfaceVariant),
                           const SizedBox(height: 16),
                           Text(
-                            'No hay productos',
+                            l10n.noProducts,
                             style: tt.titleLarge,
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Crea tu primer producto usando el botón +',
+                            l10n.createFirstProduct,
                             style: tt.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
                           ),
                         ],
@@ -112,7 +115,7 @@ class _ProductsAdminPageState extends ConsumerState<ProductsAdminPage> {
           }
         },
         icon: const Icon(Icons.add),
-        label: const Text('Nuevo Producto'),
+        label: Text(l10n.newProduct),
       ),
     );
   }
