@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
 import '../../domain/entities/catalog_filters.dart';
 import '../../domain/entities/catalog_state.dart';
 import '../../domain/entities/category.dart';
@@ -94,7 +95,7 @@ class _ShopPageState extends ConsumerState<ShopPage> {
             builder: (context, scrollController) => Column(
               children: [
                 ListTile(
-                  title: const Text('Seleccionar Categoría'),
+                  title: Text(AppLocalizations.of(context)!.filterByCategory),
                   trailing: IconButton(
                     icon: const Icon(Icons.close),
                     onPressed: () => Navigator.pop(context),
@@ -106,7 +107,7 @@ class _ShopPageState extends ConsumerState<ShopPage> {
                     controller: scrollController,
                     children: [
                       ListTile(
-                        title: const Text('Todas'),
+                        title: Text(AppLocalizations.of(context)!.allCategories),
                         trailing: _selectedCategory == null ? const Icon(Icons.check) : null,
                         selected: _selectedCategory == null,
                         onTap: () {
@@ -116,7 +117,7 @@ class _ShopPageState extends ConsumerState<ShopPage> {
                         },
                       ),
                       ...categories.map((category) => ListTile(
-                            title: Text(category.nameEs),
+                            title: Text(category.name(context)),
                             trailing: _selectedCategory == category.code ? const Icon(Icons.check) : null,
                             selected: _selectedCategory == category.code,
                             onTap: () {
@@ -136,12 +137,12 @@ class _ShopPageState extends ConsumerState<ShopPage> {
       },
       loading: () {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Cargando categorías...')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.loadingProducts)),
         );
       },
       error: (error, _) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al cargar categorías: $error')),
+          SnackBar(content: Text('${AppLocalizations.of(context)!.errorLoadingProducts}: $error')),
         );
       },
     );
@@ -162,10 +163,10 @@ class _ShopPageState extends ConsumerState<ShopPage> {
               builder: (context, scrollController) => Column(
                 children: [
                   ListTile(
-                    title: const Text('Selecciona las alergias para tu seguridad'),
+                    title: Text(AppLocalizations.of(context)!.filterByAllergens),
                     subtitle: Text(_excludedAllergens.isEmpty 
-                      ? 'Ninguno seleccionado' 
-                      : '${_excludedAllergens.length} seleccionados'),
+                      ? AppLocalizations.of(context)!.noAllergensSelected 
+                      : AppLocalizations.of(context)!.allergensSelectedCount(_excludedAllergens.length)),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -176,7 +177,7 @@ class _ShopPageState extends ConsumerState<ShopPage> {
                               setModalState(() {});
                               _loadCatalog();
                             },
-                            child: const Text('Limpiar'),
+                            child: Text(AppLocalizations.of(context)!.clearFilters),
                           ),
                         IconButton(
                           icon: const Icon(Icons.close),
@@ -194,7 +195,7 @@ class _ShopPageState extends ConsumerState<ShopPage> {
                         final allergen = allergens[index];
                         final isSelected = _excludedAllergens.contains(allergen.code);
                         return CheckboxListTile(
-                          title: Text(allergen.nameEs),
+                          title: Text(allergen.name(context)),
                           value: isSelected,
                           onChanged: (value) {
                             setState(() {
@@ -220,37 +221,38 @@ class _ShopPageState extends ConsumerState<ShopPage> {
       },
       loading: () {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Cargando alérgenos...')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.loadingProducts)),
         );
       },
       error: (error, _) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al cargar alérgenos: $error')),
+          SnackBar(content: Text('${AppLocalizations.of(context)!.errorLoadingProducts}: $error')),
         );
       },
     );
   }
 
   void _showSortOptions() {
+    final l10n = AppLocalizations.of(context)!;
     showModalBottomSheet(
       context: context,
       builder: (context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
-            title: const Text('Ordenar por'),
+            title: Text(l10n.sortBy),
             trailing: IconButton(
               icon: const Icon(Icons.close),
               onPressed: () => Navigator.pop(context),
             ),
           ),
           const Divider(),
-          _buildSortOption('Más reciente', 'createdAt', 'desc'),
-          _buildSortOption('Más antiguo', 'createdAt', 'asc'),
-          _buildSortOption('Precio: menor a mayor', 'price', 'asc'),
-          _buildSortOption('Precio: mayor a menor', 'price', 'desc'),
-          _buildSortOption('Nombre: A-Z', 'name', 'asc'),
-          _buildSortOption('Nombre: Z-A', 'name', 'desc'),
+          _buildSortOption(l10n.sortByNewest, 'createdAt', 'desc'),
+          _buildSortOption(l10n.sortByNewest, 'createdAt', 'asc'),
+          _buildSortOption(l10n.sortByPriceAsc, 'price', 'asc'),
+          _buildSortOption(l10n.sortByPriceDesc, 'price', 'desc'),
+          _buildSortOption(l10n.sortByNameAsc, 'name', 'asc'),
+          _buildSortOption(l10n.sortByNameDesc, 'name', 'desc'),
           const SizedBox(height: 16),
         ],
       ),
@@ -275,18 +277,19 @@ class _ShopPageState extends ConsumerState<ShopPage> {
   }
 
   String _getCategoryLabel(AsyncValue<List<Category>> categoriesAsync) {
-    if (_selectedCategory == null) return 'Todas las Categorías';
+    final l10n = AppLocalizations.of(context)!;
+    if (_selectedCategory == null) return l10n.allCategories;
     
     return categoriesAsync.when(
       data: (categories) {
         final category = categories.firstWhere(
           (c) => c.code == _selectedCategory,
-          orElse: () => Category(id: 0, code: '', nameEs: 'Todas', nameEn: ''),
+          orElse: () => Category(id: 0, code: '', nameEs: l10n.allCategories, nameEn: l10n.allCategories),
         );
-        return category.nameEs;
+        return category.name(context);
       },
-      loading: () => 'Cargando...',
-      error: (_, __) => 'Error',
+      loading: () => l10n.loadingProducts,
+      error: (_, __) => l10n.errorLoadingProducts,
     );
   }
 
@@ -299,9 +302,11 @@ class _ShopPageState extends ConsumerState<ShopPage> {
     final categoriesAsync = ref.watch(categoriesProvider);
     final allergensAsync = ref.watch(allergensProvider);
 
+    final l10n = AppLocalizations.of(context)!;
+    
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Disfruta la comida Zero Waste'),
+        title: Text(l10n.shopPageTitle),
         actions: [
           // Botón de ordenar
           IconButton(
@@ -378,8 +383,8 @@ class _ShopPageState extends ConsumerState<ShopPage> {
                     icon: const Icon(Icons.warning_amber),
                     label: Text(
                       _excludedAllergens.isEmpty 
-                        ? 'Alérgenos' 
-                        : 'Alérgenos (${_excludedAllergens.length})',
+                        ? l10n.filterByAllergens 
+                        : '${l10n.filterByAllergens} (${_excludedAllergens.length})',
                       overflow: TextOverflow.ellipsis,
                     ),
                     style: _excludedAllergens.isNotEmpty
@@ -400,7 +405,7 @@ class _ShopPageState extends ConsumerState<ShopPage> {
             child: Row(
               children: [
                 AppFilterChip(
-                  label: 'Solo Vegano',
+                  label: l10n.veganOnly,
                   selected: _isVegan == true,
                   onTap: () {
                     setState(() {
@@ -415,7 +420,7 @@ class _ShopPageState extends ConsumerState<ShopPage> {
                   TextButton.icon(
                     onPressed: _clearFilters,
                     icon: const Icon(Icons.clear_all, size: 18),
-                    label: const Text('Limpiar filtros'),
+                    label: Text(l10n.clearFilters),
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.red,
                     ),
@@ -436,6 +441,8 @@ class _ShopPageState extends ConsumerState<ShopPage> {
   }
 
   Widget _buildProductList(CatalogState catalogState) {
+    final l10n = AppLocalizations.of(context)!;
+    
     if (catalogState.error != null) {
       return Center(
         child: Column(
@@ -443,11 +450,11 @@ class _ShopPageState extends ConsumerState<ShopPage> {
           children: [
             const Icon(Icons.error_outline, size: 48, color: Colors.red),
             const SizedBox(height: 16),
-            Text('Error: ${catalogState.error}'),
+            Text('${l10n.errorLoadingProducts}: ${catalogState.error}'),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadCatalog,
-              child: const Text('Reintentar'),
+              child: Text(l10n.retry),
             ),
           ],
         ),
@@ -455,13 +462,18 @@ class _ShopPageState extends ConsumerState<ShopPage> {
     }
 
     if (catalogState.items.isEmpty && !catalogState.isLoading) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.shopping_bag_outlined, size: 48),
-            SizedBox(height: 16),
-            Text('No se encontraron productos'),
+            const Icon(Icons.shopping_bag_outlined, size: 48),
+            const SizedBox(height: 16),
+            Text(l10n.noProductsFound),
+            const SizedBox(height: 8),
+            Text(
+              l10n.tryAdjustingFilters,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
           ],
         ),
       );
@@ -498,7 +510,7 @@ class _ShopPageState extends ConsumerState<ShopPage> {
             ref.read(cartProvider.notifier).addItem(item);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('${item.nameEs} añadido al carrito'),
+                content: Text(l10n.addedToCart(item.name(context))),
                 duration: const Duration(seconds: 1),
               ),
             );

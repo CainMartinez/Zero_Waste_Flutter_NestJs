@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// Categoría
 class Category {
   final int id;
@@ -11,6 +13,12 @@ class Category {
     required this.nameEs,
     required this.nameEn,
   });
+
+  /// Retorna el nombre según el idioma del contexto
+  String name(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    return locale.languageCode == 'en' ? nameEn : nameEs;
+  }
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(

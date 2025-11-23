@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
 import '../../domain/entities/catalog_item.dart';
 
 /// Modal con detalles del producto/menú
@@ -156,13 +157,13 @@ class _ProductDetailModalState extends State<ProductDetailModal> {
                               children: [
                                 if (widget.item.isMenu)
                                   Chip(
-                                    label: const Text('Menú'),
+                                    label: Text(AppLocalizations.of(context)!.menuBadge),
                                     avatar: const Icon(Icons.restaurant_menu, size: 18),
                                   ),
                                 if (widget.item.isVegan) ...[
                                   const SizedBox(width: 8),
                                   Chip(
-                                    label: const Text('Vegano'),
+                                    label: Text(AppLocalizations.of(context)!.veganOnly),
                                     avatar: const Icon(
                                       Icons.eco, 
                                       size: 18,
@@ -177,7 +178,7 @@ class _ProductDetailModalState extends State<ProductDetailModal> {
                             
                             // Nombre
                             Text(
-                              widget.item.nameEs,
+                              widget.item.name(context),
                               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -187,7 +188,7 @@ class _ProductDetailModalState extends State<ProductDetailModal> {
                             
                             // Categoría
                             Text(
-                              widget.item.category.nameEs.toUpperCase(),
+                              widget.item.category.name(context).toUpperCase(),
                               style: Theme.of(context).textTheme.labelLarge?.copyWith(
                                     color: Theme.of(context).colorScheme.primary,
                                   ),
@@ -208,14 +209,14 @@ class _ProductDetailModalState extends State<ProductDetailModal> {
                             
                             // Descripción
                             Text(
-                              'Descripción',
+                              AppLocalizations.of(context)!.description,
                               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              widget.item.descriptionEs,
+                              widget.item.description(context),
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                             
@@ -224,7 +225,7 @@ class _ProductDetailModalState extends State<ProductDetailModal> {
                             // Alérgenos
                             if (widget.item.allergens.isNotEmpty) ...[
                               Text(
-                                'Alérgenos',
+                                AppLocalizations.of(context)!.allergens,
                                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -246,7 +247,7 @@ class _ProductDetailModalState extends State<ProductDetailModal> {
                                     label: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Text(allergen.nameEs),
+                                        Text(allergen.name(context)),
                                         if (isContains || isMayContain) ...[
                                           const SizedBox(width: 4),
                                           Text(
@@ -283,7 +284,7 @@ class _ProductDetailModalState extends State<ProductDetailModal> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                '✓ Contiene • ~ Puede contener trazas',
+                                '✓ ${AppLocalizations.of(context)!.contains} • ~ ${AppLocalizations.of(context)!.mayContain}',
                                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                   color: Colors.grey,
                                   fontStyle: FontStyle.italic,
@@ -295,7 +296,7 @@ class _ProductDetailModalState extends State<ProductDetailModal> {
                             // Composición del menú (solo para menús)
                             if (widget.item.isMenu && widget.item.menuComposition != null) ...[
                               Text(
-                                'Composición del Menú',
+                                AppLocalizations.of(context)!.menuComposition,
                                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -303,25 +304,25 @@ class _ProductDetailModalState extends State<ProductDetailModal> {
                               const SizedBox(height: 12),
                               _buildMenuCompositionItem(
                                 context,
-                                'Bebida',
+                                AppLocalizations.of(context)!.drink,
                                 Icons.local_drink,
                                 widget.item.menuComposition!.drinkId,
                               ),
                               _buildMenuCompositionItem(
                                 context,
-                                'Entrante',
+                                AppLocalizations.of(context)!.sideDish,
                                 Icons.restaurant,
                                 widget.item.menuComposition!.starterId,
                               ),
                               _buildMenuCompositionItem(
                                 context,
-                                'Principal',
+                                AppLocalizations.of(context)!.mainCourse,
                                 Icons.dinner_dining,
                                 widget.item.menuComposition!.mainId,
                               ),
                               _buildMenuCompositionItem(
                                 context,
-                                'Postre',
+                                AppLocalizations.of(context)!.dessert,
                                 Icons.cake,
                                 widget.item.menuComposition!.dessertId,
                               ),

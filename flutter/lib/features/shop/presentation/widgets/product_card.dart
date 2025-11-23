@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
 import '../../domain/entities/catalog_item.dart';
 
 /// Card de producto/menú del catálogo
@@ -47,7 +48,7 @@ class ProductCard extends StatelessWidget {
                       children: [
                         if (item.isMenu)
                           Chip(
-                            label: const Text('Menú', style: TextStyle(fontSize: 10)),
+                            label: Text(AppLocalizations.of(context)!.menuBadge, style: const TextStyle(fontSize: 10)),
                             padding: EdgeInsets.zero,
                             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
@@ -62,7 +63,7 @@ class ProductCard extends StatelessWidget {
                     
                     // Nombre
                     Text(
-                      item.nameEs,
+                      item.name(context),
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -75,7 +76,7 @@ class ProductCard extends StatelessWidget {
                     // Descripción
                     Expanded(
                       child: Text(
-                        item.descriptionEs,
+                        item.description(context),
                         style: Theme.of(context).textTheme.bodySmall,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,

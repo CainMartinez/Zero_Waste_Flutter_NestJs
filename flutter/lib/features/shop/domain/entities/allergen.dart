@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// Alérgeno
 class Allergen {
   final String code;
@@ -13,6 +15,12 @@ class Allergen {
     this.contains = false,
     this.mayContain = false,
   });
+
+  /// Retorna el nombre según el idioma del contexto
+  String name(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    return locale.languageCode == 'en' ? nameEn : nameEs;
+  }
 
   factory Allergen.fromJson(Map<String, dynamic> json) {
     return Allergen(

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'menu_composition.dart';
 import 'allergen.dart';
 
@@ -12,6 +13,12 @@ class CategoryInfo {
     required this.nameEs,
     required this.nameEn,
   });
+
+  /// Retorna el nombre según el idioma del contexto
+  String name(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    return locale.languageCode == 'en' ? nameEn : nameEs;
+  }
 
   factory CategoryInfo.fromJson(Map<String, dynamic> json) {
     return CategoryInfo(
@@ -62,6 +69,18 @@ class CatalogItem {
 
   bool get isMenu => type == 'menu';
   bool get isProduct => type == 'product';
+
+  /// Retorna el nombre según el idioma del contexto
+  String name(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    return locale.languageCode == 'en' ? nameEn : nameEs;
+  }
+
+  /// Retorna la descripción según el idioma del contexto
+  String description(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    return locale.languageCode == 'en' ? descriptionEn : descriptionEs;
+  }
 
   factory CatalogItem.fromJson(Map<String, dynamic> json) {
     return CatalogItem(
