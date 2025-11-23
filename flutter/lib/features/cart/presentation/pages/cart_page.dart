@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/l10n/app_localizations.dart';
 import '../../domain/models/cart_state.dart';
 import '../providers/cart_provider.dart';
 
@@ -10,15 +11,17 @@ class CartPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cartState = ref.watch(cartProvider);
 
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mi Carrito'),
+        title: Text(l10n.myCart),
         actions: [
           if (cartState.items.isNotEmpty)
             IconButton(
               icon: const Icon(Icons.delete_outline),
               onPressed: () => _showClearCartDialog(context, ref),
-              tooltip: 'Vaciar carrito',
+              tooltip: l10n.clearCartTooltip,
             ),
         ],
       ),
@@ -40,14 +43,14 @@ class CartPage extends ConsumerWidget {
           ),
           const SizedBox(height: 24),
           Text(
-            'Tu carrito está vacío',
+            AppLocalizations.of(context)!.emptyCartTitle,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
           ),
           const SizedBox(height: 8),
           Text(
-            'Añade productos desde el menú',
+            AppLocalizations.of(context)!.emptyCartMessage,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -56,7 +59,7 @@ class CartPage extends ConsumerWidget {
           FilledButton.icon(
             onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.restaurant_menu),
-            label: const Text('Ver Menú'),
+            label: Text(AppLocalizations.of(context)!.viewMenu),
           ),
         ],
       ),
@@ -110,7 +113,7 @@ class CartPage extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    cartItem.item.nameEs,
+                    cartItem.item.name(context),
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -119,7 +122,7 @@ class CartPage extends ConsumerWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    cartItem.item.category.nameEs,
+                    cartItem.item.category.name(context),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.primary,
                         ),
@@ -251,7 +254,7 @@ class CartPage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Subtotal',
+                  AppLocalizations.of(context)!.subtotal,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 Text(
@@ -267,7 +270,7 @@ class CartPage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total de artículos',
+                  AppLocalizations.of(context)!.totalItems,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -285,7 +288,7 @@ class CartPage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total',
+                  AppLocalizations.of(context)!.total,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -307,14 +310,14 @@ class CartPage extends ConsumerWidget {
                 onPressed: () {
                   // TODO: Implementar confirmación de pedido
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Función de pedido pendiente de implementar'),
-                      duration: Duration(seconds: 2),
+                    SnackBar(
+                      content: Text(AppLocalizations.of(context)!.orderPendingImplementation),
+                      duration: const Duration(seconds: 2),
                     ),
                   );
                 },
                 icon: const Icon(Icons.shopping_bag_outlined),
-                label: const Text('Confirmar Pedido'),
+                label: Text(AppLocalizations.of(context)!.confirmOrder),
                 style: FilledButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
@@ -327,15 +330,16 @@ class CartPage extends ConsumerWidget {
   }
 
   void _showClearCartDialog(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Vaciar carrito'),
-        content: const Text('¿Estás seguro de que deseas eliminar todos los productos del carrito?'),
+        title: Text(l10n.clearCartDialogTitle),
+        content: Text(l10n.clearCartDialogMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             onPressed: () {
@@ -345,7 +349,7 @@ class CartPage extends ConsumerWidget {
             style: FilledButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.error,
             ),
-            child: const Text('Vaciar'),
+            child: Text(l10n.clear),
           ),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
 import 'package:pub_diferent/features/settings/presentation/pages/settings_page.dart';
 import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart';
 
@@ -42,6 +43,8 @@ class _AppShellState extends ConsumerState<AppShell> {
     final displayName = auth?.displayName;
     final avatarUrl = auth?.avatarUrl;
 
+    final l10n = AppLocalizations.of(context)!;
+
     // Definir rutas y títulos según el rol
     final List<String> paths;
     final List<String> titles;
@@ -49,11 +52,11 @@ class _AppShellState extends ConsumerState<AppShell> {
     if (isAdmin) {
       // Rutas para ADMIN: Dashboard, Productos, Facturación, Perfil
       paths = ['/dashboard', '/products', '/billing', '/profile'];
-      titles = ['Dashboard', 'Productos', 'Facturación', 'Perfil'];
+      titles = [l10n.dashboard, l10n.products, l10n.billing, l10n.profile];
     } else {
       // Rutas para USUARIO: Inicio, Menú, Pedidos, Perfil
       paths = ['/home', '/menu', '/orders', '/profile'];
-      titles = ['Inicio', 'Menú', 'Pedidos', 'Perfil'];
+      titles = [l10n.home, l10n.menu, l10n.orders, l10n.profile];
     }
 
     // Obtener el índice actual basado en la ruta
@@ -108,7 +111,7 @@ class _AppShellState extends ConsumerState<AppShell> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Hola, $displayName',
+                    '${l10n.hello}, $displayName',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   if (auth?.isAdmin == true) ...[
@@ -153,7 +156,7 @@ class _AppShellState extends ConsumerState<AppShell> {
           ),
           IconButton(
             icon: const Icon(Icons.settings),
-            tooltip: 'Preferencias',
+            tooltip: l10n.preferences,
             onPressed: () => _openSettings(context),
           ),
           const SizedBox(width: 6),
@@ -164,50 +167,50 @@ class _AppShellState extends ConsumerState<AppShell> {
         selectedIndex: selectedIndex,
         onDestinationSelected: (index) => context.go(paths[index]),
         destinations: isAdmin
-            ? const [
+            ? [
                 // Navegación para ADMIN
                 NavigationDestination(
-                  icon: Icon(Icons.dashboard_outlined),
-                  selectedIcon: Icon(Icons.dashboard),
-                  label: 'Dashboard',
+                  icon: const Icon(Icons.dashboard_outlined),
+                  selectedIcon: const Icon(Icons.dashboard),
+                  label: l10n.dashboard,
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.inventory_2_outlined),
-                  selectedIcon: Icon(Icons.inventory_2),
-                  label: 'Productos',
+                  icon: const Icon(Icons.inventory_2_outlined),
+                  selectedIcon: const Icon(Icons.inventory_2),
+                  label: l10n.products,
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.receipt_outlined),
-                  selectedIcon: Icon(Icons.receipt),
-                  label: 'Facturación',
+                  icon: const Icon(Icons.receipt_outlined),
+                  selectedIcon: const Icon(Icons.receipt),
+                  label: l10n.billing,
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.person_outline),
-                  selectedIcon: Icon(Icons.person),
-                  label: 'Perfil',
+                  icon: const Icon(Icons.person_outline),
+                  selectedIcon: const Icon(Icons.person),
+                  label: l10n.profile,
                 ),
               ]
-            : const [
+            : [
                 // Navegación para USUARIO
                 NavigationDestination(
-                  icon: Icon(Icons.home_outlined),
-                  selectedIcon: Icon(Icons.home),
-                  label: 'Inicio',
+                  icon: const Icon(Icons.home_outlined),
+                  selectedIcon: const Icon(Icons.home),
+                  label: l10n.home,
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.restaurant_menu_outlined),
-                  selectedIcon: Icon(Icons.restaurant_menu),
-                  label: 'Menú',
+                  icon: const Icon(Icons.restaurant_menu_outlined),
+                  selectedIcon: const Icon(Icons.restaurant_menu),
+                  label: l10n.menu,
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.receipt_long_outlined),
-                  selectedIcon: Icon(Icons.receipt_long),
-                  label: 'Pedidos',
+                  icon: const Icon(Icons.receipt_long_outlined),
+                  selectedIcon: const Icon(Icons.receipt_long),
+                  label: l10n.orders,
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.person_outline),
-                  selectedIcon: Icon(Icons.person),
-                  label: 'Perfil',
+                  icon: const Icon(Icons.person_outline),
+                  selectedIcon: const Icon(Icons.person),
+                  label: l10n.profile,
                 ),
               ],
         backgroundColor: cs.surface,

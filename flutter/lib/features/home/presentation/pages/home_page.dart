@@ -4,6 +4,7 @@ import 'package:pub_diferent/features/home/presentation/widgets/home_hero_header
 import 'package:pub_diferent/features/home/presentation/widgets/featured_big_card.dart';
 import 'package:pub_diferent/features/home/presentation/widgets/loyalty_gradient_banner.dart';
 import 'package:pub_diferent/app/theme/app_palette.dart';
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -11,23 +12,23 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = appPaletteOf(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
         HomeHeroHeader(
-          titlePrimary: 'Comida Deliciosa',
-          titleAccent: 'Sin Desperdicios',
-          subtitle:
-              'Disfruta de la mejor comida para llevar mientras cuidamos nuestro planeta. Envases reutilizables, ingredientes locales y cero desperdicios.',
-          badges: const [
+          titlePrimary: l10n.homePageTitle,
+          titleAccent: l10n.homePageTitleAccent,
+          subtitle: l10n.homePageSubtitle,
+          badges: [
             AppBadge(
-              label: 'Cero Desperdicios',
+              label: l10n.badgeZeroWaste,
               icon: Icons.recycling,
               color: Colors.teal,
             ),
             AppBadge(
-              label: 'Menús Veganos',
+              label: l10n.badgeVeganMenus,
               icon: Icons.flatware,
               color: Colors.green,
             ),
@@ -49,7 +50,7 @@ class HomePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        'Comida Ecológica',
+                        l10n.featureEcoFriendlyFood,
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -57,7 +58,7 @@ class HomePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Zero Waste',
+                        l10n.featureZeroWaste,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
@@ -81,7 +82,7 @@ class HomePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        'Recogida rápida',
+                        l10n.featureFastPickup,
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -89,7 +90,7 @@ class HomePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Sin esperas',
+                        l10n.featureNoWaiting,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
@@ -102,19 +103,19 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ),
-        const FeaturedBigCard(
-          image: AssetImage('assets/images/home.jpg'),
+        FeaturedBigCard(
+          image: const AssetImage('assets/images/home.jpg'),
           badge: AppBadge(
-            label: '100% Sostenible',
+            label: l10n.featuredCard100Sustainable,
             icon: Icons.energy_savings_leaf,
             color: Colors.green,
           ),
-          title: 'Envases compostables y reutilizables',
+          title: l10n.featuredCardTitle,
         ),
         const SizedBox(height: 4),
-        const LoyaltyGradientBanner(
-          title: '¡PROGRAMA DE FIDELIDAD! 10 compras = 1 menú GRATIS',
-          subtitle: 'Acumula puntos y canjéalos por recompensas deliciosas.',
+        LoyaltyGradientBanner(
+          title: l10n.loyaltyBannerTitle,
+          subtitle: l10n.loyaltyBannerSubtitle,
           showNewBadge: true,
         ),
       ],

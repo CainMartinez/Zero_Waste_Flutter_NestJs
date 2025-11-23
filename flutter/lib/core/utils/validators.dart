@@ -1,60 +1,70 @@
+import 'package:flutter/material.dart';
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
+
 class Validators {
-  static String? required(String? value, {String fieldName = 'Este campo'}) {
+  static String? required(BuildContext context, String? value, {String? fieldName}) {
     if (value == null || value.trim().isEmpty) {
-      return '$fieldName es obligatorio';
+      final l10n = AppLocalizations.of(context)!;
+      return fieldName != null 
+          ? l10n.fieldRequired(fieldName)
+          : l10n.required;
     }
     return null;
   }
 
-  static String? email(String? value) {
+  static String? email(BuildContext context, String? value) {
+    final l10n = AppLocalizations.of(context)!;
     if (value == null || value.trim().isEmpty) {
-      return 'El email es obligatorio';
+      return l10n.emailRequired;
     }
     final regex = RegExp(r'^[\w\.\-]+@[\w\-]+\.[a-zA-Z]{2,}$');
     if (!regex.hasMatch(value.trim())) {
-      return 'Email no válido';
+      return l10n.invalidEmail;
     }
     return null;
   }
 
-  static String? password(String? value) {
+  static String? password(BuildContext context, String? value) {
+    final l10n = AppLocalizations.of(context)!;
     if (value == null || value.isEmpty) {
-      return 'La contraseña es obligatoria';
+      return l10n.passwordRequired;
     }
     if (value.length < 8) {
-      return 'Mínimo 8 caracteres';
+      return l10n.passwordMinLength;
     }
     if (!RegExp(r'[A-Z]').hasMatch(value)) {
-      return 'Debe contener al menos una mayúscula';
+      return l10n.passwordUppercase;
     }
     if (!RegExp(r'[a-z]').hasMatch(value)) {
-      return 'Debe contener al menos una minúscula';
+      return l10n.passwordLowercase;
     }
     if (!RegExp(r'[0-9]').hasMatch(value)) {
-      return 'Debe contener al menos un número';
+      return l10n.passwordNumber;
     }
     if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
-      return 'Debe contener al menos un carácter especial';
+      return l10n.passwordSpecialChar;
     }
     return null;
   }
 
-  static String? confirmPassword(String? value, String? originalPassword) {
+  static String? confirmPassword(BuildContext context, String? value, String? originalPassword) {
+    final l10n = AppLocalizations.of(context)!;
     if (value == null || value.isEmpty) {
-      return 'Confirma tu contraseña';
+      return l10n.confirmPasswordRequired;
     }
     if (value != originalPassword) {
-      return 'Las contraseñas no coinciden';
+      return l10n.passwordsDoNotMatch;
     }
     return null;
   }
 
-  static String? name(String? value) {
+  static String? name(BuildContext context, String? value) {
+    final l10n = AppLocalizations.of(context)!;
     if (value == null || value.trim().isEmpty) {
-      return 'El nombre es obligatorio';
+      return l10n.nameRequired;
     }
     if (value.trim().length < 2) {
-      return 'Nombre demasiado corto';
+      return l10n.nameTooShort;
     }
     return null;
   }
