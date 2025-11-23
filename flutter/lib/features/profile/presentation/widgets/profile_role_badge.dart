@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
 
 /// Widget para mostrar el badge de rol (Admin/Usuario)
 class ProfileRoleBadge extends StatelessWidget {
@@ -11,6 +12,7 @@ class ProfileRoleBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     
     // Admin usa error (rojo), Usuario usa primary (azul)
@@ -24,7 +26,7 @@ class ProfileRoleBadge extends StatelessWidget {
     
     return Chip(
       label: Text(
-        isAdmin ? 'Administrador' : 'Usuario',
+        isAdmin ? l10n.administrator : l10n.user,
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w600,

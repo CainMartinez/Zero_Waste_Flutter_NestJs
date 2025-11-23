@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
 import 'package:pub_diferent/features/profile/presentation/providers/profile_provider.dart';
 import 'package:pub_diferent/core/widgets/app_password_field.dart';
 import 'package:pub_diferent/core/widgets/app_form_submit.dart';
@@ -40,9 +41,10 @@ class _ChangePasswordPageState extends ConsumerState<ChangePasswordPage> {
           );
 
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Contraseña actualizada correctamente'),
+          SnackBar(
+            content: Text(l10n.passwordUpdatedSuccessfully),
             backgroundColor: Colors.green,
           ),
         );
@@ -50,9 +52,10 @@ class _ChangePasswordPageState extends ConsumerState<ChangePasswordPage> {
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error al cambiar contraseña: $e'),
+            content: Text('${l10n.errorChangingPassword}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -66,9 +69,11 @@ class _ChangePasswordPageState extends ConsumerState<ChangePasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cambiar Contraseña'),
+        title: Text(l10n.changePassword),
       ),
       body: Form(
         key: _formKey,
@@ -86,7 +91,7 @@ class _ChangePasswordPageState extends ConsumerState<ChangePasswordPage> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas, números y caracteres especiales.',
+                        l10n.passwordRequirements,
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.blue[700],
@@ -102,24 +107,24 @@ class _ChangePasswordPageState extends ConsumerState<ChangePasswordPage> {
             // Contraseña actual
             AppPasswordField(
               controller: _currentPasswordController,
-              label: 'Contraseña Actual',
-              validator: (value) => Validators.required(value, fieldName: 'La contraseña actual'),
+              label: l10n.currentPassword,
+              validator: (value) => Validators.required(context, value, fieldName: l10n.currentPassword),
             ),
             const SizedBox(height: 16),
 
             // Nueva contraseña
             AppPasswordField(
               controller: _newPasswordController,
-              label: 'Nueva Contraseña',
-              validator: Validators.password,
+              label: l10n.newPassword,
+              validator: (value) => Validators.password(context, value),
             ),
             const SizedBox(height: 16),
 
             // Confirmar contraseña
             AppPasswordField(
               controller: _confirmPasswordController,
-              label: 'Confirmar Nueva Contraseña',
-              validator: (value) => Validators.confirmPassword(value, _newPasswordController.text),
+              label: l10n.confirmNewPassword,
+              validator: (value) => Validators.confirmPassword(context, value, _newPasswordController.text),
             ),
             const SizedBox(height: 24),
 
@@ -127,7 +132,7 @@ class _ChangePasswordPageState extends ConsumerState<ChangePasswordPage> {
             AppFormSubmit(
               isLoading: _isLoading,
               onPressed: _handleSubmit,
-              label: 'Cambiar Contraseña',
+              label: l10n.changePassword,
             ),
           ],
         ),

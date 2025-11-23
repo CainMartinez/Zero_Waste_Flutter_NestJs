@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
 import 'package:pub_diferent/features/profile/presentation/providers/profile_provider.dart';
 import 'package:pub_diferent/core/widgets/app_text_field.dart';
 import 'package:pub_diferent/core/widgets/app_form_submit.dart';
@@ -67,9 +68,10 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
           );
 
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Perfil actualizado correctamente'),
+          SnackBar(
+            content: Text(l10n.profileUpdatedSuccessfully),
             backgroundColor: Colors.green,
           ),
         );
@@ -77,9 +79,10 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error al actualizar perfil: $e'),
+            content: Text('${l10n.errorUpdatingProfile}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -93,9 +96,11 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Editar Perfil'),
+        title: Text(l10n.editProfile),
       ),
       body: Form(
         key: _formKey,
@@ -105,7 +110,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
             // Avatar URL
             AppTextField(
               controller: _avatarUrlController,
-              label: 'URL del Avatar',
+              label: l10n.avatarUrl,
               hint: 'https://example.com/avatar.jpg',
               keyboardType: TextInputType.url,
               prefixIcon: const Icon(Icons.image),
@@ -115,7 +120,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
             // Teléfono
             AppTextField(
               controller: _phoneController,
-              label: 'Teléfono',
+              label: l10n.phone,
               hint: '+34 600 111 222',
               keyboardType: TextInputType.phone,
               prefixIcon: const Icon(Icons.phone),
@@ -125,7 +130,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
             // Dirección línea 1
             AppTextField(
               controller: _addressLine1Controller,
-              label: 'Dirección (Línea 1)',
+              label: l10n.addressLine1,
               hint: 'C/ Principal 123',
               prefixIcon: const Icon(Icons.home),
             ),
@@ -134,7 +139,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
             // Dirección línea 2
             AppTextField(
               controller: _addressLine2Controller,
-              label: 'Dirección (Línea 2)',
+              label: l10n.addressLine2,
               hint: 'Piso 2, puerta B',
               prefixIcon: const Icon(Icons.apartment),
             ),
@@ -143,7 +148,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
             // Ciudad
             AppTextField(
               controller: _cityController,
-              label: 'Ciudad',
+              label: l10n.city,
               hint: 'Valencia',
               prefixIcon: const Icon(Icons.location_city),
             ),
@@ -152,7 +157,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
             // Código Postal
             AppTextField(
               controller: _postalCodeController,
-              label: 'Código Postal',
+              label: l10n.postalCode,
               hint: '46870',
               keyboardType: TextInputType.number,
               prefixIcon: const Icon(Icons.pin_drop),
@@ -162,7 +167,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
             // Código de País
             AppTextField(
               controller: _countryCodeController,
-              label: 'Código de País',
+              label: l10n.countryCode,
               hint: 'ES',
               textCapitalization: TextCapitalization.characters,
               prefixIcon: const Icon(Icons.flag),
@@ -173,7 +178,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
             AppFormSubmit(
               isLoading: _isLoading,
               onPressed: _handleSubmit,
-              label: 'Guardar Cambios',
+              label: l10n.saveChanges,
             ),
           ],
         ),

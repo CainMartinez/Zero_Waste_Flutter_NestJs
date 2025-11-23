@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
 import 'package:pub_diferent/features/profile/presentation/providers/profile_provider.dart';
 import 'package:pub_diferent/features/profile/presentation/pages/update_profile_page.dart';
 import 'package:pub_diferent/features/profile/presentation/pages/change_password_page.dart';
@@ -14,11 +15,12 @@ class ProfilePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final profileAsync = ref.watch(profileProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mi Perfil'),
+        title: Text(l10n.myProfile),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -85,7 +87,7 @@ class ProfilePage extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Información de Contacto',
+                          l10n.personalInfo,
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -96,16 +98,16 @@ class ProfilePage extends ConsumerWidget {
                         // Teléfono
                         ProfileInfoRow(
                           icon: Icons.phone,
-                          label: 'Teléfono',
-                          value: profile.phone ?? 'No especificado',
+                          label: l10n.phone,
+                          value: profile.phone ?? l10n.notProvided,
                         ),
                         const SizedBox(height: 12),
                         
                         // Dirección línea 1
                         ProfileInfoRow(
                           icon: Icons.home,
-                          label: 'Dirección',
-                          value: profile.addressLine1 ?? 'No especificada',
+                          label: l10n.address,
+                          value: profile.addressLine1 ?? l10n.notProvided,
                         ),
                         if (profile.addressLine2 != null && profile.addressLine2!.isNotEmpty) ...[
                           const SizedBox(height: 8),
@@ -122,16 +124,16 @@ class ProfilePage extends ConsumerWidget {
                         // Ciudad
                         ProfileInfoRow(
                           icon: Icons.location_city,
-                          label: 'Ciudad',
-                          value: profile.city ?? 'No especificada',
+                          label: l10n.city,
+                          value: profile.city ?? l10n.notProvided,
                         ),
                         const SizedBox(height: 12),
                         
                         // Código Postal
                         ProfileInfoRow(
                           icon: Icons.pin_drop,
-                          label: 'Código Postal',
-                          value: profile.postalCode ?? 'No especificado',
+                          label: l10n.postalCode,
+                          value: profile.postalCode ?? l10n.notProvided,
                         ),
                       ],
                     ),
@@ -149,7 +151,7 @@ class ProfilePage extends ConsumerWidget {
                     );
                   },
                   icon: const Icon(Icons.edit),
-                  label: const Text('Editar Perfil'),
+                  label: Text(l10n.editProfile),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
@@ -167,7 +169,7 @@ class ProfilePage extends ConsumerWidget {
                       );
                     },
                     icon: const Icon(Icons.lock),
-                    label: const Text('Cambiar Contraseña'),
+                    label: Text(l10n.changePassword),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
@@ -179,7 +181,7 @@ class ProfilePage extends ConsumerWidget {
                 ElevatedButton.icon(
                   onPressed: () => _handleLogout(context, ref),
                   icon: const Icon(Icons.logout),
-                  label: const Text('Cerrar Sesión'),
+                  label: Text(l10n.logout),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
@@ -198,7 +200,7 @@ class ProfilePage extends ConsumerWidget {
               const Icon(Icons.error_outline, size: 60, color: Colors.red),
               const SizedBox(height: 16),
               Text(
-                'Error al cargar perfil',
+                l10n.errorLoadingProfile,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
@@ -212,7 +214,7 @@ class ProfilePage extends ConsumerWidget {
                 onPressed: () {
                   ref.read(profileProvider.notifier).refresh();
                 },
-                child: const Text('Reintentar'),
+                child: Text(l10n.retry),
               ),
             ],
           ),
@@ -223,16 +225,17 @@ class ProfilePage extends ConsumerWidget {
 
   Future<void> _handleLogout(BuildContext context, WidgetRef ref) async {
     if (!context.mounted) return;
+    final l10n = AppLocalizations.of(context)!;
     
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Cerrar Sesión'),
-        content: const Text('¿Estás seguro de que deseas cerrar sesión?'),
+        title: Text(l10n.logoutConfirmTitle),
+        content: Text(l10n.logoutConfirmMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Cancelar'),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.of(ctx).pop(true),
@@ -240,7 +243,7 @@ class ProfilePage extends ConsumerWidget {
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
             ),
-            child: const Text('Cerrar Sesión'),
+            child: Text(l10n.logout),
           ),
         ],
       ),
@@ -255,9 +258,10 @@ class ProfilePage extends ConsumerWidget {
         }
       } catch (e) {
         if (context.mounted) {
+          final l10n = AppLocalizations.of(context)!;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Error al cerrar sesión: $e'),
+              content: Text('${l10n.errorLoggingOut}: $e'),
               backgroundColor: Colors.red,
             ),
           );
