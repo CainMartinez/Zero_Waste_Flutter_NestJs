@@ -4,6 +4,7 @@
 
 ![Logo](flutter/assets/images/logo.jpg)
 
+> Accede a la documentación completa en https://cain-dev.gitbook.io/ecobocado
 ---
 
 ## Una Nueva Forma de Disfrutar tu Comida Favorita
