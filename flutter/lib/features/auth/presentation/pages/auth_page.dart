@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
 import 'package:pub_diferent/core/widgets/app_header_logo.dart';
 import 'package:pub_diferent/features/auth/presentation/widgets/login_form.dart';
 import 'package:pub_diferent/features/auth/presentation/widgets/register_form.dart';
@@ -21,6 +22,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
 
@@ -34,8 +36,8 @@ class _AuthPageState extends ConsumerState<AuthPage> {
             children: [
               const SizedBox(height: 6),
               AppHeaderLogo(
-                title: _mode == AuthMode.login ? 'Inicia sesión' : 'Crea tu cuenta',
-                subtitle: 'Comidas zero waste, recogida sin esperas.',
+                title: _mode == AuthMode.login ? l10n.loginTitle : l10n.registerTitle,
+                subtitle: l10n.authSubtitle,
               ),
               const SizedBox(height: 26),
 
@@ -70,7 +72,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
 
               const SizedBox(height: 20),
               Text(
-                'Al continuar aceptas la recogida rápida y el sistema de puntos.',
+                l10n.authAcceptTerms,
                 style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
                 textAlign: TextAlign.center,
               ),
@@ -103,13 +105,13 @@ class _AuthModeSwitcher extends StatelessWidget {
       child: Row(
         children: [
           _Pill(
-            label: 'Login',
+            label: AppLocalizations.of(context)!.loginButton,
             icon: Icons.login_rounded,
             selected: mode == AuthMode.login,
             onTap: () => onChanged(AuthMode.login),
           ),
           _Pill(
-            label: 'Registro',
+            label: AppLocalizations.of(context)!.registerButton,
             icon: Icons.person_add_alt_1_rounded,
             selected: mode == AuthMode.register,
             onTap: () => onChanged(AuthMode.register),
@@ -141,13 +143,13 @@ class _AuthRoleSwitcher extends StatelessWidget {
       child: Row(
         children: [
           _Pill(
-            label: 'Cliente',
+            label: AppLocalizations.of(context)!.clientRole,
             icon: Icons.person_outline,
             selected: role == AuthRole.user,
             onTap: () => onChanged(AuthRole.user),
           ),
           _Pill(
-            label: 'Admin',
+            label: AppLocalizations.of(context)!.adminRole,
             icon: Icons.verified_user_outlined,
             selected: role == AuthRole.admin,
             onTap: () => onChanged(AuthRole.admin),

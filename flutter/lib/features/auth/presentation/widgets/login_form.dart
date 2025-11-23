@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
+import 'package:pub_diferent/core/utils/error_translator.dart';
 import 'package:pub_diferent/core/widgets/app_text_field.dart';
 import 'package:pub_diferent/core/widgets/app_password_field.dart';
 import 'package:pub_diferent/core/widgets/app_form_submit.dart';
@@ -61,11 +63,10 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     if (authState.hasError && !_errorShown) {
       _errorShown = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final errorString = authState.error?.toString() ?? 'No se pudo iniciar sesión';
-        // Quitar el prefijo "Exception: " si existe
-        final message = errorString.startsWith('Exception: ') 
-            ? errorString.substring(11) 
-            : errorString;
+        final l10n = AppLocalizations.of(context)!;
+        final errorString = authState.error?.toString() ?? l10n.errorLoginFailed;
+        // Traducir error usando ErrorTranslator
+        final message = ErrorTranslator.translate(context, errorString);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(message),
@@ -85,21 +86,21 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             label: 'Email',
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
-            validator: Validators.email,
+            validator: (v) => Validators.email(context, v),
           ),
           const SizedBox(height: 12),
           AppPasswordField(
             controller: _passwordCtrl,
-            label: 'Contraseña',
+            label: AppLocalizations.of(context)!.password,
             textInputAction: TextInputAction.done,
             onFieldSubmitted: (_) {
               if (!isLoading) _submit();
             },
-            validator: Validators.password,
+            validator: (v) => Validators.password(context, v),
           ),
           const SizedBox(height: 20),
           AppFormSubmit(
-            label: isLoading ? 'Entrando...' : 'Entrar',
+            label: isLoading ? AppLocalizations.of(context)!.loggingIn : AppLocalizations.of(context)!.login,
             isLoading: isLoading,
             onPressed: isLoading ? null : _submit,
           ),

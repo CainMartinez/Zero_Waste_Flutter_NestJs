@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pub_diferent/core/l10n/app_localizations.dart';
+import 'package:pub_diferent/core/utils/error_translator.dart';
 import 'package:pub_diferent/core/widgets/app_text_field.dart';
 import 'package:pub_diferent/core/widgets/app_password_field.dart';
 import 'package:pub_diferent/core/widgets/app_form_submit.dart';
@@ -43,14 +45,15 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
       password: _passwordCtrl.text,
     );
     
-    if (user != null) {
-      final userName = user.name ?? 'Usuario';
+    if (user != null && mounted) {
+      final l10n = AppLocalizations.of(context)!;
+      final userName = user.name ?? l10n.user;
       final userEmail = user.email ?? '';
       
       // Usar el ScaffoldMessenger guardado que sigue siendo válido
       scaffoldMessenger.showSnackBar(
         SnackBar(
-          content: Text('¡Te has registrado con éxito $userName con el email $userEmail!'),
+          content: Text(l10n.registerSuccessMessage(userName, userEmail)),
           backgroundColor: Colors.green,
           duration: const Duration(seconds: 4),
         ),
@@ -67,10 +70,10 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
     if (authState.hasError && !_errorShown) {
       _errorShown = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final errorString = authState.error?.toString() ?? 'Error en el registro';
-        final message = errorString.startsWith('Exception: ') 
-            ? errorString.substring(11) 
-            : errorString;
+        final l10n = AppLocalizations.of(context)!;
+        final errorString = authState.error?.toString() ?? l10n.errorRegisterFailed;
+        // Traducir error usando ErrorTranslator
+        final message = ErrorTranslator.translate(context, errorString);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(message),
@@ -87,9 +90,9 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
         children: [
           AppTextField(
             controller: _nameCtrl,
-            label: 'Nombre',
+            label: AppLocalizations.of(context)!.name,
             textInputAction: TextInputAction.next,
-            validator: Validators.name,
+            validator: (v) => Validators.name(context, v),
           ),
           const SizedBox(height: 12),
           AppTextField(
@@ -97,21 +100,21 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
             label: 'Email',
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
-            validator: Validators.email,
+            validator: (v) => Validators.email(context, v),
           ),
           const SizedBox(height: 12),
           AppPasswordField(
             controller: _passwordCtrl,
-            label: 'Contraseña',
+            label: AppLocalizations.of(context)!.password,
             textInputAction: TextInputAction.done,
             onFieldSubmitted: (_) {
               if (!isLoading) _submit();
             },
-            validator: Validators.password,
+            validator: (v) => Validators.password(context, v),
           ),
           const SizedBox(height: 20),
           AppFormSubmit(
-            label: isLoading ? 'Creando cuenta...' : 'Crear cuenta',
+            label: isLoading ? AppLocalizations.of(context)!.creatingAccount : AppLocalizations.of(context)!.createAccount,
             isLoading: isLoading,
             onPressed: isLoading ? null : _submit,
           ),
