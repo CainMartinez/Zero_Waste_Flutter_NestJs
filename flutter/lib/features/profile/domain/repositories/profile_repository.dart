@@ -1,4 +1,4 @@
-import 'package:pub_diferent/features/profile/domain/entities/profile.dart';
+import 'package:eco_bocado/features/profile/domain/entities/profile.dart';
 
 abstract class ProfileRepository {
   Future<Profile> getProfile();

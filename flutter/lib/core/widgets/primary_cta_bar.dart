@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pub_diferent/core/widgets/app_button.dart';
+import 'package:eco_bocado/core/widgets/app_button.dart';
 
 /// Barra inferior con llamada a la acción primaria.
 class PrimaryCtaBar extends StatelessWidget {

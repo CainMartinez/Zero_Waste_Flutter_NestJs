@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:pub_diferent/features/settings/data/datasources/preferences_local_datasource.dart';
-import 'package:pub_diferent/features/settings/data/repositories/preferences_repository_impl.dart';
-import 'package:pub_diferent/features/settings/domain/entities/preferences.dart';
-import 'package:pub_diferent/features/settings/domain/repositories/preferences_repository.dart';
-import 'package:pub_diferent/features/settings/domain/usecases/preferences_usecases.dart';
+import 'package:eco_bocado/features/settings/data/datasources/preferences_local_datasource.dart';
+import 'package:eco_bocado/features/settings/data/repositories/preferences_repository_impl.dart';
+import 'package:eco_bocado/features/settings/domain/entities/preferences.dart';
+import 'package:eco_bocado/features/settings/domain/repositories/preferences_repository.dart';
+import 'package:eco_bocado/features/settings/domain/usecases/preferences_usecases.dart';
 
 /// Provider para SharedPreferences
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {

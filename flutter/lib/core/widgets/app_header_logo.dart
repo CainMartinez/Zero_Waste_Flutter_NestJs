@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pub_diferent/app/theme/app_palette.dart';
+import 'package:eco_bocado/app/theme/app_palette.dart';
 
 class AppHeaderLogo extends StatelessWidget {
   const AppHeaderLogo({
@@ -41,7 +41,7 @@ class AppHeaderLogo extends StatelessWidget {
         ),
         SizedBox(height: spacing),
         Text(
-          title ?? 'Pub Diferent',
+          title ?? 'EcoBocado',
           style: tt.headlineSmall,
           textAlign: TextAlign.center,
         ),

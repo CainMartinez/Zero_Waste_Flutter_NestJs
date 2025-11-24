@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pub_diferent/features/admin/data/datasources/product_admin_remote_datasource.dart';
-import 'package:pub_diferent/features/admin/data/repositories/product_admin_repository_impl.dart';
-import 'package:pub_diferent/features/admin/domain/entities/product_admin.dart';
-import 'package:pub_diferent/features/admin/domain/repositories/product_admin_repository.dart';
+import 'package:eco_bocado/features/admin/data/datasources/product_admin_remote_datasource.dart';
+import 'package:eco_bocado/features/admin/data/repositories/product_admin_repository_impl.dart';
+import 'package:eco_bocado/features/admin/domain/entities/product_admin.dart';
+import 'package:eco_bocado/features/admin/domain/repositories/product_admin_repository.dart';
 
 // Provider del datasource
 final productAdminRemoteDataSourceProvider = Provider<ProductAdminRemoteDataSource>((ref) {

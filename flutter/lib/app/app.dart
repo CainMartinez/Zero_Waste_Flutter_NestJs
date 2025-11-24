@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pub_diferent/app/router.dart';
-import 'package:pub_diferent/app/theme/app_theme.dart';
-import 'package:pub_diferent/features/settings/presentation/providers/preferences_provider.dart';
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/app/router.dart';
+import 'package:eco_bocado/app/theme/app_theme.dart';
+import 'package:eco_bocado/features/settings/presentation/providers/preferences_provider.dart';
+import 'package:eco_bocado/core/l10n/app_localizations.dart';
 
 /// Widget raíz de la aplicación.
 /// Configura el tema y el router principal (con navegación inferior persistente).
-class PubDiferentApp extends ConsumerWidget {
-  const PubDiferentApp({super.key});
+class EcoBocadoApp extends ConsumerWidget {
+  const EcoBocadoApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,7 +32,7 @@ class PubDiferentApp extends ConsumerWidget {
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Pub Diferent',
+      title: 'EcoBocado',
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: darkMode ? ThemeMode.dark : ThemeMode.light,

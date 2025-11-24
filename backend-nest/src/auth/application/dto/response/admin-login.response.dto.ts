@@ -11,7 +11,7 @@ export class AdminLoginResponseDto {
   })
   accessToken!: string;
 
-  @ApiProperty({ example: 'admin@pubdiferent.com' })
+  @ApiProperty({ example: 'admin@eco_bocado.com' })
   email!: string;
 
   @ApiProperty({ example: 'Administrador General' })

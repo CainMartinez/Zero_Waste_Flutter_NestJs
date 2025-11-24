@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pub_diferent/core/widgets/app_button.dart';
+import 'package:eco_bocado/core/widgets/app_button.dart';
 
 /// Botón de submit reutilizable para formularios.
 /// Gestiona estado de carga, expansión a ancho completo y adornos opcionales.

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pub_diferent/catalog/catalog_page.dart';
-import 'package:pub_diferent/core/widgets/primary_cta_bar.dart';
-import 'package:pub_diferent/features/settings/presentation/providers/preferences_provider.dart';
-import 'package:pub_diferent/features/settings/presentation/widgets/settings_section_title.dart';
-import 'package:pub_diferent/features/settings/presentation/widgets/settings_switch_tile.dart';
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/catalog/catalog_page.dart';
+import 'package:eco_bocado/core/widgets/primary_cta_bar.dart';
+import 'package:eco_bocado/features/settings/presentation/providers/preferences_provider.dart';
+import 'package:eco_bocado/features/settings/presentation/widgets/settings_section_title.dart';
+import 'package:eco_bocado/features/settings/presentation/widgets/settings_switch_tile.dart';
+import 'package:eco_bocado/core/l10n/app_localizations.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});

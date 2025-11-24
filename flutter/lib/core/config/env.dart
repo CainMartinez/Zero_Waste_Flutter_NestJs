@@ -5,6 +5,8 @@
 ///   flutter run -d emulator-5554 --dart-define=API_BASE_URL=http://10.0.2.2:8080/api --dart-define=MINIO_BASE_URL=http://10.0.2.2:9000
 /// Debug Android Genymotion:
 ///   flutter run -d emulator-5554 --dart-define=API_BASE_URL=http://10.0.3.2:8080/api --dart-define=MINIO_BASE_URL=http://10.0.3.2:9000
+/// Debug iOS Cain, cambiar IP según red local:
+/// flutter run -d Cain \ --dart-define=API_BASE_URL=http://192.168.0.105:8080/api --dart-define=MINIO_BASE_URL=http://192.168.0.105:9000
 /// En build:
 ///   flutter build apk --dart-define=API_BASE_URL=https://tu-dominio.com/api --dart-define=MINIO_BASE_URL=https://minio.tu-dominio.com
 /// Comando para ejecutar en mi iphone real conectado por USB:

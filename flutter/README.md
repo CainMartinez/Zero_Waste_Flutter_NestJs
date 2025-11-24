@@ -1,13 +1,13 @@
-# Pub Diferent · Flutter
+# EcoBocado · Flutter
 
 > Este readme se irá actualizando a medida que la aplicación vaya creciendo, se centrará solamente en la parte técnica de flutter.
 
 ![Identidad visual](assets/images/logo.jpg)
 
-Aplicación multiplataforma (iOS, Android, web y escritorio) para el restaurante Pub Diferent. Permite a clientes ver y comprar los platos disponibles de comida para llevar y reservar una hora concreta evitando colas y los administradores consultar y modificar todos los productos, además de ver la facturación total mediante el uso de la aplicación, ambos usuarios deben autenticarse para gestionar su perfil y a nivel de aplicación se permite ajustar preferencias locales como el tema, idioma o envío de notificaciones.
+Aplicación multiplataforma (iOS, Android, web y escritorio) para el restaurante EcoBocado. Permite a clientes ver y comprar los platos disponibles de comida para llevar y reservar una hora concreta evitando colas y los administradores consultar y modificar todos los productos, además de ver la facturación total mediante el uso de la aplicación, ambos usuarios deben autenticarse para gestionar su perfil y a nivel de aplicación se permite ajustar preferencias locales como el tema, idioma o envío de notificaciones.
 
 ## Objetivo y alcance
-- Centralizar la experiencia zero-waste del Pub Diferent en una sola app con navegación adaptada a clientes y administradores.
+- Centralizar la experiencia zero-waste del EcoBocado en una sola app con navegación adaptada a clientes y administradores.
 
 
 ## Arquitectura funcional

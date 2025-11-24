@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pub_diferent/core/widgets/app_badge.dart';
+import 'package:eco_bocado/core/widgets/app_badge.dart';
 
 /// Tarjeta de menú para mostrar platos individuales dentro del listado principal
 class FoodMenuCard extends StatelessWidget {

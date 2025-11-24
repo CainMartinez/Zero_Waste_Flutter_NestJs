@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pub_diferent/features/auth/presentation/pages/auth_page.dart';
-import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart';
+import 'package:eco_bocado/features/auth/presentation/pages/auth_page.dart';
+import 'package:eco_bocado/features/auth/presentation/providers/auth_provider.dart';
 
 /// Widget que decide qué mostrar en función del estado de autenticación
 class AuthGate extends ConsumerWidget {

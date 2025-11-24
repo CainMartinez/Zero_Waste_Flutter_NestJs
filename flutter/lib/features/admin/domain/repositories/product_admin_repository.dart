@@ -1,4 +1,4 @@
-import 'package:pub_diferent/features/admin/domain/entities/product_admin.dart';
+import 'package:eco_bocado/features/admin/domain/entities/product_admin.dart';
 
 abstract class ProductAdminRepository {
   Future<List<ProductAdmin>> getAllProducts();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pub_diferent/catalog/widgets/showcase_scaffold.dart';
-import 'package:pub_diferent/core/widgets/app_badge.dart';
+import 'package:eco_bocado/catalog/widgets/showcase_scaffold.dart';
+import 'package:eco_bocado/core/widgets/app_badge.dart';
 
 class BadgesDemo extends StatelessWidget {
   const BadgesDemo({super.key});

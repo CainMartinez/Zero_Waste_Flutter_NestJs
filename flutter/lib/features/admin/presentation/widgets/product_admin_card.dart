@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pub_diferent/features/admin/domain/entities/product_admin.dart';
-import 'package:pub_diferent/features/admin/presentation/widgets/product_form_dialog.dart';
+import 'package:eco_bocado/features/admin/domain/entities/product_admin.dart';
+import 'package:eco_bocado/features/admin/presentation/widgets/product_form_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pub_diferent/features/admin/presentation/providers/product_admin_provider.dart';
-import 'package:pub_diferent/core/config/env.dart';
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/features/admin/presentation/providers/product_admin_provider.dart';
+import 'package:eco_bocado/core/config/env.dart';
+import 'package:eco_bocado/core/l10n/app_localizations.dart';
 
 class ProductAdminCard extends ConsumerWidget {
   final ProductAdmin product;

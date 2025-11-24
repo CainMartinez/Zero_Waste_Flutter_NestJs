@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pub_diferent/catalog/widgets/showcase_scaffold.dart';
-import 'package:pub_diferent/core/widgets/app_button.dart';
-import 'package:pub_diferent/core/widgets/app_form_submit.dart';
+import 'package:eco_bocado/catalog/widgets/showcase_scaffold.dart';
+import 'package:eco_bocado/core/widgets/app_button.dart';
+import 'package:eco_bocado/core/widgets/app_form_submit.dart';
 
 class ButtonsDemo extends StatelessWidget {
   const ButtonsDemo({super.key});

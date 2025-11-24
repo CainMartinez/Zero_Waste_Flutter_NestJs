@@ -1,6 +1,6 @@
-import 'package:pub_diferent/features/auth/domain/entities/user.dart';
-import 'package:pub_diferent/features/auth/domain/entities/user_session.dart';
-import 'package:pub_diferent/features/auth/domain/entities/admin_session.dart';
+import 'package:eco_bocado/features/auth/domain/entities/user.dart';
+import 'package:eco_bocado/features/auth/domain/entities/user_session.dart';
+import 'package:eco_bocado/features/auth/domain/entities/admin_session.dart';
 
 abstract class AuthRepository {
   Future<UserSession> loginUser({

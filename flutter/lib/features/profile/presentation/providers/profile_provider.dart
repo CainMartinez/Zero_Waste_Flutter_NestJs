@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pub_diferent/features/profile/domain/entities/profile.dart';
-import 'package:pub_diferent/features/profile/domain/usecases/profile_usecases.dart';
-import 'package:pub_diferent/features/profile/data/datasources/profile_remote_datasource.dart';
-import 'package:pub_diferent/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:eco_bocado/features/profile/domain/entities/profile.dart';
+import 'package:eco_bocado/features/profile/domain/usecases/profile_usecases.dart';
+import 'package:eco_bocado/features/profile/data/datasources/profile_remote_datasource.dart';
+import 'package:eco_bocado/features/profile/data/repositories/profile_repository_impl.dart';
 
 /// Provider para el remote datasource
 final profileRemoteDataSourceProvider = Provider<ProfileRemoteDataSource>((ref) {

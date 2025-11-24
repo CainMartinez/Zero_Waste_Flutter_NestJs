@@ -1,18 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:pub_diferent/features/auth/data/datasources/auth_remote_datasource.dart';
-import 'package:pub_diferent/features/auth/data/datasources/auth_local_datasource.dart';
-import 'package:pub_diferent/features/auth/data/repositories/auth_repository_impl.dart';
-import 'package:pub_diferent/features/auth/domain/repositories/auth_repository.dart';
-import 'package:pub_diferent/features/auth/domain/usecases/auth_usecase.dart';
+import 'package:eco_bocado/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:eco_bocado/features/auth/data/datasources/auth_local_datasource.dart';
+import 'package:eco_bocado/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:eco_bocado/features/auth/domain/repositories/auth_repository.dart';
+import 'package:eco_bocado/features/auth/domain/usecases/auth_usecase.dart';
 
-import 'package:pub_diferent/features/auth/domain/entities/user_session.dart';
-import 'package:pub_diferent/features/auth/domain/entities/admin_session.dart';
-import 'package:pub_diferent/features/auth/domain/entities/user.dart';
-import 'package:pub_diferent/features/auth/domain/entities/admin.dart';
-import 'package:pub_diferent/features/auth/domain/entities/auth_tokens.dart';
+import 'package:eco_bocado/features/auth/domain/entities/user_session.dart';
+import 'package:eco_bocado/features/auth/domain/entities/admin_session.dart';
+import 'package:eco_bocado/features/auth/domain/entities/user.dart';
+import 'package:eco_bocado/features/auth/domain/entities/admin.dart';
+import 'package:eco_bocado/features/auth/domain/entities/auth_tokens.dart';
 
-import 'package:pub_diferent/features/profile/presentation/providers/profile_provider.dart';
+import 'package:eco_bocado/features/profile/presentation/providers/profile_provider.dart';
 
 class AuthViewState {
   final UserSession? userSession;

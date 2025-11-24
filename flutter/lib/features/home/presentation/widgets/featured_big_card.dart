@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pub_diferent/core/widgets/app_badge.dart';
+import 'package:eco_bocado/core/widgets/app_badge.dart';
 
 /// Card grande destacada del home.
 /// Recibe un ImageProvider para permitir const con AssetImage.

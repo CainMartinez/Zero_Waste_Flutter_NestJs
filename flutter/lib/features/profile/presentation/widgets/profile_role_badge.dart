@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/core/l10n/app_localizations.dart';
 
 /// Widget para mostrar el badge de rol (Admin/Usuario)
 class ProfileRoleBadge extends StatelessWidget {

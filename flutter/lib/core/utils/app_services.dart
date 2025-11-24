@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:pub_diferent/core/utils/constants.dart';
+import 'package:eco_bocado/core/utils/constants.dart';
 
 class AppServices {
   static final FlutterSecureStorage storage = const FlutterSecureStorage(

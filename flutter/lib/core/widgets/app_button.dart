@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pub_diferent/app/theme/app_palette.dart';
+import 'package:eco_bocado/app/theme/app_palette.dart';
 
 enum AppButtonVariant { primary, secondary, danger }
 

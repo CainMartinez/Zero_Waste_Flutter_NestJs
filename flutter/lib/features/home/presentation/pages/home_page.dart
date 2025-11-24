@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pub_diferent/core/widgets/app_badge.dart';
-import 'package:pub_diferent/features/home/presentation/widgets/home_hero_header.dart';
-import 'package:pub_diferent/features/home/presentation/widgets/featured_big_card.dart';
-import 'package:pub_diferent/features/home/presentation/widgets/loyalty_gradient_banner.dart';
-import 'package:pub_diferent/app/theme/app_palette.dart';
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/core/widgets/app_badge.dart';
+import 'package:eco_bocado/features/home/presentation/widgets/home_hero_header.dart';
+import 'package:eco_bocado/features/home/presentation/widgets/featured_big_card.dart';
+import 'package:eco_bocado/features/home/presentation/widgets/loyalty_gradient_banner.dart';
+import 'package:eco_bocado/app/theme/app_palette.dart';
+import 'package:eco_bocado/core/l10n/app_localizations.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

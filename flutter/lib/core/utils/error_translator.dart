@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/core/l10n/app_localizations.dart';
 
 /// Utilidad para traducir errores del backend usando análisis de mensajes
 class ErrorTranslator {

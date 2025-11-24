@@ -2,9 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:image_picker/image_picker.dart';
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
-import 'package:pub_diferent/features/admin/domain/entities/product_admin.dart';
-import 'package:pub_diferent/core/config/env.dart';
+import 'package:eco_bocado/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/features/admin/domain/entities/product_admin.dart';
+import 'package:eco_bocado/core/config/env.dart';
 
 class ProductImageSection extends StatelessWidget {
   final List<ProductImage> existingImages;

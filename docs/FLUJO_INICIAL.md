@@ -1,4 +1,4 @@
-# 📱 Flujo Inicial de la Aplicación - Pub Diferent
+# 📱 Flujo Inicial de la Aplicación - EcoBocado
 
 ---
 
@@ -23,7 +23,7 @@ Future<void> main() async {
       overrides: [
         sharedPreferencesProvider.overrideWithValue(sharedPreferences),
       ],
-      child: const PubDiferentApp(),
+      child: const EcoBocadoApp(),
     ),
   );
 }
@@ -54,12 +54,12 @@ Future<void> main() async {
 ## 2. Widget raíz: app.dart
 
 ### Descripción
-`PubDiferentApp` es el widget raíz que configura el tema y el sistema de navegación de la aplicación.
+`EcoBocadoApp` es el widget raíz que configura el tema y el sistema de navegación de la aplicación.
 
 ### Arquitectura
 
 ```
-PubDiferentApp (ConsumerWidget)
+EcoBocadoApp (ConsumerWidget)
   ├── Observa authProvider
   ├── Observa preferencesProvider
   └── Retorna MaterialApp.router
@@ -70,8 +70,8 @@ PubDiferentApp (ConsumerWidget)
 ### Código detallado
 
 ```dart
-class PubDiferentApp extends ConsumerWidget {
-  const PubDiferentApp({super.key});
+class EcoBocadoApp extends ConsumerWidget {
+  const EcoBocadoApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -89,7 +89,7 @@ class PubDiferentApp extends ConsumerWidget {
     // 3. Configurar MaterialApp con router
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Pub Diferent',
+      title: 'EcoBocado',
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: darkMode ? ThemeMode.dark : ThemeMode.light,
@@ -136,7 +136,7 @@ PreferencesNotifier actualiza el estado
           ↓
 preferencesProvider notifica cambio
           ↓
-PubDiferentApp se reconstruye
+EcoBocadoApp se reconstruye
           ↓
 MaterialApp.router cambia themeMode
           ↓
@@ -475,7 +475,7 @@ return Scaffold(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Pub Diferent',
+                    'EcoBocado',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   Text(
@@ -722,8 +722,8 @@ AuthGate (ConsumerWidget)
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pub_diferent/features/auth/presentation/pages/auth_page.dart';
-import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart';
+import 'package:eco_bocado/features/auth/presentation/pages/auth_page.dart';
+import 'package:eco_bocado/features/auth/presentation/providers/auth_provider.dart';
 
 /// Widget que decide qué mostrar en función del estado de autenticación
 class AuthGate extends ConsumerWidget {
@@ -958,7 +958,7 @@ ProviderScope(
       await SharedPreferences.getInstance()
     ),
   ],
-  child: const PubDiferentApp(),
+  child: const EcoBocadoApp(),
 )
 // ✅ FUNCIONA: devuelve la instancia real
 ```
@@ -1079,7 +1079,7 @@ updatePreference() → Guarda en SharedPreferences
               ↓
 state = AsyncValue.data(updatedPrefs) → UI actualiza
               ↓
-PubDiferentApp detecta cambio en darkMode
+EcoBocadoApp detecta cambio en darkMode
               ↓
 MaterialApp.router cambia themeMode
               ↓
@@ -1337,7 +1337,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 #### Características
 - **Tipo**: `Provider<GoRouter>` (inmutable)
 - **Ciclo de vida**: Se crea una vez al inicio y nunca cambia
-- **Observadores**: `PubDiferentApp` lo observa con `ref.watch()`
+- **Observadores**: `EcoBocadoApp` lo observa con `ref.watch()`
 
 #### ¿Por qué Provider y no StateNotifier?
 
@@ -1350,7 +1350,7 @@ context.go('/products');
   ↓
 routerProvider cambia de estado
   ↓
-PubDiferentApp se reconstruye completamente
+EcoBocadoApp se reconstruye completamente
   ↓
 MaterialApp.router se recrea
   ↓
@@ -1368,7 +1368,7 @@ GoRouter maneja la navegación internamente
   ↓
 Solo el contenido de ShellRoute cambia
   ↓
-PubDiferentApp NO se reconstruye
+EcoBocadoApp NO se reconstruye
   ↓
 ✅ Performance óptima, estado preservado
 ```
@@ -1385,7 +1385,7 @@ PubDiferentApp NO se reconstruye
    ├── Carga SharedPreferences
    └── Lanza ProviderScope con overrides
 
-2. PubDiferentApp (app.dart)
+2. EcoBocadoApp (app.dart)
    ├── Observa routerProvider (sistema de navegación)
    ├── Observa preferencesProvider (tema oscuro/claro)
    └── Configura MaterialApp.router

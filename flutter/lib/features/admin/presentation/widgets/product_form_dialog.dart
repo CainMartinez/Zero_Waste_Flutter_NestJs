@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
-import 'package:pub_diferent/features/admin/domain/entities/product_admin.dart';
-import 'package:pub_diferent/features/admin/presentation/providers/product_admin_provider.dart';
+import 'package:eco_bocado/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/features/admin/domain/entities/product_admin.dart';
+import 'package:eco_bocado/features/admin/presentation/providers/product_admin_provider.dart';
 import 'form_sections/product_basic_info_form.dart';
 import 'form_sections/product_category_selector.dart';
 import 'form_sections/product_image_section.dart';

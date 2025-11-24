@@ -95,14 +95,13 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale.fromSubtags(languageCode: 'es', scriptCode: 'ejemplo'),
     Locale('es'),
   ];
 
   /// Nombre de la aplicación
   ///
   /// In es, this message translates to:
-  /// **'Pub Diferent'**
+  /// **'EcoBocado'**
   String get appTitle;
 
   /// Título principal de la página de inicio
@@ -1330,18 +1329,6 @@ class _AppLocalizationsDelegate
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-  // Lookup logic when language+script codes are specified.
-  switch (locale.languageCode) {
-    case 'es':
-      {
-        switch (locale.scriptCode) {
-          case 'ejemplo':
-            return AppLocalizationsEsEjemplo();
-        }
-        break;
-      }
-  }
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'en':

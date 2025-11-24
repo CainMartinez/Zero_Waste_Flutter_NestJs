@@ -1,5 +1,5 @@
-import 'package:pub_diferent/features/profile/domain/entities/profile.dart';
-import 'package:pub_diferent/features/profile/domain/repositories/profile_repository.dart';
+import 'package:eco_bocado/features/profile/domain/entities/profile.dart';
+import 'package:eco_bocado/features/profile/domain/repositories/profile_repository.dart';
 
 class ProfileUseCases {
   final ProfileRepository _repository;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
-import 'package:pub_diferent/features/admin/presentation/providers/product_admin_provider.dart';
+import 'package:eco_bocado/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/features/admin/presentation/providers/product_admin_provider.dart';
 
 class ProductAllergenSection extends ConsumerWidget {
   final Map<String, Map<String, bool>> selectedAllergens;

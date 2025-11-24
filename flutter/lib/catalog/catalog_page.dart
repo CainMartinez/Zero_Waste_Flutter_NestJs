@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pub_diferent/catalog/demos/buttons_demo.dart';
-import 'package:pub_diferent/catalog/demos/cards_demo.dart';
-import 'package:pub_diferent/catalog/demos/inputs_demo.dart';
-import 'package:pub_diferent/catalog/demos/badges_demo.dart';
+import 'package:eco_bocado/catalog/demos/buttons_demo.dart';
+import 'package:eco_bocado/catalog/demos/cards_demo.dart';
+import 'package:eco_bocado/catalog/demos/inputs_demo.dart';
+import 'package:eco_bocado/catalog/demos/badges_demo.dart';
 
 class CatalogPage extends StatelessWidget {
   const CatalogPage({super.key});

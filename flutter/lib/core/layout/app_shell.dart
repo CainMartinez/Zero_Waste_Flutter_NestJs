@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
-import 'package:pub_diferent/features/settings/presentation/pages/settings_page.dart';
-import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart';
+import 'package:eco_bocado/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/features/settings/presentation/pages/settings_page.dart';
+import 'package:eco_bocado/features/auth/presentation/providers/auth_provider.dart';
 
 class AppShell extends ConsumerStatefulWidget {
   const AppShell({
@@ -82,7 +82,7 @@ class _AppShellState extends ConsumerState<AppShell> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Pub Diferent',
+                        'EcoBocado',
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       Text(

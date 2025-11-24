@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
-import 'package:pub_diferent/features/profile/presentation/providers/profile_provider.dart';
-import 'package:pub_diferent/core/widgets/app_text_field.dart';
-import 'package:pub_diferent/core/widgets/app_form_submit.dart';
+import 'package:eco_bocado/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/features/profile/presentation/providers/profile_provider.dart';
+import 'package:eco_bocado/core/widgets/app_text_field.dart';
+import 'package:eco_bocado/core/widgets/app_form_submit.dart';
 
 class UpdateProfilePage extends ConsumerStatefulWidget {
   const UpdateProfilePage({super.key});

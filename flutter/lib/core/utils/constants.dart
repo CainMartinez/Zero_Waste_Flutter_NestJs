@@ -1,4 +1,4 @@
-import 'package:pub_diferent/core/config/env.dart';
+import 'package:eco_bocado/core/config/env.dart';
 
 /// URL base leída desde las variables de entorno
 final baseUrl = Env.apiBaseUrl;

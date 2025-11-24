@@ -9,8 +9,8 @@ async function bootstrap() {
   app.useGlobalFilters(new DomainExceptionFilter());
   
   const config = new DocumentBuilder()
-    .setTitle('Zero Waste Pub Diferent API')
-    .setDescription('Documentación interactiva de los endpoints de Zero Waste Pub Diferent.')
+    .setTitle('Zero Waste EcoBocado API')
+    .setDescription('Documentación interactiva de los endpoints de Zero Waste EcoBocado.')
     .setVersion('3.5.4')
     .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' , description: 'Ingrese el access token JWT sin el "Bearer"'})
     .build();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/core/l10n/app_localizations.dart';
 
 class ProductBasicInfoForm extends StatelessWidget {
   final TextEditingController nameEsCtrl;

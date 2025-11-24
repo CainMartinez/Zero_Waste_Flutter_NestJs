@@ -9,7 +9,7 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get appTitle => 'Pub Diferent';
+  String get appTitle => 'EcoBocado';
 
   @override
   String get homePageTitle => 'Comida Deliciosa';
@@ -643,45 +643,4 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get errorRegisterFailed => 'Error en el registro';
-}
-
-/// The translations for Spanish Castilian (`es_ejemplo`).
-class AppLocalizationsEsEjemplo extends AppLocalizationsEs {
-  AppLocalizationsEsEjemplo() : super('es_ejemplo');
-
-  @override
-  String get preferences => 'Preferencias';
-
-  @override
-  String get language => 'Idioma';
-
-  @override
-  String get profile => 'Mi perfil';
-
-  @override
-  String get home => 'Inicio';
-
-  @override
-  String get invalidEmail => 'Email no válido';
-
-  @override
-  String get passwordsDoNotMatch => 'Las contraseñas no coinciden';
-
-  @override
-  String get changePassword => 'Cambiar contraseña';
-
-  @override
-  String get logout => 'Cerrar sesión';
-
-  @override
-  String get saveChanges => 'Guardar cambios';
-
-  @override
-  String get currentPassword => 'Contraseña actual';
-
-  @override
-  String get newPassword => 'Nueva contraseña';
-
-  @override
-  String get login => 'Inicia sesión';
 }

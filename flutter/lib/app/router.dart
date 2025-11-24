@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:pub_diferent/core/layout/app_shell.dart';
-import 'package:pub_diferent/features/home/presentation/pages/home_page.dart';
-import 'package:pub_diferent/features/profile/presentation/pages/profile_page.dart';
-import 'package:pub_diferent/features/shop/presentation/pages/shop_page.dart';
-import 'package:pub_diferent/features/admin/presentation/pages/products_admin_page.dart';
+import 'package:eco_bocado/core/layout/app_shell.dart';
+import 'package:eco_bocado/features/home/presentation/pages/home_page.dart';
+import 'package:eco_bocado/features/profile/presentation/pages/profile_page.dart';
+import 'package:eco_bocado/features/shop/presentation/pages/shop_page.dart';
+import 'package:eco_bocado/features/admin/presentation/pages/products_admin_page.dart';
 
-import 'package:pub_diferent/core/widgets/auth_gate.dart';
+import 'package:eco_bocado/core/widgets/auth_gate.dart';
 
 final _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 

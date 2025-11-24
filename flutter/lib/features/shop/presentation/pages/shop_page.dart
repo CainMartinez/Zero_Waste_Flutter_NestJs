@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/core/l10n/app_localizations.dart';
 import '../../domain/entities/catalog_filters.dart';
 import '../../domain/entities/catalog_state.dart';
 import '../../domain/entities/category.dart';

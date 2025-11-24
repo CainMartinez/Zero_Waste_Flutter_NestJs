@@ -1,4 +1,4 @@
-# Pub Diferent · Nest JS
+# EcoBocado · Nest JS
 > Este readme se irá actualizando a medida que la aplicación vaya creciendo, se centrará solamente en la parte técnica de Nest JS.
 
 ## 1. Media Module - Gestión de Imágenes con MinIO

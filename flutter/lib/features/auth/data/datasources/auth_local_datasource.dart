@@ -1,5 +1,5 @@
-import 'package:pub_diferent/core/utils/app_services.dart';
-import 'package:pub_diferent/core/utils/constants.dart';
+import 'package:eco_bocado/core/utils/app_services.dart';
+import 'package:eco_bocado/core/utils/constants.dart';
 
 const _sessionNameKey = 'auth_session_name';
 const _sessionEmailKey = 'auth_session_email';

@@ -1,4 +1,4 @@
-import 'package:pub_diferent/features/settings/domain/entities/preferences.dart';
+import 'package:eco_bocado/features/settings/domain/entities/preferences.dart';
 
 abstract class PreferencesRepository {
   Future<Preferences> getPreferences();

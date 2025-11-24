@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pub_diferent/catalog/widgets/showcase_scaffold.dart';
-import 'package:pub_diferent/core/widgets/app_text_field.dart';
-import 'package:pub_diferent/core/widgets/app_password_field.dart';
-import 'package:pub_diferent/core/widgets/app_form_submit.dart';
+import 'package:eco_bocado/catalog/widgets/showcase_scaffold.dart';
+import 'package:eco_bocado/core/widgets/app_text_field.dart';
+import 'package:eco_bocado/core/widgets/app_password_field.dart';
+import 'package:eco_bocado/core/widgets/app_form_submit.dart';
 
 class InputsDemo extends StatefulWidget {
   const InputsDemo({super.key});

@@ -1,12 +1,12 @@
-import 'package:pub_diferent/features/auth/domain/repositories/auth_repository.dart';
-import 'package:pub_diferent/features/auth/domain/entities/auth_tokens.dart';
-import 'package:pub_diferent/features/auth/domain/entities/user.dart';
-import 'package:pub_diferent/features/auth/domain/entities/admin.dart';
-import 'package:pub_diferent/features/auth/domain/entities/user_session.dart';
-import 'package:pub_diferent/features/auth/domain/entities/admin_session.dart';
+import 'package:eco_bocado/features/auth/domain/repositories/auth_repository.dart';
+import 'package:eco_bocado/features/auth/domain/entities/auth_tokens.dart';
+import 'package:eco_bocado/features/auth/domain/entities/user.dart';
+import 'package:eco_bocado/features/auth/domain/entities/admin.dart';
+import 'package:eco_bocado/features/auth/domain/entities/user_session.dart';
+import 'package:eco_bocado/features/auth/domain/entities/admin_session.dart';
 
-import 'package:pub_diferent/features/auth/data/datasources/auth_remote_datasource.dart';
-import 'package:pub_diferent/features/auth/data/datasources/auth_local_datasource.dart';
+import 'package:eco_bocado/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:eco_bocado/features/auth/data/datasources/auth_local_datasource.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remote;

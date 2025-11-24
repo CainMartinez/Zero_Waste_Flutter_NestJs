@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
-import 'package:pub_diferent/features/profile/presentation/providers/profile_provider.dart';
-import 'package:pub_diferent/features/profile/presentation/pages/update_profile_page.dart';
-import 'package:pub_diferent/features/profile/presentation/pages/change_password_page.dart';
-import 'package:pub_diferent/features/profile/presentation/widgets/profile_avatar.dart';
-import 'package:pub_diferent/features/profile/presentation/widgets/profile_role_badge.dart';
-import 'package:pub_diferent/features/profile/presentation/widgets/profile_info_row.dart';
-import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart';
+import 'package:eco_bocado/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/features/profile/presentation/providers/profile_provider.dart';
+import 'package:eco_bocado/features/profile/presentation/pages/update_profile_page.dart';
+import 'package:eco_bocado/features/profile/presentation/pages/change_password_page.dart';
+import 'package:eco_bocado/features/profile/presentation/widgets/profile_avatar.dart';
+import 'package:eco_bocado/features/profile/presentation/widgets/profile_role_badge.dart';
+import 'package:eco_bocado/features/profile/presentation/widgets/profile_info_row.dart';
+import 'package:eco_bocado/features/auth/presentation/providers/auth_provider.dart';
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});

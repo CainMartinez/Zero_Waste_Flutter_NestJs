@@ -1,5 +1,5 @@
-import 'package:pub_diferent/features/auth/domain/entities/auth_tokens.dart';
-import 'package:pub_diferent/features/auth/domain/entities/user.dart';
+import 'package:eco_bocado/features/auth/domain/entities/auth_tokens.dart';
+import 'package:eco_bocado/features/auth/domain/entities/user.dart';
 
 class UserSession {
   final AuthTokens tokens;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pub_diferent/catalog/widgets/showcase_scaffold.dart';
-import 'package:pub_diferent/features/orders/presentation/widgets/order_card.dart';
-import 'package:pub_diferent/features/shop/presentation/widgets/food_menu_card.dart';
+import 'package:eco_bocado/catalog/widgets/showcase_scaffold.dart';
+import 'package:eco_bocado/features/orders/presentation/widgets/order_card.dart';
+import 'package:eco_bocado/features/shop/presentation/widgets/food_menu_card.dart';
 
 class CardsDemo extends StatelessWidget {
   const CardsDemo({super.key});

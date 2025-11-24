@@ -380,7 +380,7 @@ Usuario ve: "No existe un usuario con ese email" (ES) / "No user found with that
 ### `app.dart`
 
 ```dart
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/core/l10n/app_localizations.dart';
 
 // Sincronización con SharedPreferences
 final languageCode = preferencesAsync.when(
@@ -434,7 +434,7 @@ Toda la app se traduce automáticamente
 ### Ejemplo: `home_page.dart`
 
 ```dart
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
+import 'package:eco_bocadoore/l10n/app_localizations.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -471,7 +471,7 @@ class HomePage extends StatelessWidget {
 ### Ejemplo: `settings_page.dart`
 
 ```dart
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/core/l10n/app_localizations.dart';
 
 class SettingsPage extends ConsumerWidget {
   @override

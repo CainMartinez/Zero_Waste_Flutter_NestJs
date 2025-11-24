@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pub_diferent/core/widgets/app_badge.dart';
+import 'package:eco_bocado/core/widgets/app_badge.dart';
 
 /// Tarjeta para mostrar un pedido activo o del historial
 class OrderCard extends StatelessWidget {

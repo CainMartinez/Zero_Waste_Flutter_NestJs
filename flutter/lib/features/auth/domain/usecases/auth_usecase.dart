@@ -1,7 +1,7 @@
-import 'package:pub_diferent/features/auth/domain/entities/user.dart';
-import 'package:pub_diferent/features/auth/domain/entities/user_session.dart';
-import 'package:pub_diferent/features/auth/domain/entities/admin_session.dart';
-import 'package:pub_diferent/features/auth/domain/repositories/auth_repository.dart';
+import 'package:eco_bocado/features/auth/domain/entities/user.dart';
+import 'package:eco_bocado/features/auth/domain/entities/user_session.dart';
+import 'package:eco_bocado/features/auth/domain/entities/admin_session.dart';
+import 'package:eco_bocado/features/auth/domain/repositories/auth_repository.dart';
 
 class AuthUseCases {
   final Future<UserSession> Function({

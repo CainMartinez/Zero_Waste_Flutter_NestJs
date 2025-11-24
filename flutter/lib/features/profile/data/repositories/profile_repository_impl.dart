@@ -1,8 +1,8 @@
-import 'package:pub_diferent/core/utils/app_services.dart';
-import 'package:pub_diferent/core/utils/constants.dart';
-import 'package:pub_diferent/features/profile/domain/entities/profile.dart';
-import 'package:pub_diferent/features/profile/domain/repositories/profile_repository.dart';
-import 'package:pub_diferent/features/profile/data/datasources/profile_remote_datasource.dart';
+import 'package:eco_bocado/core/utils/app_services.dart';
+import 'package:eco_bocado/core/utils/constants.dart';
+import 'package:eco_bocado/features/profile/domain/entities/profile.dart';
+import 'package:eco_bocado/features/profile/domain/repositories/profile_repository.dart';
+import 'package:eco_bocado/features/profile/data/datasources/profile_remote_datasource.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileRemoteDataSource _remoteDataSource;

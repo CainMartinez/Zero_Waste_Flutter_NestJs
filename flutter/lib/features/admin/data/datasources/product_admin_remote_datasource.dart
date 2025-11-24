@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pub_diferent/core/utils/app_services.dart';
-import 'package:pub_diferent/features/admin/domain/entities/product_admin.dart';
+import 'package:eco_bocado/core/utils/app_services.dart';
+import 'package:eco_bocado/features/admin/domain/entities/product_admin.dart';
 
 class ProductAdminRemoteDataSource {
   final Dio _dio = AppServices.dio;

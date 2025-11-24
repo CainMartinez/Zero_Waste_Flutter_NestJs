@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:pub_diferent/core/utils/app_services.dart';
+import 'package:eco_bocado/core/utils/app_services.dart';
 
 /// Datasource REMOTO para AUTH
 class AuthRemoteDataSource {

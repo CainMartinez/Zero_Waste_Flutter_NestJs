@@ -1,5 +1,5 @@
-import 'package:pub_diferent/features/settings/domain/entities/preferences.dart';
-import 'package:pub_diferent/features/settings/domain/repositories/preferences_repository.dart';
+import 'package:eco_bocado/features/settings/domain/entities/preferences.dart';
+import 'package:eco_bocado/features/settings/domain/repositories/preferences_repository.dart';
 
 class PreferencesUseCases {
   final Future<Preferences> Function() getPreferences;

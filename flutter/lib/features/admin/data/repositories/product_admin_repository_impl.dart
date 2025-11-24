@@ -1,6 +1,6 @@
-import 'package:pub_diferent/features/admin/data/datasources/product_admin_remote_datasource.dart';
-import 'package:pub_diferent/features/admin/domain/entities/product_admin.dart';
-import 'package:pub_diferent/features/admin/domain/repositories/product_admin_repository.dart';
+import 'package:eco_bocado/features/admin/data/datasources/product_admin_remote_datasource.dart';
+import 'package:eco_bocado/features/admin/domain/entities/product_admin.dart';
+import 'package:eco_bocado/features/admin/domain/repositories/product_admin_repository.dart';
 
 class ProductAdminRepositoryImpl implements ProductAdminRepository {
   final ProductAdminRemoteDataSource _remoteDataSource;

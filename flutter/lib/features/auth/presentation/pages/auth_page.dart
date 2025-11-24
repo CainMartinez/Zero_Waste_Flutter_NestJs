@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pub_diferent/core/l10n/app_localizations.dart';
-import 'package:pub_diferent/core/widgets/app_header_logo.dart';
-import 'package:pub_diferent/features/auth/presentation/widgets/login_form.dart';
-import 'package:pub_diferent/features/auth/presentation/widgets/register_form.dart';
-import 'package:pub_diferent/features/auth/presentation/providers/auth_provider.dart';
+import 'package:eco_bocado/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/core/widgets/app_header_logo.dart';
+import 'package:eco_bocado/features/auth/presentation/widgets/login_form.dart';
+import 'package:eco_bocado/features/auth/presentation/widgets/register_form.dart';
+import 'package:eco_bocado/features/auth/presentation/providers/auth_provider.dart';
 
 enum AuthMode { login, register }
 enum AuthRole { user, admin }
