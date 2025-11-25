@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:eco_bocado/core/l10n/app_localizations.dart';
+import 'package:eco_bocado/core/layout/widgets/app_navigation_bar.dart';
 import 'package:eco_bocado/features/settings/presentation/pages/settings_page.dart';
 import 'package:eco_bocado/features/auth/presentation/providers/auth_provider.dart';
 
@@ -98,7 +99,7 @@ class _AppShellState extends ConsumerState<AppShell> {
             Container(
               width: 1,
               height: 24,
-              color: cs.outlineVariant.withOpacity(0.4),
+              color: cs.outlineVariant.withValues(alpha: 0.4),
             ),
             const SizedBox(width: 16),
           ],
@@ -119,7 +120,7 @@ class _AppShellState extends ConsumerState<AppShell> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
-                        color: Colors.red.withOpacity(0.1),
+                        color: Colors.red.withValues(alpha: 0.1),
                         border: Border.all(color: Colors.red, width: 1),
                         borderRadius: BorderRadius.circular(4),
                       ),
@@ -163,57 +164,10 @@ class _AppShellState extends ConsumerState<AppShell> {
         ],
       ),
       body: widget.child,
-      bottomNavigationBar: NavigationBar(
+      bottomNavigationBar: AppNavigationBar(
+        isAdmin: isAdmin,
         selectedIndex: selectedIndex,
-        onDestinationSelected: (index) => context.go(paths[index]),
-        destinations: isAdmin
-            ? [
-                // Navegación para ADMIN
-                NavigationDestination(
-                  icon: const Icon(Icons.dashboard_outlined),
-                  selectedIcon: const Icon(Icons.dashboard),
-                  label: l10n.dashboard,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.inventory_2_outlined),
-                  selectedIcon: const Icon(Icons.inventory_2),
-                  label: l10n.products,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.receipt_outlined),
-                  selectedIcon: const Icon(Icons.receipt),
-                  label: l10n.billing,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.person_outline),
-                  selectedIcon: const Icon(Icons.person),
-                  label: l10n.profile,
-                ),
-              ]
-            : [
-                // Navegación para USUARIO
-                NavigationDestination(
-                  icon: const Icon(Icons.home_outlined),
-                  selectedIcon: const Icon(Icons.home),
-                  label: l10n.home,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.restaurant_menu_outlined),
-                  selectedIcon: const Icon(Icons.restaurant_menu),
-                  label: l10n.menu,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.receipt_long_outlined),
-                  selectedIcon: const Icon(Icons.receipt_long),
-                  label: l10n.orders,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.person_outline),
-                  selectedIcon: const Icon(Icons.person),
-                  label: l10n.profile,
-                ),
-              ],
-        backgroundColor: cs.surface,
+        paths: paths,
       ),
     );
   }
