@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
+import 'package:eco_bocado/core/utils/pretty_dio_logger.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:eco_bocado/core/utils/constants.dart';
 
@@ -85,10 +86,20 @@ class AppServices {
       ),
     );
 
+    d.interceptors.add(PrettyDioLogger(
+      requestHeader: true,
+      requestBody: true,
+      responseBody: true,
+      responseHeader: false,
+      error: true,
+      compact: true,
+      maxWidth: 90,
+    ));
+
     return d;
   }
 
-  /// Intenta refrescar usando el refresh guardado y enviándolo por Authorization: Bearer <refresh>.
+  /// Intenta refrescar usando el refresh guardado y enviándolo por Authorization: Bearer -refresh-.
   static Future<bool> _tryRefreshToken(Dio d) async {
     final refresh = await storage.read(key: refreshKey);
     if (refresh == null || refresh.isEmpty) return false;
