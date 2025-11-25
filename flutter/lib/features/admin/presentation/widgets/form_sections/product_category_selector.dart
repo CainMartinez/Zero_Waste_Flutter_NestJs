@@ -23,7 +23,7 @@ class ProductCategorySelector extends ConsumerWidget {
 
     final l10n = AppLocalizations.of(context)!;
     return DropdownButtonFormField<int>(
-      value: selectedCategoryId,
+      initialValue: selectedCategoryId,
       decoration: InputDecoration(
         labelText: l10n.category,
         prefixIcon: const Icon(Icons.category_outlined),

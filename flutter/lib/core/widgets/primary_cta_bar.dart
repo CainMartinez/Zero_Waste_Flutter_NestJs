@@ -30,7 +30,7 @@ class PrimaryCtaBar extends StatelessWidget {
         color: cs.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.35 : 0.12),
+            color: Colors.black.withValues(alpha: isDark ? 0.35 : 0.12),
             blurRadius: 14,
             offset: const Offset(0, -3),
           ),

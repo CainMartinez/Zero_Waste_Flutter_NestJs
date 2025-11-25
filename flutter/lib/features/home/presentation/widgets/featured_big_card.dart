@@ -41,8 +41,8 @@ class FeaturedBigCard extends StatelessWidget {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withOpacity(0.35),
-                    Colors.black.withOpacity(0.55),
+                    Colors.black.withValues(alpha: 0.35),
+                    Colors.black.withValues(alpha: 0.55),
                   ],
                 ),
               ),
@@ -87,7 +87,7 @@ class FeaturedBigCard extends StatelessWidget {
             child: const CircularProgressIndicator(),
           );
         },
-        errorBuilder: (_, __, ___) => _errorBox(cs),
+        errorBuilder: (_, _, _) => _errorBox(cs),
       );
     }
 
@@ -95,7 +95,7 @@ class FeaturedBigCard extends StatelessWidget {
     return Image(
       image: image,
       fit: BoxFit.cover,
-      errorBuilder: (_, __, ___) => _errorBox(cs),
+      errorBuilder: (_, _, _) => _errorBox(cs),
     );
   }
 

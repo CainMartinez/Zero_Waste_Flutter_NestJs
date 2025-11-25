@@ -42,8 +42,8 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/orders',
             pageBuilder: (context, state) => const NoTransitionPage(
               child: AuthGate(
-                child: Center(child: Text('Listado de pedidos')),
                 authPageKey: ValueKey('orders-auth'),
+                child: Center(child: Text('Listado de pedidos')),
               ),
             ),
           ),
@@ -53,8 +53,8 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/dashboard',
             pageBuilder: (context, state) => const NoTransitionPage(
               child: AuthGate(
-                child: Center(child: Text('Dashboard - Datos globales de la aplicación')),
                 authPageKey: ValueKey('dashboard-auth'),
+                child: Center(child: Text('Dashboard - Datos globales de la aplicación')),
               ),
             ),
           ),
@@ -62,8 +62,8 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/products',
             pageBuilder: (context, state) => const NoTransitionPage(
               child: AuthGate(
-                child: ProductsAdminPage(),
                 authPageKey: ValueKey('products-auth'),
+                child: ProductsAdminPage(),
               ),
             ),
           ),
@@ -71,8 +71,8 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/billing',
             pageBuilder: (context, state) => const NoTransitionPage(
               child: AuthGate(
-                child: Center(child: Text('Facturación')),
                 authPageKey: ValueKey('billing-auth'),
+                child: Center(child: Text('Facturación')),
               ),
             ),
           ),
@@ -82,8 +82,8 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/profile',
             pageBuilder: (context, state) => const NoTransitionPage(
               child: AuthGate(
-                child: ProfilePage(),
                 authPageKey: ValueKey('profile-auth'),
+                child: ProfilePage(),
               ),
             ),
           ),

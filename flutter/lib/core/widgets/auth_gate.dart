@@ -25,7 +25,7 @@ class AuthGate extends ConsumerWidget {
         return isLogged ? child : AuthPage(key: authPageKey);
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (_, __) => AuthPage(key: authPageKey),
+      error: (_, _) => AuthPage(key: authPageKey),
     );
   }
 }

@@ -25,7 +25,7 @@ class _ShopPageState extends ConsumerState<ShopPage> {
   // Filtros
   String? _selectedCategory;
   bool? _isVegan;
-  List<String> _excludedAllergens = [];
+  final List<String> _excludedAllergens = [];
   String _sortBy = 'createdAt';
   String _sortOrder = 'desc';
 
@@ -289,7 +289,7 @@ class _ShopPageState extends ConsumerState<ShopPage> {
         return category.name(context);
       },
       loading: () => l10n.loadingProducts,
-      error: (_, __) => l10n.errorLoadingProducts,
+      error: (_, _) => l10n.errorLoadingProducts,
     );
   }
 

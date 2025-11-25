@@ -89,7 +89,7 @@ class _InputsDemoState extends State<InputsDemo> {
             'Campo de texto reutilizable con validación integrada. '
             'Usado en formularios de login y registro.',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.7),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
           
@@ -135,7 +135,7 @@ class _InputsDemoState extends State<InputsDemo> {
             'Campo especializado para contraseñas con toggle de visibilidad. '
             'Usado en login_form.dart y register_form.dart.',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.7),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
           
@@ -170,7 +170,7 @@ class _InputsDemoState extends State<InputsDemo> {
           Text(
             'Composición como en login_form.dart',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.7),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
           

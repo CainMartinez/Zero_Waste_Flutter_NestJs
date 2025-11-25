@@ -30,8 +30,8 @@ class HomeHeroHeader extends StatelessWidget {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [
-        cs.secondary.withOpacity(isDark ? 0.22 : 0.16),
-        cs.secondary.withOpacity(isDark ? 0.10 : 0.08),
+        cs.secondary.withValues(alpha: isDark ? 0.22 : 0.16),
+        cs.secondary.withValues(alpha: isDark ? 0.10 : 0.08),
       ],
     );
 
@@ -41,7 +41,7 @@ class HomeHeroHeader extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.25 : 0.08),
+            color: Colors.black.withValues(alpha: isDark ? 0.25 : 0.08),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),

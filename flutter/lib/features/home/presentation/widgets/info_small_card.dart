@@ -44,7 +44,7 @@ class InfoSmallCard extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: (color ?? cs.secondary).withOpacity(0.15),
+                color: (color ?? cs.secondary).withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(

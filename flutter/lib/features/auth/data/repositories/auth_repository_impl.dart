@@ -148,6 +148,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   /// Recupera lo que haya en secure storage y lo entrega tal cual.
+  @override
   Future<({String? accessToken, String? refreshToken, String? role})>
       readStoredSession() async {
     final accessToken = await _local.readAccessToken();

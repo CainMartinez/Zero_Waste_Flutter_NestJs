@@ -80,7 +80,7 @@ class BadgesDemo extends StatelessWidget {
             'Etiqueta reutilizable con variantes filled y outline. '
             'Integrado con el theme para colores consistentes.',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.7),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
           
@@ -153,7 +153,7 @@ class BadgesDemo extends StatelessWidget {
           Text(
             'Usado en OrderCard para mostrar estados del pedido',
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.7),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 8),
@@ -192,7 +192,7 @@ class BadgesDemo extends StatelessWidget {
           Text(
             'AppBadgeSize.small usado en FoodMenuCard y OrderCard',
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.7),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 8),

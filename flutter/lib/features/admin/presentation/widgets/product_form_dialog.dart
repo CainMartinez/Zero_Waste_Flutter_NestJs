@@ -31,13 +31,13 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
   late bool _isVegan;
   late int? _categoryId;
   bool _isLoading = false;
-  List<XFile> _newImages = []; // Imágenes nuevas a subir
+  final List<XFile> _newImages = []; // Imágenes nuevas a subir
   List<ProductImage> _existingImages = []; // Imágenes ya existentes en el servidor
-  List<int> _imagesToDelete = []; // IDs de imágenes marcadas para eliminar
+  final List<int> _imagesToDelete = []; // IDs de imágenes marcadas para eliminar
   bool _uploadingImages = false;
   
   // Alérgenos seleccionados: Map<code, {contains, mayContain}>
-  Map<String, Map<String, bool>> _selectedAllergens = {};
+  final Map<String, Map<String, bool>> _selectedAllergens = {};
 
   @override
   void initState() {

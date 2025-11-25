@@ -21,13 +21,13 @@ class EcoBocadoApp extends ConsumerWidget {
     final darkMode = preferencesAsync.when(
       data: (prefs) => prefs.darkMode ?? false,
       loading: () => false,
-      error: (_, __) => false,
+      error: (_, _) => false,
     );
     
     final languageCode = preferencesAsync.when(
       data: (prefs) => prefs.language ?? 'es',
       loading: () => 'es',
-      error: (_, __) => 'es',
+      error: (_, _) => 'es',
     );
 
     return MaterialApp.router(

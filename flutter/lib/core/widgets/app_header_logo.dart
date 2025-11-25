@@ -25,7 +25,7 @@ class AppHeaderLogo extends StatelessWidget {
           height: 84,
           width: 84,
           decoration: BoxDecoration(
-            color: palette.secondary.withOpacity(0.12),
+            color: palette.secondary.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(28),
           ),
           alignment: Alignment.center,

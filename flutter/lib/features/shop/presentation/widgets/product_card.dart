@@ -31,7 +31,7 @@ class ProductCard extends StatelessWidget {
                   ? Image.network(
                       item.images.first,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => _buildPlaceholder(context),
+                      errorBuilder: (_, _, _) => _buildPlaceholder(context),
                     )
                   : _buildPlaceholder(context),
             ),

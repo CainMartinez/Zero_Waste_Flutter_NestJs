@@ -39,7 +39,7 @@ class CartPage extends ConsumerWidget {
           Icon(
             Icons.shopping_cart_outlined,
             size: 120,
-            color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.3),
+            color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
           ),
           const SizedBox(height: 24),
           Text(
@@ -102,7 +102,7 @@ class CartPage extends ConsumerWidget {
                       width: 80,
                       height: 80,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => _buildPlaceholderImage(context, cartItem),
+                      errorBuilder: (_, _, _) => _buildPlaceholderImage(context, cartItem),
                     )
                   : _buildPlaceholderImage(context, cartItem),
             ),
@@ -237,7 +237,7 @@ class CartPage extends ConsumerWidget {
         color: Theme.of(context).colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -308,7 +308,6 @@ class CartPage extends ConsumerWidget {
               width: double.infinity,
               child: FilledButton.icon(
                 onPressed: () {
-                  // TODO: Implementar confirmación de pedido
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(AppLocalizations.of(context)!.orderPendingImplementation),

@@ -98,7 +98,7 @@ class _ProductDetailModalState extends State<ProductDetailModal> {
                                   return Image.network(
                                     widget.item.images[index],
                                     fit: BoxFit.cover,
-                                    errorBuilder: (_, __, ___) => Container(
+                                    errorBuilder: (_, _, _) => Container(
                                       color: Theme.of(context).colorScheme.surfaceContainerHighest,
                                       child: Icon(
                                         widget.item.isMenu ? Icons.restaurant_menu : Icons.fastfood,
@@ -127,7 +127,7 @@ class _ProductDetailModalState extends State<ProductDetailModal> {
                                           shape: BoxShape.circle,
                                           color: _currentImageIndex == index
                                               ? Theme.of(context).colorScheme.primary
-                                              : Colors.white.withOpacity(0.5),
+                                              : Colors.white.withValues(alpha: 0.5),
                                         ),
                                       ),
                                     ),
@@ -271,7 +271,7 @@ class _ProductDetailModalState extends State<ProductDetailModal> {
                                           : (useRedStyle ? Colors.red.shade800 : (useOrangeStyle ? Colors.orange.shade800 : Colors.grey.shade600)),
                                     ),
                                     backgroundColor: isDarkMode
-                                        ? (useRedStyle ? Colors.red.shade900.withOpacity(0.3) : (useOrangeStyle ? Colors.orange.shade900.withOpacity(0.3) : Colors.grey.shade800.withOpacity(0.3)))
+                                        ? (useRedStyle ? Colors.red.shade900.withValues(alpha: 0.3) : (useOrangeStyle ? Colors.orange.shade900.withValues(alpha: 0.3) : Colors.grey.shade800.withValues(alpha: 0.3)))
                                         : (useRedStyle ? Colors.red.shade100 : (useOrangeStyle ? Colors.orange.shade100 : Colors.grey.shade100)),
                                     labelStyle: TextStyle(
                                       color: isDarkMode

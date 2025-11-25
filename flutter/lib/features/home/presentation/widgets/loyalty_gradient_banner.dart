@@ -38,10 +38,10 @@ class LoyaltyGradientBanner extends StatelessWidget {
       end: Alignment.bottomRight,
       colors: [
         // Warm start
-        const Color(0xFFFFC107).withOpacity(isDark ? 0.90 : 0.88), // Amber
-        const Color(0xFFFF7043).withOpacity(isDark ? 0.95 : 0.92), // Deep orange
+        const Color(0xFFFFC107).withValues(alpha: isDark ? 0.90 : 0.88), // Amber
+        const Color(0xFFFF7043).withValues(alpha: isDark ? 0.95 : 0.92), // Deep orange
         // Blend with theme secondary at el final para coherencia de marca
-        cs.secondary.withOpacity(isDark ? 0.92 : 0.90),
+        cs.secondary.withValues(alpha: isDark ? 0.92 : 0.90),
       ],
     );
 
@@ -51,7 +51,7 @@ class LoyaltyGradientBanner extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.35 : 0.12),
+            color: Colors.black.withValues(alpha: isDark ? 0.35 : 0.12),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -66,7 +66,7 @@ class LoyaltyGradientBanner extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.18),
+              color: Colors.white.withValues(alpha: 0.18),
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(
@@ -113,7 +113,7 @@ class LoyaltyGradientBanner extends StatelessWidget {
                 Text(
                   subtitle,
                   style: tt.bodySmall?.copyWith(
-                    color: Colors.white.withOpacity(0.95),
+                    color: Colors.white.withValues(alpha: 0.95),
                     height: 1.25,
                     fontWeight: FontWeight.w500,
                   ),

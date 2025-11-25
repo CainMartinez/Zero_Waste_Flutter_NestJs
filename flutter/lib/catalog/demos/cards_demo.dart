@@ -73,7 +73,7 @@ class CardsDemo extends StatelessWidget {
             'Tarjeta especializada para mostrar platos del menú con imagen, badges, '
             'precio y disponibilidad. Usado en Home y Shop.',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.7),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 12),
@@ -127,7 +127,7 @@ class CardsDemo extends StatelessWidget {
             'Tarjeta especializada para pedidos con fecha, número de orden, '
             'estado (AppBadge), lista de items y total. Usado en Home y Orders.',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.7),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 12),
