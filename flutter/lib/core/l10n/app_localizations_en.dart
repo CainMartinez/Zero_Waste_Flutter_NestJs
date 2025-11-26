@@ -124,6 +124,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sortByNewest => 'Newest';
 
   @override
+  String get sortByOldest => 'Oldest';
+
+  @override
   String get sortByNameAsc => 'Name (A-Z)';
 
   @override

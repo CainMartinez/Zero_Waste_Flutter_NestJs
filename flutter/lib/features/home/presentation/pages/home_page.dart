@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       children: [
         HomeHeroHeader(
           titlePrimary: l10n.homePageTitle,
@@ -37,7 +37,7 @@ class HomePage extends StatelessWidget {
         Card(
           elevation: 2,
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(12),
             child: Row(
               children: [
                 Expanded(
@@ -48,7 +48,7 @@ class HomePage extends StatelessWidget {
                         size: 32, 
                         color: palette.success,
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 4),
                       Text(
                         l10n.featureEcoFriendlyFood,
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
@@ -80,7 +80,7 @@ class HomePage extends StatelessWidget {
                         size: 32, 
                         color: palette.warning,
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 4),
                       Text(
                         l10n.featureFastPickup,
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(

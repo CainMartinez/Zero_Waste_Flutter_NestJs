@@ -314,6 +314,12 @@ abstract class AppLocalizations {
   /// **'Más recientes'**
   String get sortByNewest;
 
+  /// Ordenar por más antiguos
+  ///
+  /// In es, this message translates to:
+  /// **'Más antiguos'**
+  String get sortByOldest;
+
   /// Ordenar por nombre ascendente
   ///
   /// In es, this message translates to:

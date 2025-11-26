@@ -153,6 +153,10 @@
   "@sortByNewest": {
     "description": "Ordenar por más recientes"
   },
+  "sortByOldest": "Más antiguos",
+  "@sortByOldest": {
+    "description": "Ordenar por más antiguos"
+  },
   "sortByNameAsc": "Nombre (A-Z)",
   "@sortByNameAsc": {
     "description": "Ordenar por nombre ascendente"

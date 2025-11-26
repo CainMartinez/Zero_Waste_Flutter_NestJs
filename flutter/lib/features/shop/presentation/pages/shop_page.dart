@@ -248,7 +248,7 @@ class _ShopPageState extends ConsumerState<ShopPage> {
           ),
           const Divider(),
           _buildSortOption(l10n.sortByNewest, 'createdAt', 'desc'),
-          _buildSortOption(l10n.sortByNewest, 'createdAt', 'asc'),
+          _buildSortOption(l10n.sortByOldest, 'createdAt', 'asc'),
           _buildSortOption(l10n.sortByPriceAsc, 'price', 'asc'),
           _buildSortOption(l10n.sortByPriceDesc, 'price', 'desc'),
           _buildSortOption(l10n.sortByNameAsc, 'name', 'asc'),
