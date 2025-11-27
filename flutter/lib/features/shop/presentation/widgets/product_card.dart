@@ -36,78 +36,89 @@ class ProductCard extends StatelessWidget {
                   : _buildPlaceholder(context),
             ),
             
+            // Contenido con altura fija
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Tipo y badges
-                    Row(
+                    // Tipo y badges en fila con wrap
+                    Wrap(
+                      spacing: 4,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         if (item.isMenu)
                           Chip(
-                            label: Text(AppLocalizations.of(context)!.menuBadge, style: const TextStyle(fontSize: 10)),
-                            padding: EdgeInsets.zero,
+                            label: Text(
+                              AppLocalizations.of(context)!.menuBadge,
+                              style: const TextStyle(fontSize: 9),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
                             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            visualDensity: VisualDensity.compact,
                           ),
-                        if (item.isVegan) ...[
-                          const SizedBox(width: 4),
-                          const Icon(Icons.eco, size: 16, color: Colors.green),
-                        ],
+                        if (item.isVegan)
+                          const Icon(Icons.eco, size: 14, color: Colors.green),
                       ],
                     ),
                     
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 6),
                     
-                    // Nombre
+                    // Nombre del producto
                     Text(
                       item.name(context),
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
                             fontWeight: FontWeight.bold,
+                            height: 1.2,
                           ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 4),
                     
-                    // Descripción
+                    // Descripción con espacio flexible
                     Expanded(
                       child: Text(
                         item.description(context),
-                        style: Theme.of(context).textTheme.bodySmall,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              fontSize: 11,
+                              height: 1.2,
+                            ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 6),
                     
-                    // Precio y botón
+                    // Precio y botón añadir
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Flexible(
+                        Expanded(
                           child: Text(
                             '${item.price.toStringAsFixed(2)} ${item.currency}',
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                   color: Theme.of(context).colorScheme.primary,
                                   fontWeight: FontWeight.bold,
+                                  fontSize: 16,
                                 ),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
+                        const SizedBox(width: 4),
                         if (onAddToCart != null)
                           IconButton.filled(
                             onPressed: onAddToCart,
                             icon: const Icon(Icons.add_shopping_cart),
-                            iconSize: 20,
-                            padding: const EdgeInsets.all(8),
+                            iconSize: 18,
+                            padding: const EdgeInsets.all(6),
                             constraints: const BoxConstraints(
-                              minWidth: 36,
-                              minHeight: 36,
+                              minWidth: 32,
+                              minHeight: 32,
                             ),
                           ),
                       ],

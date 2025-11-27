@@ -115,25 +115,25 @@ class _AppShellState extends ConsumerState<AppShell> {
                     '${l10n.hello}, $displayName',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  if (auth?.isAdmin == true) ...[
-                    const SizedBox(width: 6),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Colors.red.withValues(alpha: 0.1),
-                        border: Border.all(color: Colors.red, width: 1),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: const Text(
-                        'ADMIN',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ),
-                  ],
+                  // if (auth?.isAdmin == true) ...[
+                  //   const SizedBox(width: 6),
+                  //   Container(
+                  //     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.red.withValues(alpha: 0.1),
+                  //       border: Border.all(color: Colors.red, width: 1),
+                  //       borderRadius: BorderRadius.circular(4),
+                  //     ),
+                  //     child: const Text(
+                  //       'ADMIN',
+                  //       style: TextStyle(
+                  //         fontSize: 10,
+                  //         fontWeight: FontWeight.bold,
+                  //         color: Colors.red,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ],
                 ],
               ),
             ),

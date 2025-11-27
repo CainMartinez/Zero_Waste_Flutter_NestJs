@@ -76,7 +76,7 @@ class ProductImageSection extends StatelessWidget {
                           height: 100,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: Colors.red.withOpacity(0.5),
+                            color: Colors.red.withValues(alpha: 0.5),
                           ),
                           child: const Center(
                             child: Icon(

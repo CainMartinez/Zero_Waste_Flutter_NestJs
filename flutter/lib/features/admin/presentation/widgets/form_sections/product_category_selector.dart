@@ -28,6 +28,7 @@ class ProductCategorySelector extends ConsumerWidget {
         labelText: l10n.category,
         prefixIcon: const Icon(Icons.category_outlined),
       ),
+      isExpanded: true,
       items: state.categories.map((cat) {
         final locale = Localizations.localeOf(context);
         final nameEs = cat['nameEs'] as String;
@@ -35,7 +36,10 @@ class ProductCategorySelector extends ConsumerWidget {
         final name = locale.languageCode == 'en' ? nameEn : nameEs;
         return DropdownMenuItem<int>(
           value: cat['id'] as int,
-          child: Text(name),
+          child: Text(
+            name,
+            overflow: TextOverflow.ellipsis,
+          ),
         );
       }).toList(),
       onChanged: onCategoryChanged,
